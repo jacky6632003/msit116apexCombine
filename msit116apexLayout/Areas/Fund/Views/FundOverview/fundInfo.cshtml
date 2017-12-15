@@ -1,0 +1,529 @@
+﻿@model msit116apexLayout.Areas.Fund.ViewModels.FundViewModel
+@{
+    ViewBag.Title = "基金詳情";
+}
+
+@section styles{
+    <style>
+        .row {
+            background-color: #F5F5F5;
+            height: 4em;
+            padding-top: 1em;
+            margin-bottom: 1.5em;
+        }
+
+        .fundOverviewSelect {
+            width: 15em;
+            height: 2em;
+            text-align: center;
+        }
+
+        .dark {
+            width: 1.15em;
+            -webkit-filter: grayscale(1); /*沒有任何色彩的黑白影像*/
+        }
+
+        .blind {
+            width: 1.15em;
+            -webkit-filter: grayscale(0);
+        }
+
+        .red {
+            color: #CC0000;
+        }
+
+        .green {
+            color: #55AA00;
+        }
+
+        .t {
+            border-top: 1px solid black;
+            width: 7em;
+        }
+
+        h2 {
+            float: left;
+            width: 30em;
+        }
+
+        .width {
+            width: 15em;
+        }
+
+        .floatRight {
+            float: right
+        }
+
+        .floatLeft {
+            float: Left
+        }
+        .textCenter {
+            text-align: center;
+        }
+    </style>
+}
+
+<div>
+    @*<form class="form-inline">
+        <input type="text" placeholder="Search" aria-label="Search" style="width:50em" class="form-control mr-sm-2">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>*@
+    <div>
+        @*<h1>圖片</h1>*@<br />
+    </div>
+    <div>
+        <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb" style="background-color:	#444444">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","FundOverview")" style="color:#FFFFFF">基金總覽</a></li>
+                <li class="breadcrumb-item active" aria-current="page" style="color:#DDAA00">基金詳情</li>
+            </ol>
+        </nav>
+    </div>
+
+    @foreach (var info in Model.FundInfo)
+    {
+        <div>
+            <div>
+                <h2>@Html.DisplayFor(x => info.FundName)</h2>
+            </div>
+        </div>
+        <br />
+        <div>
+            <div>
+                <h1>@Html.DisplayFor(x => info.FundScale)</h1>
+                
+                    <div class="width floatLeft">
+                        <h6>
+                            @Html.DisplayNameFor(f => f.FundDetail.First().ValueChange) / @Html.DisplayNameFor(f => f.FundDetail.First().ChangeRate)
+                        </h6>
+                        <div id="span1" class="t textCenter">
+                            <h6>
+                                @if (info.ValueChange > 0)
+                                {
+                                    <span class="red">@Html.DisplayFor(f => info.ValueChange)</span>
+}
+                                @if (info.ValueChange < 0)
+                                {
+                                    <span class="green">@Html.DisplayFor(f => info.ValueChange)</span>
+}
+                                /
+                                @if (info.ChangeRate > 0)
+                                {
+                                    <span class="red">@Html.DisplayFor(f => info.ChangeRate)%</span>
+}
+                                @if (info.ChangeRate < 0)
+                                {
+                                    <span class="green">@Html.DisplayFor(f => info.ChangeRate)%</span>
+}
+                            </h6>
+                        </div>
+                    </div>
+                
+                <div class="floatLeft width">
+                    <h6>
+                        @Html.DisplayNameFor(f => f.FundMaster.First().StarRank)
+                    </h6>
+                    <div id="span1" class="t">
+                        @for (int i = 1; i <= info.StarRank; i++)
+                        {
+                            <img name="idstar0" class="blind" src="@Href("~/Areas/Fund/Images/star.png")" alt="Images/star" />
+}
+                        @for (int i = info.StarRank + 1; i <= 5; i++)
+                        {
+                            <img name="idstar0" class="dark" src="@Href("~/Areas/Fund/Images/star.png")" alt="Images/star" />
+}
+                    </div>
+                </div>
+                @*<div class="floatLeft width">
+                    @Html.DisplayNameFor(f => f.FundGoods.First().ClickRate)
+                    <div id="span1" class="t">
+                        @Html.DisplayFor(x => info.ClickRate)
+                    </div>
+                </div>*@
+                <div class="floatRight">
+                    <span>@Html.ActionLink("加入購物車", "AddToCart", "FundOverview", new { id = info.GoodID }, new { @class = "btn btn-danger" })</span>
+                    @*<a class="forAlert" href="@Url.Action("AddToCart","FundOverview",new {id = info.GoodID })">
+                        <img name="idcart1" src="@Href("~/Areas/Fund/Images/shopping-cart2.png")" alt="addToCart" /><span class ="btn btn-danger">加入購物車</span>
+                    </a>*@
+                </div>
+            </div>
+            <br />
+            <br />
+            <br />
+            <hr />
+            <br />
+            @*<div id="main" style="width: 1000px;height:450px;"></div>*@
+            <div>
+                @Html.HiddenFor(x => Model.FundInfo.FirstOrDefault().FundID)
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="btn btn-secondary active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">淨值走勢</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-secondary" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">資產配置</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-secondary" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">基金資料</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div id="main" style="width: 100%;height:450px;"></div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        <div style="width: 100%;">
+                            <div id="main2" style="width:1000px;height:450px;display: table;margin: 0 auto;"></div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                        <table class="table table-bordered table-hover">
+                            <tbody>
+                                <tr class="table-active">
+                                    <td class="table-active" style="width:8em;background-color:#333333; color:white">
+                                        @Html.DisplayNameFor(x => x.FundMaster.First().FundName)
+                                    </td>
+                                    <td class="table-active" style="background-color:#173347; color:white">
+                                        @Html.DisplayFor(x => info.FundName)
+                                    </td>
+                                </tr>
+                                <tr class="table-light">
+                                    <td  style="width:150px; background-color:#333333; color:white">
+                                        @Html.DisplayNameFor(x => x.FundMaster.First().Custodian)
+                                    </td>
+                                    <td style="background-color:#F1F7ED;">
+                                        @Html.DisplayFor(x => info.Custodian)
+                                    </td>
+                                </tr>
+                                <tr class="table-active">
+                                    <td  style="width:150px; background-color:#333333; color:white">
+                                        @Html.DisplayNameFor(x => x.FundCompany.First().FundCpyName)
+                                    </td>
+                                    <td style="background-color:#173347; color:white">
+                                        @Html.DisplayFor(x => info.FundCpyName)
+                                    </td>
+                                </tr>
+                                <tr class="table-light">
+                                    <td  style="width:150px; background-color:#333333; color:white">
+                                        @Html.DisplayNameFor(x => x.FundMaster.First().SetUpDate)
+                                    </td>
+                                    <td style="background-color:#F1F7ED;">
+                                        @Html.DisplayFor(x => info.SetUpDate)
+                                    </td>
+                                </tr>
+                                <tr class="table-active">
+                                    <td class="table-active"  style="width:150px; background-color:#333333; color:white">
+                                        @Html.DisplayNameFor(x => x.FundType.First().FundTypeName)
+                                    </td>
+                                    <td class="table-active" style="background-color:#173347; color:white">
+                                        @Html.DisplayFor(x => info.FundTypeName)
+                                    </td>
+                                </tr>
+                                <tr class="table-light">
+                                    <td style="width:150px; background-color:#333333; color:white">
+                                        @Html.DisplayNameFor(x => x.FundMaster.First().Location)
+                                    </td>
+                                    <td style="background-color:#F1F7ED;">
+                                        @Html.DisplayFor(x => info.Location)
+                                    </td>
+                                </tr>
+                                <tr class="table-active">
+                                    <td  style="width:150px; background-color:#333333; color:white">
+                                        @Html.DisplayNameFor(x => x.FundGoods.First().Description)
+                                    </td>
+                                    <td style="background-color:#173347; color:white">
+                                        @Html.DisplayFor(x => info.Description)
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+            <br />
+            <div class="textCenter">
+                <h3><span class="badge badge-pill badge-dark">近三十日淨值表</span></h3>
+            </div>
+            <br />
+            <br />
+            <div style="width:100%">
+                <div style="display:table;margin: 0 auto;">
+                    <table class="floatLeft">
+                        <thead class="table table-bordered bg-warning">
+                            <tr class="textCenter">
+                                <th class="floatLeft" style="width:150px">
+                                    @Html.DisplayNameFor(x => x.FundDetail.First().Date)
+                                </th>
+                                <th class="floatLeft" style="width:100px">
+                                    @Html.DisplayNameFor(x => x.FundDetail.First().NetValue)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="table table-bordered">
+                            @foreach (var values in Model.DaysValues.Take(10))
+                            {
+                                <tr class="textCenter">
+                                    <td class="floatLeft table-primary" style="width:150px; background-color:#333333; color:white">
+                                        @Html.DisplayFor(x => values.tenDays)
+                                    </td>
+                                    <td class="floatLeft table-secondary" style="width:100px; background-color:#F1F7ED;">
+                                        @Html.DisplayFor(x => values.tenDaysValues)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <table class="floatLeft" >
+                        <thead class="table table-bordered badge-warning">
+                            <tr class="textCenter">
+                                <th class="floatLeft" style="width:150px">
+                                    @Html.DisplayNameFor(x => x.FundDetail.First().Date)
+                                </th>
+                                <th class="floatLeft" style="width:100px">
+                                    @Html.DisplayNameFor(x => x.FundDetail.First().NetValue)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="table table-bordered">
+                            @foreach (var values2 in Model.DaysValues.Skip(10).Take(10))
+                            {
+                                <tr class="textCenter">
+                                    <td class="floatLeft" style="width:150px; background-color:#333333; color:white">
+                                        @Html.DisplayFor(x => values2.tenDays)
+                                    </td>
+                                    <td class="floatLeft table-secondary" style="width:100px; background-color:#F1F7ED;">
+                                        @Html.DisplayFor(x => values2.tenDaysValues)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <table class="floatLeft">
+                        <thead class="table table-bordered badge-warning">
+                            <tr class="textCenter">
+                                <th class="floatLeft" style="width:150px">
+                                    @Html.DisplayNameFor(x => x.FundDetail.First().Date)
+                                </th>
+                                <th class="floatLeft" style="width:100px">
+                                    @Html.DisplayNameFor(x => x.FundDetail.First().NetValue)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="table table-bordered">
+                            @foreach (var values3 in Model.DaysValues.Skip(20).Take(10))
+                            {
+                                <tr class="textCenter">
+                                    <td class="floatLeft table-primary" style="width:150px; background-color:#333333; color:white">
+                                        @Html.DisplayFor(x => values3.tenDays)
+                                    </td>
+                                    <td class="floatLeft table-secondary" style="width:100px; background-color:#F1F7ED;">
+                                        @Html.DisplayFor(x => values3.tenDaysValues)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+
+        </div>
+    }
+</div>
+
+
+@section scripts{
+<script src="~/Areas/Fund/Scripts/echarts.min.js"></script>
+    <script>
+    var myChart = echarts.init(document.getElementById('main'));
+
+    var base = +new Date(2017, 11, 27);
+    var oneDay = 24 * 3600 * 1000;
+    var date = [];
+    var data = [];
+    //var data = [Math.random() * 300];
+    ajaxdate();
+    //for (var i = 1; i < 1265; i++) {
+    //    var now = new Date(base += oneDay);
+    //    date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'));
+    //    data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));
+    //}
+    console.log(data);
+
+    option = {
+        tooltip: {
+            trigger: 'axis',
+            position: function (pt) {
+                return [pt[0], '10%'];
+            }
+        },
+        title: {
+            left: 'center',
+            text: '淨值走勢',
+        },
+        toolbox: {
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: date
+        },
+        yAxis: {
+            type: 'value',
+            boundaryGap: [0, '100%']
+        },
+        dataZoom: [{
+            type: 'inside',
+            start: 0,
+            end: 10
+        }, {
+            start: 0,
+            end: 10,
+            handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+            handleSize: '80%',
+            handleStyle: {
+                color: '#fff',
+                shadowBlur: 3,
+                shadowColor: 'rgba(0, 0, 0, 0.6)',
+                shadowOffsetX: 2,
+                shadowOffsetY: 2
+            }
+        }],
+        series: [
+            {
+                name: '淨值',
+                type: 'line',
+                smooth: true,
+                symbol: 'none',
+                sampling: 'average',
+                itemStyle: {
+                    normal: {
+                        color: 'rgb(255, 70, 131)'
+                    }
+                },
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: 'rgb(255, 158, 68)'
+                        }, {
+                            offset: 1,
+                            color: 'rgb(255, 70, 131)'
+                        }])
+                    }
+                },
+                data: data
+            }
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+
+    function ajaxdate() {
+        //產生 Company 下拉選單
+        var fundID = $("#FundID").val();
+        $.post('@Url.Action("ValueChart", "FundOverview")', { id: fundID}, function (res) {
+                var i = 1;
+                $.each(res, function (id, obj) {
+                    date.push([parseInt(obj.Year), parseInt(obj.month), parseInt(obj.date)].join('/'));
+                    data.push(parseInt(obj.NetValue));
+                    //data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));
+                    i = i + 1;
+                });
+                console.log(i);
+                myChart.setOption(option);
+            });
+        }
+
+    var myChart2 = echarts.init(document.getElementById('main2'));
+
+            ajaxDeploy()
+
+            function ajaxDeploy() {
+             var fundID = $("#FundID").val();
+             $.get('@Url.Action("fundDeploy", "FundOverview", new { area="Fund"})',{ id: fundID }, function (res) {
+                $.each(res, function (id, obj) {
+                    option2 = {
+                        color: ['#FFBB00'],
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                            }
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: ['股票 %', '債券 %', '現金 %', '其他 %'],
+                                axisTick: {
+                                    alignWithLabel: true
+                                }
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '百分比 ',
+                                type: 'bar',
+                                barWidth: '45%',
+                                //data: [10, 52, 200, 334]
+                                data: [obj.StockPT, obj.BondPT, obj.CashPT, obj.OtherPT]
+                            }
+                        ]
+                    };
+                });
+
+                myChart2.setOption(option2);
+            });
+        }
+    </script>
+
+}
+

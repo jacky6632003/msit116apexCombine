@@ -1,0 +1,109 @@
+﻿@model msit116apexLayout.Models.InterviewRecords
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+@section styles{
+    <style>
+        .masterdiv {
+            margin: 2em
+        }
+
+        .nakadiv {
+            margin: 1em
+        }
+
+        .monostyle {
+            margin-left: 6em;
+       
+        }
+
+        .h {
+            margin-left: 2em
+        }
+
+        hr {
+            border-bottom:1px solid black
+        }
+    </style>
+}
+<div style="width:1800px">
+    <h2 class="h " style="color:darkgoldenrod">是否確定刪除此資料?</h2>
+    <hr />
+
+    <div class="row masterdiv">
+        <div class="col">
+            <div class="nakadiv">
+                <h3 class="h">@Html.DisplayNameFor(model => model.Interviewer_Name)</h3>
+                <hr />
+                <h4 class="monostyle">@Html.DisplayFor(model => model.Interviewer_Name)</h4>
+            </div>
+
+            <div class="nakadiv">
+                <h3 class="h">@Html.DisplayNameFor(model => model.Interviewee_Name)</h3>
+                <hr />
+                <h4 class="monostyle">@Html.DisplayFor(model => model.Interviewee_Name)</h4>
+            </div>
+
+            <div class="nakadiv">
+                <h3 class="h">@Html.DisplayNameFor(model => model.StartTime)</h3>
+                <hr />
+                <h4 class="monostyle">@Html.DisplayFor(model => model.StartTime)</h4>
+            </div>
+
+            <div class="nakadiv">
+                <h3 class="h">@Html.DisplayNameFor(model => model.C_Location)</h3>
+                <hr />
+                <h4 class="monostyle">@Html.DisplayFor(model => model.C_Location)</h4>
+            </div>
+        </div>
+
+
+        <div class="col">
+
+            <div class="nakadiv">
+                <h3 class="h">@Html.DisplayNameFor(model => model.InterviewType.TypeName)</h3>
+                <hr />
+                <h4 class="monostyle">@Html.DisplayFor(model => model.InterviewType.TypeName)</h4>
+            </div>
+
+            <div class="nakadiv">
+                <h3 class="h">@Html.DisplayNameFor(model => model.CreateTime)</h3>
+                <hr />
+                <h4 class="monostyle">@Html.DisplayFor(model => model.CreateTime)</h4>
+            </div>
+
+            <div>
+                <h3 class="h">@Html.DisplayNameFor(model => model.LastModifyTime)</h3>
+                <hr />
+                <h4 class="monostyle">@Html.DisplayFor(model => model.LastModifyTime)</h4>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row h">
+        <div class="col">
+            <div class="nakadiv" style="margin-left:1em">
+                <h3 class="h">@Html.DisplayNameFor(model => model.InterviewContent)</h3>
+                <hr />
+                <h4 class="monostyle">@Html.DisplayFor(model => model.InterviewContent)</h4>
+            </div>
+        </div>
+
+    </div>
+    <div class="row masterdiv">
+        <div class="col monostyle">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-actions">
+                    <input type="submit" value="確定刪除" class="btn btn-danger" />
+                    @Html.ActionLink("返回", "Index", "CRM/InterviewRecords", new { @class = "btn btn-info" })
+                </div>
+            }
+        </div>
+    </div>
+
+    </div>

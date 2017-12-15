@@ -1,0 +1,41 @@
+﻿@model IEnumerable<msit116apexLayout.Models.ProcedureGetMembers_Result>
+@{
+    ViewBag.Title = "MembersManager";
+}
+<table id="tbHad" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(p => p.UserName)</th>
+            <th>@Html.DisplayNameFor(p => p.Name)</th>
+            <th>@Html.DisplayNameFor(p => p.Email)</th>
+            <th>@Html.DisplayNameFor(p => p.BirthDay)</th>
+            <th>@Html.DisplayNameFor(p => p.Country)</th>
+            <th>@Html.DisplayNameFor(p => p.PhoneNumber)</th>
+            <th>@Html.DisplayNameFor(p => p.Telephone)</th>
+            <th>@Html.DisplayNameFor(p => p.ResidenceAddress)</th>
+            <th>@Html.DisplayNameFor(p => p.MailingAddress)</th>
+            <th>@Html.DisplayNameFor(p => p.IdentityCardNumber)</th>
+            <th>@Html.DisplayNameFor(p => p.Title)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var member in Model)
+        {
+            <tr>
+                <th>@Html.EditorFor(ee => member.UserName)</th>
+                <th>@Html.EditorFor(ee => member.Name)</th>
+                <th>@Html.EditorFor(ee => member.Email)</th>
+                <th>@Html.EditorFor(ee => member.BirthDay)</th>
+                <th>@Html.EditorFor(ee => member.Country)</th>
+                <th>@Html.EditorFor(ee => member.PhoneNumber)</th>
+                <th>@Html.EditorFor(ee => member.Telephone)</th>
+                <th>@Html.EditorFor(ee => member.ResidenceAddress)</th>
+                <th>@Html.EditorFor(ee => member.MailingAddress)</th>
+                <th>@Html.EditorFor(ee => member.IdentityCardNumber)</th>
+                <th>@Html.EditorFor(ee => member.Title)</th>
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.Action("NewMember", "Account")
+

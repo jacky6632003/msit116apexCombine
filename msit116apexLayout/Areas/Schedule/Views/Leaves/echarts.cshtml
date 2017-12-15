@@ -1,0 +1,688 @@
+﻿
+@{
+    ViewBag.Title = "報表";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+@section styles{
+
+
+
+    <style>
+       
+        .aaa {
+            display: inline-block;
+        }
+    </style>
+
+}
+
+<div style=" width:100%; text-align:center; " class="print-btn">
+    <h2 style="font-size:40px">報表</h2>
+    </div>
+    <div class="alert alert-secondary">
+        <div class="form-inline">
+            公司每月請假次數
+
+            <select id="year" name="year" class="color1 form-control inline" style="width:150px;"></select>
+            &nbsp;&nbsp;
+            @Html.DropDownList("departmentID3", null, htmlAttributes: new { @class = "form-control" })
+            @*<input type="button" value="匯出" id="btnecharts1" class="btn btn-success   btn-flat" />*@
+        </div>
+
+    </div>
+
+
+
+
+    <div id="main" style="width: 600px;height:400px;" class="aaa"></div>
+    <div id="main3" style="width: 600px;height:400px;" class="aaa"></div>
+
+    <div class="alert alert-secondary">
+        <div class="form-inline">
+            個人每月請假統計
+            <select id="year1" name="year" class="color1 form-control inline" style="width:150px;"></select>
+            &nbsp;&nbsp;
+            <select id="month" name="month" class="color1 form-control inline" style="width:150px;"></select>月
+
+            @Html.DropDownList("departmentID", null, htmlAttributes: new { @class = "form-control" })
+            &nbsp;&nbsp;
+            @Html.DropDownList("UserID", null, htmlAttributes: new { @class = "form-control" })
+            &nbsp;&nbsp;
+            <input type="button" value="匯出" id="btnecharts2" class="btn btn-success   btn-flat" />
+        </div>
+
+    </div>
+    <div id="main1" style="width: 600px;height:400px;" class="aaa"></div>
+    <div id="main2" style="width: 600px;height:400px;" class="aaa"></div>
+
+    <div class="alert alert-secondary">
+        <div class="form-inline">
+            部門請假統計
+            <select id="year2" name="year2" class="color1 form-control inline" style="width:150px;"></select>
+            &nbsp;&nbsp;
+            <select id="month2" name="month2" class="color1 form-control inline" style="width:150px;"></select>月
+
+            @Html.DropDownList("departmentID2", null, htmlAttributes: new { @class = "form-control" })
+            &nbsp;&nbsp;
+            <input type="button" value="匯出" id="btnecharts3" class="btn btn-success   btn-flat" />
+        </div>
+
+    </div>
+    <div id="main4" style="width: 600px;height:400px;" class="aaa"></div>
+    @section scripts{
+
+
+        <script src="~/Areas/Schedule/script/echarts.min.js"></script>
+        <script>
+        $(document).ready(function () {
+
+
+            var Today = new Date();
+            var classdatas = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            var classdatas2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            var classdatas3 = null;
+            var classdatas4 = null;
+            var classdatas5 = null;
+            var classdatas6 = null;
+            bbb();
+            var toyear = Today.getYear()+1900;
+            var tomon = Today.getMonth()+1;
+            //console.log(tomon);
+            for (i = 2015; i <= toyear; i++) {   //新增年
+                var opt = window.document.createElement("option");  //<option >
+                //opt.setAttribute("value", i);  //<option value=1,2...>
+                //var optTxt = document.createTextNode(i);  //1,2,3.....
+                //opt.appendChild(optTxt);  //<option value=1>1</option>
+                opt.value = i;
+                opt.innerHTML = i;
+                document.getElementById('year').appendChild(opt);
+
+
+            }
+            $("#year").val(toyear);
+            for (i = 2015; i <= toyear; i++) {   //新增年
+                var opt = window.document.createElement("option");  //<option >
+                //opt.setAttribute("value", i);  //<option value=1,2...>
+                //var optTxt = document.createTextNode(i);  //1,2,3.....
+                //opt.appendChild(optTxt);  //<option value=1>1</option>
+                opt.value = i;
+                opt.innerHTML = i;
+                document.getElementById('year1').appendChild(opt);
+            }
+            $("#year1").val(toyear);
+            for (i = 2015; i <= toyear; i++) {   //新增年
+                var opt = window.document.createElement("option");  //<option >
+                //opt.setAttribute("value", i);  //<option value=1,2...>
+                //var optTxt = document.createTextNode(i);  //1,2,3.....
+                //opt.appendChild(optTxt);  //<option value=1>1</option>
+                opt.value = i;
+                opt.innerHTML = i;
+                document.getElementById('year2').appendChild(opt);
+            }
+            $("#year2").val(toyear);
+            for (i = 1; i <= 12; i++) {   //新增月
+                var opt = window.document.createElement("option");  //<option >
+                //opt.setAttribute("value", i);  //<option value=1,2...>
+                //var optTxt = document.createTextNode(i);  //1,2,3.....
+                //opt.appendChild(optTxt);  //<option value=1>1</option>
+                opt.value = i;
+                opt.innerHTML = i;
+                document.getElementById('month').appendChild(opt);
+            }
+            $("#month").val(tomon);
+            for (i = 1; i <= 12; i++) {   //新增月
+                var opt = window.document.createElement("option");  //<option >
+                //opt.setAttribute("value", i);  //<option value=1,2...>
+                //var optTxt = document.createTextNode(i);  //1,2,3.....
+                //opt.appendChild(optTxt);  //<option value=1>1</option>
+                opt.value = i;
+                opt.innerHTML = i;
+                document.getElementById('month2').appendChild(opt);
+            }
+            $("#month2").val(tomon);
+            //  $("#year").val(Today.getFullYear());
+            var ss1 = $("#year").val();
+
+            function ajax1() {
+                  var ss1 = $("#year").val();
+                  var ss2 = $("#departmentID3").val();
+                var data1 = {
+                    year: ss1,
+                    dep:ss2
+                }
+                $.ajax({
+                    url: "@Url.Action("echartsleave")",
+                    data: data1,
+                    type: 'post',
+                    success: function (res) {
+                        classdatas = res;
+                        aaa();
+
+
+                    }
+
+                })
+                  $.ajax({
+                    url: "@Url.Action("echartsleave1")",
+                    data: data1,
+                    type: 'post',
+                    traditional: true,
+                    success: function (res) {
+                        classdatas4 = res;
+
+                        ddd(ss1);
+
+                    }
+
+                })
+
+            }
+            ajax1();
+            $("#year").on("change", function () {
+
+                ajax1();
+
+            })
+            $("#departmentID3").on("change", function () {
+
+                ajax1();
+
+            })
+              function aaa() {
+                var myChart = echarts.init(document.getElementById('main'));
+                option = {
+                    color: ['#3398DB'],
+                    title: {
+                        text: '*請假/時間單位為：天'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    legend: {
+                        data: ['销量']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                            axisTick: {
+                                alignWithLabel: true
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '個數',
+                            type: 'bar',
+                            barWidth: '60%',
+                            data: classdatas
+
+                        }
+                    ]
+                };
+
+                myChart.setOption(option);
+            }
+
+              $('#departmentID').change(function () {
+                  $('#UserID').empty();
+                  var a = $('#departmentID').val();
+                  var data1 = {
+                      Department: a,
+
+                 }
+                 $.ajax({
+                    url:"@Url.Action("echartsDepartmentID")",
+                    data: data1,
+                    type: 'post',
+                    success: function (res) {
+                        if (res.length > 0) {
+                            $('#UserID').append(res);
+                            getcharjason();
+
+                        }
+                    }
+
+                 })
+
+
+
+              })
+
+              document.getElementById("year1").onchange = getcharjason;
+              document.getElementById("month").onchange = getcharjason;
+              //document.getElementById("departmentID").onchange = getcharjason;
+              document.getElementById("UserID").onchange = getcharjason;
+              getcharjason();
+              function getcharjason() {
+                  var year1 = $("#year1").val();
+                  var UserID1 = $("#UserID").val();
+                  var month1 = $("#month").val();
+                  var data2 = {
+                      year: year1,
+                      mon: month1,
+                      ids: UserID1
+
+                  }
+
+                   $.ajax({
+                    url:"@Url.Action("echartsDepartmentIDJson")",
+                    data: data2,
+                    type: 'post',
+                    success: function (res) {
+                        classdatas2 = res;
+                        bbb();
+                    }
+
+                  })
+
+                  $.ajax({
+                    url:"@Url.Action("jasontest")",
+                    data: data2,
+                    type: 'post',
+                    success: function (res) {
+                        classdatas3 = res;
+                       ccc();
+                    }
+
+                 })
+
+              }
+
+
+              function bbb() {
+                  var myChart = echarts.init(document.getElementById('main1'));
+                  var dataAxis = ['年休假', '公假', '事假', '病假', '喪假', '工傷假', '產假', '陪產假', '婚假', '其它'];
+                  //var classdatas2 = [220, 182, 191, 234, 290, 330, 310, 123, 442, 321, 90, 149, 210, 122, 133, 334, 198, 123, 125, 220];
+                  var yMax = 10;
+                  var dataShadow = [];
+
+                  for (var i = 0; i < classdatas2.length; i++) {
+                      dataShadow.push(yMax);
+                  }
+
+                  option = {
+                      title: {
+                          text: '個人每月休假統計',
+                          subtext: '假別'
+                      },
+                      xAxis: {
+                          data: dataAxis,
+                          axisLabel: {
+                              inside: true,
+                              textStyle: {
+                                  color: '#000'
+                              }
+                          },
+                          axisTick: {
+                              show: false
+                          },
+                          axisLine: {
+                              show: false
+                          },
+                          z: 10
+                      },
+                      yAxis: {
+                          axisLine: {
+                              show: false
+                          },
+                          axisTick: {
+                              show: false
+                          },
+                          axisLabel: {
+                              textStyle: {
+                                  color: '#999'
+                              }
+                          }
+                      },
+                      dataZoom: [
+                          {
+                              type: 'inside'
+                          }
+                      ],
+                      series: [
+                          { // For shadow
+                              type: 'bar',
+                              itemStyle: {
+                                  normal: { color: 'rgba(0,0,0,0.05)' }
+                              },
+                              barGap: '-100%',
+                              barCategoryGap: '40%',
+                              data: dataShadow,
+                              animation: false
+                          },
+                          {
+                              type: 'bar',
+                              itemStyle: {
+                                  normal: {
+                                      color: new echarts.graphic.LinearGradient(
+                                          0, 0, 0, 1,
+                                          [
+                                              { offset: 0, color: '#83bff6' },
+                                              { offset: 0.5, color: '#188df0' },
+                                              { offset: 1, color: '#188df0' }
+                                          ]
+                                      )
+                                  },
+                                  emphasis: {
+                                      color: new echarts.graphic.LinearGradient(
+                                          0, 0, 0, 1,
+                                          [
+                                              { offset: 0, color: '#2378f7' },
+                                              { offset: 0.7, color: '#2378f7' },
+                                              { offset: 1, color: '#83bff6' }
+                                          ]
+                                      )
+                                  }
+                              },
+                              data: classdatas2
+                          }
+                      ]
+                  };
+
+                  // Enable data zoom when user click bar.
+                  var zoomSize = 6;
+                  myChart.on('click', function (params) {
+                      console.log(dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)]);
+                      myChart.dispatchAction({
+                          type: 'dataZoom',
+                          startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
+                          endValue: dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
+                      });
+                  });
+                  myChart.setOption(option);
+              }
+
+              function ccc() {
+                  var myChart = echarts.init(document.getElementById('main2'));
+                  option = {
+                      tooltip: {
+                          trigger: 'item',
+                          formatter: "{a} <br/>{b}: {c} ({d}%)"
+                      },
+                      legend: {
+                          orient: 'vertical',
+                          x: 'left',
+                          data: ['年休假', '公假', '事假', '病假', '喪假', '工傷假', '產假', '陪產假', '婚假', '其它']
+                      },
+                      series: [
+                          {
+                              name: '來源',
+                              type: 'pie',
+                              radius: ['50%', '70%'],
+                              avoidLabelOverlap: false,
+                              label: {
+                                  normal: {
+                                      show: false,
+                                      position: 'center'
+                                  },
+                                  emphasis: {
+                                      show: true,
+                                      textStyle: {
+                                          fontSize: '30',
+                                          fontWeight: 'bold'
+                                      }
+                                  }
+                              },
+                              labelLine: {
+                                  normal: {
+                                      show: false
+                                  }
+                              },
+                              data: classdatas3
+                          }
+                      ]
+                  };
+                  myChart.setOption(option);
+              }
+
+              function ddd(ss1) {
+
+                  var colors = ['#5793f3', '#d14a61', '#675bba'];
+
+                  var myChart = echarts.init(document.getElementById('main3'));
+                  option = {
+                      color: colors,
+
+                      tooltip: {
+                          trigger: 'none',
+                          axisPointer: {
+                              type: 'cross'
+                          }
+                      },
+                      legend: {
+                          data: [ss1-1 + '年', ss1 + '年']
+                      },
+                      grid: {
+                          top: 70,
+                          bottom: 50
+                      },
+                      xAxis: [
+                          {
+                              type: 'category',
+                              axisTick: {
+                                  alignWithLabel: true
+                              },
+                              axisLine: {
+                                  onZero: false,
+                                  lineStyle: {
+                                      color: colors[1]
+                                  }
+                              },
+                              axisPointer: {
+                                  label: {
+                                      formatter: function (params) {
+                                          return ss1 + '年' + params.value
+                                              + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+                                      }
+                                  }
+                              },
+                              data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                          },
+                          {
+                              type: 'category',
+                              axisTick: {
+                                  alignWithLabel: true
+                              },
+                              axisLine: {
+                                  onZero: false,
+                                  lineStyle: {
+                                      color: colors[0]
+                                  }
+                              },
+                              axisPointer: {
+                                  label: {
+                                      formatter: function (params) {
+                                          return ss1-1 + '年' + params.value
+                                              + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+                                      }
+                                  }
+                              },
+                              data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                          }
+                      ],
+                      yAxis: [
+                          {
+                              type: 'value'
+                          }
+                      ],
+                      series: [
+                          {
+                              name: ss1-1+'年',
+                              type: 'line',
+                              xAxisIndex: 1,
+                              smooth: true,
+                              data: classdatas4
+                          },
+                          {
+                              name: ss1 + '年',
+                              type: 'line',
+                              smooth: true,
+                              data: classdatas
+                          }
+                      ]
+                  };
+                  myChart.setOption(option);
+              }
+
+
+              document.getElementById("year2").onchange = getcharjason2;
+              document.getElementById("month2").onchange = getcharjason2;
+              document.getElementById("departmentID2").onchange = getcharjason2;
+
+              getcharjason2();
+
+              function getcharjason2() {
+                  var year1 = $("#year2").val();
+                  var departmentID2 = $("#departmentID2").val();
+                  var month1 = $("#month2").val();
+
+                  var data2 = {
+                      year: year1,
+                      dqp: departmentID2,
+                      mon: month1,
+                  }
+                  var data3 = {
+
+                      dqp: departmentID2,
+
+                  }
+                  $.ajax({
+                    url:"@Url.Action("jasonDep")",
+                    data: data2,
+                    type: 'post',
+                    success: function (res) {
+                        classdatas5 = res;
+                        eee();
+                    }
+
+                  })
+                  $.ajax({
+                    url:"@Url.Action("jasonDep1")",
+                    data: data3,
+                    type: 'post',
+                    success: function (res) {
+                        classdatas6 = res;
+                       eee();
+                    }
+
+                 })
+
+              }
+
+              function eee() {
+                  var myChart = echarts.init(document.getElementById('main4'));
+                  option = {
+                      title: {
+                          text: '請假次數',
+                          subtext: '部門'
+                      },
+                      tooltip: {
+                          trigger: 'axis'
+                      },
+                      legend: {
+                          data: ['蒸发量', '降水量']
+                      },
+                      toolbox: {
+                          show: true,
+                          feature: {
+                              dataView: { show: true, readOnly: false },
+                              magicType: { show: true, type: ['line', 'bar'] },
+                              restore: { show: true },
+                              saveAsImage: { show: true }
+                          }
+                      },
+                      calculable: true,
+                      xAxis: [
+                          {
+                              type: 'category',
+                              data: classdatas6
+                          }
+                      ],
+                      yAxis: [
+                          {
+                              type: 'value'
+                          }
+                      ],
+                      series: [
+                          {
+                              name: '次數',
+                              type: 'bar',
+                              data: classdatas5,
+                              markPoint: {
+                                  data: [
+                                      { type: 'max', name: '最大值' },
+                                      { type: 'min', name: '最小值' }
+                                  ]
+                              },
+                              markLine: {
+                                  data: [
+                                      { type: 'average', name: '平均值' }
+                                  ]
+                              }
+                          },
+
+                      ]
+                  };
+                  myChart.setOption(option);
+
+
+              }
+
+              $("#btnecharts3").click(function () {
+                   var year1 = $("#year2").val();
+                  var departmentID2 = $("#departmentID2").val();
+                  var month1 = $("#month2").val();
+
+
+                  var year = year1;
+                  var dqp = departmentID2;
+                  var mon = month1;
+
+                  window.location = '@Url.Action("ExportToExcelechart3")?year=' + year + '&dqp=' + dqp + '&mon=' + mon;
+
+
+              })
+
+            @*$("#btnecharts1").click(function () {
+                var ss1 = $("#year").val();
+
+
+                  var year = ss1;
+
+
+                  window.location = '@Url.Action("ExportToExcelechart1")?year=' + year ;
+
+
+              })*@
+
+
+              $("#btnecharts2").click(function () {
+                  var year = $("#year1").val();
+                  var ids = $("#UserID").val();
+                  var mon = $("#month").val();
+                  window.location = '@Url.Action("ExportToExcelechart2")?year=' + year+"&ids="+ids+"&mon="+mon;
+
+
+              })
+
+        })
+
+        </script>
+    }

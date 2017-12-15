@@ -1,0 +1,232 @@
+﻿@model IEnumerable<msit116apexLayout.Models.UserNews>
+@{
+    ViewBag.Title = "通知";
+}
+
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+        <div class="card">
+            <h4 class="card-header bg-dark text-white">
+                @ViewBag.Title
+            </h4>
+            <div class="card-body">
+                <table id="tablereadfalse">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <span>寄送者</span>
+                            </th>
+                            <th>
+                                <span>通知</span>
+                            </th>
+                            <th>
+                                <span>時間</span>
+                            </th>
+                            <th>
+                                <span>動作</span>
+                            </th>
+                            <th>
+                                <span>刪除</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr id="readfalse" style="border-bottom:solid 2px black">
+                            <td colspan="5">
+                                <h5>未讀</h5>
+                            </td>
+                        </tr>
+                        @foreach (var userNews in Model)
+                        {
+                            if (!userNews.read)
+                            {
+                                <tr style="border-bottom:dotted 1px silver">
+                                    <td style="width:3em"></td>
+                                    <td>
+                                        @if (@userNews.fromUser == "msit116apex@gmail.com")
+                                        {
+                                            @userNews.fromUser <span>(系統管理員)</span>
+                                        }
+                                        else
+                                        {
+                                        @userNews.fromUser
+                                        }
+                                    
+                                    </td>
+                                    <td>
+                                    <span>標題：</span>@userNews.msgTitle
+                                        <br />
+                                        <span>內容：</span>@userNews.msgContent
+                                        <br />
+                                        @if (@userNews.msgUrl != "")
+                                        {
+                                            <span>連結：</span><a href="@userNews.msgUrl" class="btn btn-success">連結</a>
+                                        }                    
+                                    </td>
+                                    <td>@userNews.time</td>
+                                    <td>
+                                        <button type="button" id= "@string.Format("sn{0}",@userNews.sn)" data-read="true" href="" class="btn btn-info">變更為已讀</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" id="@string.Format("rm{0}",@userNews.sn)" href="" class="btn btn-danger">刪除</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <table id="tablereadfalseAll">
+                    <thead><tr></tr></thead>
+                    <tbody></tbody>
+                </table>
+                <table id="tablereadtrue">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <span>寄送者</span>
+                            </th>
+                            <th>
+                                <span>通知</span>
+                            </th>
+                            <th>
+                                <span>時間</span>
+                            </th>
+                            <th>
+                                <span>動作</span>
+                            </th>
+                            <th>
+                                <span>刪除</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="readtrue" style="border-bottom:solid 2px black">
+                            <td colspan="5">
+                                <h5>已讀</h5>
+                            </td>
+                        </tr>
+                        @foreach (var userNews in Model)
+                        {
+                            if (userNews.read)
+                            {
+                                <tr style="border-bottom:dotted 1px silver">
+                                    <td style="width:3em"></td>
+                                    <td>
+                                        @if (@userNews.fromUser == "msit116apex@gmail.com")
+                                        {
+                                            @userNews.fromUser <span>(系統管理員)</span>
+                                        }
+                                        else
+                                        {
+                                            @userNews.fromUser
+                                        }
+                                    </td>
+                                    <td>
+                                        <span>標題：</span>@userNews.msgTitle
+                                        <br />
+                                        <span>內容：</span>@userNews.msgContent
+                                        <br />
+                                        @if (@userNews.msgUrl != "")
+                                        {
+                                            <span>連結：</span><a href="@userNews.msgUrl" class="btn btn-success">連結</a>
+                                        }
+                                    </td>
+                                    <td>@userNews.time</td>
+                                    <td>
+                                        <button type="button" id="@string.Format("sn{0}",@userNews.sn)" data-read="false" href="" class="btn btn-warning">變更為未讀</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" id="@string.Format("rm{0}",@userNews.sn)" href="" class="btn btn-danger">刪除</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+                <table id="tablereadtrueAll">
+                    <thead><tr></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts{
+    <script>
+        $(function () {
+            $("button[id^='sn']").click(function () {
+                var tsn = $(this).attr("id").split("sn")[1];
+                var tread = $(this).data("read");
+                var titemBtn = $(this);
+                var titem = $(this).parent().parent();
+                var updata = {
+                    sn: tsn,
+                    read: tread
+                };
+                $.post("@Url.Action("UserMessage", "Account",new { area=""})", updata, function (data) { });
+
+                var tTime = parseDate($(this).parent().parent().children("td:eq(3)").text());
+                var tablereadtrueELEs = $("#tablereadtrue>tbody>tr:gt(0)");
+                var tablereadfalseELEs = $("#tablereadfalse>tbody>tr:gt(0)");
+                if (tread == true) {
+                    $.each(tablereadtrueELEs, function (id, children) {
+                        var cTime = parseDate($(children).children("td:eq(3)").text());
+                        if ((tTime > cTime) == false) {
+                            $(titem).insertBefore($(children));
+                            $(titemBtn).data("read", false).removeClass("btn-info").addClass("btn-warning").text("變更為未讀");
+                            return false;
+                        }
+                        if (tablereadtrueELEs.length == $(children).index())
+                        {
+                            $(titem).insertAfter($(children));
+                            $(titemBtn).data("read", false).removeClass("btn-info").addClass("btn-warning").text("變更為未讀");
+                            return false;
+                        }
+                    });
+                    if (tablereadtrueELEs.length == 0) {
+                        $(titem).insertAfter($("#readtrue"));
+                        $(titemBtn).data("read", false).removeClass("btn-info").addClass("btn-warning").text("變更為未讀");
+                    }
+                }
+                else if (tread == false)
+                {
+                    $.each(tablereadfalseELEs, function (id, children) {
+                        var cTime = parseDate($(children).children("td:eq(3)").text());
+                        if ((tTime > cTime) == false) {
+                            $(titem).insertBefore($(children));
+                            $(titemBtn).data("read", true).removeClass("btn-warning").addClass("btn-info").text("變更為已讀");
+                            return false;
+                        }
+                        if (tablereadfalseELEs.length == $(children).index()) {
+                            $(titem).insertAfter($(children));
+                            $(titemBtn).data("read", true).removeClass("btn-warning").addClass("btn-info").text("變更為已讀");
+                            return false;
+                        }
+                    });
+                    if (tablereadfalseELEs.length == 0) {
+                        $(titem).insertAfter($("#readfalse"));
+                        $(titemBtn).data("read", true).removeClass("btn-warning").addClass("btn-info").text("變更為已讀");
+                    }
+                }
+                //
+            });
+            $("button[id^='rm']").click(function () {
+                var trm = $(this).attr("id").split("rm")[1];
+                var updata = {
+                    sn: trm
+                    };
+                $.post("@Url.Action("RemoveUserMessage", "Account",new { area=""})", updata, function (data) { });
+                $(this).parent().parent().remove();
+            });
+        });
+    </script>
+    }

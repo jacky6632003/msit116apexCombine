@@ -1,0 +1,378 @@
+﻿@model IEnumerable<msit116apexLayout.Models.Department>
+@{
+    ViewBag.Title = "行事曆";
+}
+<div style=" width:100%; text-align:center; " class="print-btn">
+    <h2 style="font-size:40px;">行事曆</h2>
+</div>
+
+
+<br />
+
+<div id="accordion" role="tablist">
+    <div class="card">
+        <div class="card-header" role="tab" id="headingOne">
+            <h5 class="mb-0">
+                <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="color:black">
+                  <span style="color:#ffd800">!</span>  部門顏色分辨
+                </a>
+            </h5>
+        </div>
+
+        <div id="collapseOne" class="collapse " role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                <table class="table" " >
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.departmentID)
+                            </th>
+                            <th ">
+                                自己
+                            </th>
+                            @foreach (var items in Model)
+            {
+                                <th>
+                                    @Html.DisplayFor(modelItem => items.departmentName)
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>
+                                顏色分辨
+                            </th>
+                            <td style="color:aqua;">
+                                aqua
+                            </td>
+                            @foreach (var items in Model)
+            {
+                                <td style="color:  @Html.DisplayFor(modelItem => items.depThemeColor);">
+                                    @Html.DisplayFor(modelItem => items.depThemeColor)
+                                </td>
+                            }
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<br />
+
+    <div id="calender"></div>
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><span id="eventTitle"></span></h4>
+                </div>
+                <div class="modal-body">
+                    <button id="btnDelete" class="btn btn-default btn-sm pull-right">
+                        <span class="glyphicon glyphicon-remove"></span> 刪除
+                    </button>
+                    <button id="btnEdit" class="btn btn-default btn-sm pull-right" style="margin-right:5px;">
+                        <span class="glyphicon glyphicon-pencil"></span> 修改
+                    </button>
+                    <p id="pDetails"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="myModalSave" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">儲存行事曆</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="col-md-12 form-horizontal">
+                        <input type="hidden" id="hdEventID" value="0" />
+                        <div class="form-group">
+                            <label>標題</label>
+                            <input type="text" id="txtSubject" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>開始時間</label>
+                            <div class="input-group date" id="dtp1">
+                                <input type="text" id="txtStart" class="form-control" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label><input type="checkbox" id="chkIsFullDay" checked="checked" />  全天</label>
+                            </div>
+                        </div>
+                        <div class="form-group" id="divEndDate" style="display:none">
+                            <label>結束時間</label>
+                            <div class="input-group date" id="dtp2">
+                                <input type="text" id="txtEnd" class="form-control" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>內容</label>
+                            <textarea id="txtDescription" rows="3" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>部門</label>
+                            @Html.DropDownList("ddThemeColor", null, htmlAttributes: new { @class = "form-control" })
+                            @*<select id="ddThemeColor" class="form-control">
+                                    <option value="">Default</option>
+                                    <option value="red">Red</option>
+                                    <option value="blue">Blue</option>
+                                    <option value="black">Black</option>
+                                    <option value="green">Green</option>
+                                </select>*@
+                        </div>
+
+                        <button type="button" id="btnSave" class="btn btn-success">儲存</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
+                        <button type="button" class="btn btn-info" id="Demo">Demo</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    @section scripts{
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+        @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>*@
+        <script>
+            $(document).ready(function () {
+                // var q = $("#ddThemeColor").val("aqua");
+                $('#ddThemeColor option[value="aqua"]').attr("selected", true);
+                var events = [];
+                var selectedEvent = null;
+                FetchEventAndRenderCalendar();
+                function FetchEventAndRenderCalendar() {
+                    events = [];
+                    $.ajax({
+                        type: "GET",
+                        url: "/home/GetEvents",
+                        success: function (data) {
+                            $.each(data, function (i, v) {
+                                events.push({
+                                    eventID: v.EventID,
+                                    title: v.Subject,
+                                    description: v.Description,
+                                    start: moment(v.Start),
+                                    end: v.End != null ? moment(v.End) : null,
+                                    color: v.ThemeColor,
+                                    allDay: v.IsFullDay
+                                });
+                            })
+
+                            GenerateCalender(events);
+                        },
+                        error: function (error) {
+                            alert('failed');
+                        }
+                    })
+                }
+
+                function GenerateCalender(events) {
+                    $('#calender').fullCalendar('destroy');
+                    $('#calender').fullCalendar({
+                        contentHeight: 400,
+                        defaultDate: new Date(),
+                        timeFormat: 'h(:mm)a',
+                        header: {
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'month,basicWeek,basicDay,list'
+                        },
+                        eventLimit: true,
+                        eventColor: '#378006',
+                        events: events,
+                        eventClick: function (calEvent, jsEvent, view) {
+                            selectedEvent = calEvent;
+                            $('#myModal #eventTitle').text(calEvent.title);
+                            var $description = $('<div/>');
+                            $description.append($('<p/>').html('<b>開始期間:</b>' + calEvent.start.format("YYYY/MM/DD HH:mm:ss")));
+                            if (calEvent.end != null) {
+                                $description.append($('<p/>').html('<b>結束:</b>' + calEvent.end.format("YYYY/MM/DD HH:mm:ss")));
+                            }
+                            $description.append($('<p/>').html('<b>內容:</b>' + calEvent.description));
+                            $('#myModal #pDetails').empty().html($description);
+
+                            $('#myModal').modal();
+                        },
+                        selectable: true,
+                        select: function (start, end) {
+                            selectedEvent = {
+                                eventID: 0,
+                                title: '',
+                                description: '',
+                                start: start,
+                                end: end,
+                                allDay: false,
+                                color: ''
+                            };
+                            openAddEditForm();
+                            $('#calendar').fullCalendar('unselect');
+                        },
+                        editable: true,
+                        eventDrop: function (event) {
+                            var data = {
+                                EventID: event.eventID,
+                                Subject: event.title,
+                                Start: event.start.format('YYYY-MM-DD HH:mm:ss'),
+                                End: event.end != null ? event.end.format('YYYY-MM-DD HH:mm:ss') : null,
+                                Description: event.description,
+                                ThemeColor: event.color,
+                                IsFullDay: event.allDay
+                            };
+                            SaveEvent(data);
+                        }
+                    })
+                }
+
+                $('#btnEdit').click(function () {
+                    //Open modal dialog for edit event
+                    openAddEditForm();
+                })
+                $('#btnDelete').click(function () {
+                    if (selectedEvent != null && confirm('你確定嗎?')) {
+                        $.ajax({
+                            type: "POST",
+                            url: '/home/DeleteEvent',
+                            data: { 'eventID': selectedEvent.eventID },
+                            success: function (data) {
+                                if (data.status) {
+                                    //Refresh the calender
+                                    FetchEventAndRenderCalendar();
+                                    $('#myModal').modal('hide');
+                                }
+                            },
+                            error: function () {
+                                alert('Failed');
+                            }
+                        })
+                    }
+                })
+
+                //$('#dtp1,#dtp2').datetimepicker({
+                //    format: 'yyyy/MM/dd HH:mm:ss'
+                //});
+
+                $('#chkIsFullDay').change(function () {
+                    if ($(this).is(':checked')) {
+                        $('#divEndDate').hide();
+                    }
+                    else {
+                        $('#divEndDate').show();
+                    }
+                });
+
+                function openAddEditForm() {
+                    if (selectedEvent != null) {
+                        $('#hdEventID').val(selectedEvent.eventID);
+                        $('#txtSubject').val(selectedEvent.title);
+                        $('#txtStart').val(selectedEvent.start.format('YYYY-MM-DD HH:mm:ss'));
+                        $('#chkIsFullDay').prop("checked", selectedEvent.allDay || false);
+                        $('#chkIsFullDay').change();
+                        $('#txtEnd').val(selectedEvent.end != null ? selectedEvent.end.format('YYYY-MM-DD HH:mm:ss') : '');
+                        $('#txtDescription').val(selectedEvent.description);
+                        $('#ddThemeColor').val(selectedEvent.color);
+                    }
+                    $('#myModal').modal('hide');
+                    $('#myModalSave').modal();
+                }
+
+                $('#btnSave').click(function () {
+                    //Validation/
+
+                    if ($('#txtSubject').val().trim() == "") {
+                        alert('Subject required');
+                        return;
+                    }
+                    if ($('#txtStart').val().trim() == "") {
+                        alert('Start date required');
+                        return;
+                    }
+                    if ($('#chkIsFullDay').is(':checked') == false && $('#txtEnd').val().trim() == "") {
+                        alert('End date required');
+                        return;
+                    }
+                    else {
+                        var startDate = moment($('#txtStart').val(), "YYYY-MM-DD HH:mm:ss").toDate();
+                        var endDate = moment($('#txtEnd').val(), "YYYY-MM-DD HH:mm:ss").toDate();
+                        if (startDate > endDate) {
+                            alert('Invalid end date');
+                            return;
+                        }
+                    }
+
+                    var data = {
+                        EventID: $('#hdEventID').val(),
+                        Subject: $('#txtSubject').val().trim(),
+                        Start: $('#txtStart').val().trim(),
+                        End: $('#chkIsFullDay').is(':checked') ? null : $('#txtEnd').val().trim(),
+                        Description: $('#txtDescription').val(),
+                        ThemeColor: $('#ddThemeColor').val(),
+                        IsFullDay: $('#chkIsFullDay').is(':checked')
+                    }
+                    SaveEvent(data);
+                    // call function for submit data to the server
+                })
+
+                function SaveEvent(data) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/home/SaveEvent',
+                        data: data,
+                        success: function (data) {
+                            if (data.status) {
+                                //Refresh the calender
+                                FetchEventAndRenderCalendar();
+                                $('#myModalSave').modal('hide');
+                            }
+                        },
+                        error: function () {
+                            alert('Failed');
+                        }
+                    })
+                }
+                $("#Demo").click(function () {
+                    $("#txtSubject").val("開會");
+                    $("#txtDescription").val("A小組開會");
+                })
+            })
+        </script>
+
+        <script src="~/Areas/Schedule/script/laydate/laydate.js"></script>
+        <script src="~/Areas/Schedule/script/zh-tw.js"></script>
+        <script>
+            laydate.render({
+                elem: '#txtStart'
+                , type: 'datetime'
+            });
+            laydate.render({
+                elem: '#txtEnd '
+                , type: 'datetime'
+            });
+        </script>
+
+    }
+
+

@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "角色覆核管理";
+}
+<div class="row">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-10">
+        <div class="card">
+            <h4 class="card-header bg-info text-white">角色覆核管理</h4>
+            <div class="card-body">
+
+                <div>
+                    <div id="selectViewRoleConfirmDiv" class="col-md-4">
+
+                    </div>
+                    <div id="loadViewRoleConfirmContent" style="padding:3px">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            $.get("@Url.Action("GetRolesList", "Power",new { area=""})", null, function (data) {
+                var sx1s = $('<select id="selectViewRoleConfirmSelect"></select>').addClass('form-control').prepend("<option value=''>請選擇</option>");
+                $.each(data, function (idv, objv) {
+                    var sx1 = $("<option></option>")
+                        .attr("value", objv.uRoles.uRoleID)
+                        .text(objv.uRoles.uRoleName);
+                    sx1s.append(sx1);
+                });
+                $('#selectViewRoleConfirmDiv').html(sx1s);
+            });
+            $('#selectViewRoleConfirmDiv').on('change', '#selectViewRoleConfirmSelect', function () {
+                var rid = parseInt($(this).val());
+                if (rid) {
+                    $.get('@Url.Action("ViewRoleConfirm")?roleID=' + rid, function (data) {
+                        $('#loadViewRoleConfirmContent').html(data);
+                    });
+                }
+                else
+                {
+                    $('#loadViewRoleConfirmContent').html("");
+                }
+            });
+        });
+    </script>
+    }

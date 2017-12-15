@@ -1,0 +1,21 @@
+﻿@model msit116apexLayout.Models.ResendValidationEmailViewModel
+@{
+    ViewBag.Title = "電子郵件未認證";
+    Layout = null;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>您的電子郵件地址未認證，請確認您的電子郵件的收件夾，找到認證信進行認證。</p>
+
+@if (Model.UserId != null) 
+{
+    using (Html.BeginForm("ResendValidationEmail", "Account", FormMethod.Post, new { id = "resendValidationForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.UserId)
+    }
+
+    <a href="javascript:document.getElementById('resendValidationForm').submit()">重新寄送認證信</a>
+
+}

@@ -1,0 +1,80 @@
+﻿@model msit116apexLayout.Models.FundMaster
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>FundMaster</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FundName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FundName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SetUpDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SetUpDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Custodian)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Custodian)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FundScale)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FundScale)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StarRank)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StarRank)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FundStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FundStatus)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

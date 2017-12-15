@@ -1,0 +1,439 @@
+﻿@model  IEnumerable<msit116apexLayout.Models.InterviewRecords>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+}
+<script src="~/Scripts/jquery-3.2.1.min.js"></script>
+<script src="~/Scripts/Json4ms.js"></script>
+<script src="~/Scripts/date.f-0.5.0.js"></script>
+<script src="~/Areas/CRM/Script/datatables.min.js"></script>
+<link href="~/Areas/CRM/Script/datatables.min.css" rel="stylesheet" />
+
+<div>
+    <h2 class="text-center">訪問紀錄</h2>
+    <hr style="border:1px solid black;width:1600px"/>
+</div>
+@section styles{
+    <style>
+        .overlay {
+            height: 100%;
+            width: 0;
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            background-color: rgb(0,0,0); /* Black fallback color */
+            background-color: rgba(0,0,0, 0.9);
+            overflow-x: hidden;
+            transition: 0.5s;
+        }
+
+        .overlay-content {
+            position: relative;
+            top: 25%; /* 25% from the top */
+            width: 100%; /* 100% width */
+            text-align: center; /* Centered text/links */
+            margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+        }
+
+        .overlay a {
+            padding: 8px;
+            text-decoration: none;
+            font-size: 36px;
+            color: #818181;
+            display: block; /* Display block instead of inline */
+            transition: 0.3s; /* Transition effects on hover (color) */
+        }
+
+            .overlay a:hover, .overlay a:focus {
+                color: #f1f1f1;
+            }
+
+        .overlay .closebtn {
+            position: absolute;
+            top: 20px;
+            right: 45px;
+            font-size: 60px;
+        }
+
+        .thead {
+            background-color:gold;
+        }
+        #detailtable th {
+            font-size: 32px;
+        }
+        #detailtable td {
+            font-size: 28px;
+        }
+        
+        #contenid th {
+            font-size: 32px;
+        }
+        #contentTd {
+            font-size: 28px;
+        }
+        
+        .detailTable {
+            width: 1200px;
+            margin-bottom: 3em;
+        }
+        #detailtable th{
+            padding-right:0px;
+            padding-left:0px;
+        }
+        pre {
+            white-space: -moz-pre-wrap; /* Mozilla, supported since 1999 */
+            white-space: -pre-wrap; /* Opera */
+            white-space: -o-pre-wrap; /* Opera */
+            white-space: pre-wrap; /* CSS3 - Text module (Candidate Recommendation) http://www.w3.org/TR/css3-text/#white-space */
+            word-wrap: break-word; /* IE 5.5+ */
+        }
+    </style>
+}
+
+
+@*功能按鈕*@
+@*<a onclick="openNav()" class="btn btn-info">test</a>*@
+<div class="form-group" style="margin-left:10em;margin-right:10em;margin-bottom:0.3em">
+    <div style="margin-bottom:0.3em">
+        @Html.ActionLink("新增紀錄", "Create", "", new { @class = "btn btn-info" })
+    </div>
+
+    <div class="row">
+        <div class="col-6" style="margin-left:2em">
+            @*顯示客戶清單*@
+            <div>
+            
+                <table style="width:60%">
+                    <thead class="navbar navbar-expand-lg navbar-light bg-light">
+                        <tr id="Thtr" class="collapse navbar-collapse ">
+                            <th class="navbar-nav mr-auto" style="width:100%">
+                                <div class="nav-item dropdown" style="width:100%">
+                                    <a class="nav-link dropdown-toggle fa fa-address-book" role="button" id="idropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                                    <div class="dropdown-menu" aria-labelledby="idropdown">
+                                        <a class="dropdown-item" href="@Url.Action("Viewcreate_partial", "Partial", new { area = "CRM" })">新增</a>
+                                        <a class="dropdown-item" href="@Url.Action("viewDelectSub", "Partial", new { area = "CRM", id = ViewBag.EmployeeID })">刪除</a>
+                                    </div>
+
+                                    @{
+                                        SelectList userlist = new SelectList(ViewBag.UserDropdown, "UserID", "UserName");
+                                    }
+                                    @Html.DropDownList("UserDropdown", userlist, "請選擇會員", new { @class = "form-control", @onchange = "selectUID(), Userd()" })
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="Tb">
+                        <tr>
+                            <th>
+
+                            </th>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-left:2em; margin-top:1em;margin-bottom:2.5em;margin-right:2em">
+        @*顯示客戶資料*@
+        <table class="table table-hover">
+            <figcaption>客戶資料</figcaption>
+            <thead class="thead">
+                <tr class=" bg-warning">
+                    <th>會員姓名</th>
+                    <th>國籍</th>
+                    <th>生日</th>
+                    <th>電子郵件</th>
+                    <th>通訊地址</th>
+                    <th>家用電話</th>
+                    <th>手機號碼</th>
+                    <th>職稱</th>
+                    >
+                </tr>
+            </thead>
+            <tbody id="uservaldata"></tbody>
+        </table>
+    </div>
+
+
+
+
+    @*顯示訪問清單*@
+    <div class="form-group" style="margin:2em">
+        <table class="table table-hover" id="interviewList">
+            <figcaption>訪問資料</figcaption>
+            <thead class="thead" >
+                <tr class=" bg-warning">
+                    <th>@Html.DisplayNameFor(m => m.Interviewee_Name)</th>
+                    <th>@Html.DisplayNameFor(m => m.StartTime)</th>
+                    <th>@Html.DisplayNameFor(m => m.C_Type_ID)</th>
+                    <th>@Html.DisplayNameFor(m => m.C_Location)</th>
+                    <th>詳細內容</th>
+                    <th>修改資料</th>
+                    <th>刪除資料</th>
+                </tr>
+            </thead>
+            <tbody id="tb0" >
+                @if (ViewBag.message == null)
+                {
+
+                    foreach (var item in Model)
+                    {
+                        var buttonid = String.Format("{0}{1}", "detailbutton", item.InterviewID);
+                        <tr>
+                            <td>@Html.DisplayFor(m => item.Interviewee_Name)</td>
+                            <td>@Html.DisplayFor(m => item.StartTime)</td>
+                            <td>@Html.DisplayFor(m => item.InterviewType.TypeName)</td>
+                            <td>@Html.DisplayFor(m => item.C_Location)</td>
+                            <td><button id="@buttonid" onclick="openNav(),idDetail(@item.InterviewID)" class="btn btn-info" value="@item.InterviewID">詳細內容</button></td>
+                            <td>@Html.ActionLink("修改", "Edit", new { id = item.InterviewID }, new { @class = "btn btn-info" })</td>
+                            <td>@Html.ActionLink("刪除", "Delete", new { id = item.InterviewID }, new { @class = "btn btn-danger" })</td>
+                            
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td>@ViewBag.message</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<div id="myNav" class="overlay">
+
+    <!-- Button to close the overlay navigation -->
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+    <!-- Overlay content -->
+    <div class="overlay-content" id="content" style="background-color:white; width:80%;margin-left:8%;">
+        <div style="padding-left:5em;padding-right:5em;padding-top:1em">
+            <table class="table" id="detailtable">
+                <thead class="thead ">
+                    <tr class="bg-warning">
+                        <th>員工姓名</th>
+                        <th>會員姓名</th>
+                        <th>訪問日期</th>
+                        <th>地點</th>
+                        <th>訪問類型</th>
+                        <th>建表時間</th>
+                        <th>最後修改時間</th>
+                    </tr>
+                </thead>
+                <tbody id="detailTb"></tbody>
+            </table>
+        </div>
+        
+
+        <table class="table dataTable" style="padding-left:5em;padding-right:5em;">
+            <thead class="thead " id="contenid">
+                <tr class="bg-warning">
+                    <th>內容</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="contentTd" style="width:100px"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- Use any element to open/show the overlay navigation menu -->
+
+
+
+@section scripts{
+    <script>
+        var username = null;
+        var emid = null;
+        var userval = null;
+        var v = {
+            "processing": "處理中...",
+            "loadingRecords": "載入中...",
+            "lengthMenu": "顯示 _MENU_ 項結果",
+            "zeroRecords": "沒有符合的結果",
+            "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+            "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+            "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+            "infoPostFix": "",
+            "search": "搜尋:",
+            "paginate": {
+                "first": "第一頁",
+                "previous": "上一頁",
+                "next": "下一頁",
+                "last": "最後一頁"
+            },
+            "aria": {
+                "sortAscending": ": 小到大排列",
+                "sortDescending": ": 大到小排列"
+            }
+        }
+        $(document).ready(function () {
+            $("#interviewList").DataTable({
+                "language": v,
+                "info": false
+            });
+            username = "@ViewBag.abc";
+            emid = "@ViewBag.EmployeeID";
+            if ($("#UserDropdown").val() == "")
+            {
+            userval = $("#UserDropdown").val()
+            }
+            else
+            {
+                userval = "@ViewBag.user";
+            }
+            if ("@ViewBag.Index" != "Index" )
+            {
+                selectUID();
+                Userd();
+            }
+
+        })
+
+        //用ID
+        function selectUID() {
+            userval = $("#UserDropdown").val()
+            if (userval == "")
+            {
+                userval = "@ViewBag.userid";
+            }
+            $.getJSON("@Url.Action("IDselect", "AJAX", new { Area = "CRM" })", { "id": userval, "Employeeid": emid }, function (data) {
+                changeInterviewDeteil(data)
+            })
+        }
+
+        //替換InterviewList內容
+        function changeInterviewDeteil(data) {
+            var tb = $("#tb0");
+            var div = $(document.createDocumentFragment());
+            tb.empty();
+            if (data != null) {
+                $.each(data, function (id, val) {
+                    var v = val.StartTime;
+                    var v2 = val.CreateTime;
+                    var v3 = val.LastModifyTime;
+
+                    var tr = $("<tr></tr>");
+                    var td2 = $("<td></td>").text(val.Interviewee_Name);
+                    var td3 = $("<td></td>").text(JSON.parseWithDate(JSON.stringifyWcf(v)).f("yyyy-MM-dd"));
+                    var td5 = $("<td></td>").text(val.TypeName);
+                    var td6 = $("<td></td>").text(val.C_Location);
+                    var td9 = $("<td></td>").html($("<a></a>").addClass("btn btn-info")
+                        .attr({ "href": ("@Url.Action("Edit", "InterviewRecords", new { Area = "CRM" })/" + val.InterviewID).toString() })
+                        .text("修改"));
+
+                    var td10 = $("<td></td>").html($("<a></a>").addClass("btn btn-danger")
+                        .attr({ "href": ("@Url.Action("Delete", "InterviewRecords", new { Area = "CRM" })/" + val.InterviewID).toString() })
+                        .text("刪除"));
+                   var v = val.InterviewID;
+                    var td11 = $("<td></td>").html($("<button></button>")
+                        .addClass("btn btn-info")
+                        //todo 無法帶參數
+                        .attr({ "onclick": "openNav(), idDetail("+v+")"})
+                        .text("詳細內容"))
+
+
+                    tr.append([td2, td3, td5, td6, td11, td9, td10]);
+                      div.append(tr);
+                })
+                tb.html(div);
+                //userval = "";
+            }
+        }
+
+        //替換User內容
+        function Userd() {
+              var uservaldata = $("#uservaldata");
+            $.getJSON("@Url.Action("changeUserInterview", "AJAX",new { Area = "CRM"})", { "id": userval }, function (datas) {
+                if (datas.BirthDay != null)
+                {
+                    var birthdayval = datas.BirthDay;
+                    var BirthDay = $("<th></th>").text(JSON.parseWithDate(JSON.stringifyWcf(birthdayval)).f("yyyy-MM-dd"));
+                }
+                else {
+                    BirthDay = $("<th></th>").text("無");
+                }
+
+                var tr = $("<tr></tr>");
+                var Name = $("<th></th>").text(datas.Name);
+                var Country = $("<th></th>").text(datas.Country);
+                var Email = $("<th></th>").text(datas.Email)
+                var MailingAddress = $("<th></th>").text(datas.MailingAddress)
+                var PhoneNumber = $("<th></th>").text(datas.PhoneNumber)
+                var Telephone = $("<th></th>").text(datas.Telephone)
+                var Title = $("<th></th>").text(datas.Title)
+                tr.append([Name, Country, BirthDay, Email, MailingAddress, PhoneNumber, Telephone, Title])
+                uservaldata.html(tr);
+              })
+            userval = "";
+        }
+
+        //todo 將MasterIndex, partial_creaet, partial_delect 用table方式顯示
+
+        //todo 將detail用AJAX生成(用table)
+        function idDetail(Id)
+        {
+            var contentTd = $("#contentTd").text("");
+            var detailTb = $("#detailTb");
+            $.getJSON("@Url.Action("idDetail", "AJAX",new { area = "CRM"})", { id: Id }, function (data) {
+                var speace = $(document.createDocumentFragment())
+                var startime = data.StartTime;
+                var createTime = data.CreateTime;
+                var LastModifyTime = data.LastModifyTime;
+                var tr = $("<tr></tr>");
+                var td1 = $("<td></td>").text(data.Interviewer_Name);
+                var td2 = $("<td></td>").text(data.Interviewee_Name);
+                var td3 = $("<td></td>").text(JSON.parseWithDate(JSON.stringifyWcf(startime)).f("yyyy-MM-dd"));
+                var td4 = $("<td></td>").text(data.C_Location);
+                var td5 = $("<td></td>").text(data.TypeName);
+                //var tdcontent = $("<pre></pre>").text(data.InterviewContent);
+                var td7 = $("<td></td>").text(JSON.parseWithDate(JSON.stringifyWcf(createTime)).f("yyyy-MM-dd"));
+                var td8 = $("<td></td>").text(JSON.parseWithDate(JSON.stringifyWcf(LastModifyTime)).f("yyyy-MM-dd"));
+                tr.append(td1, td2, td3, td4, td5, td7, td8);
+                speace.append(tr);
+                detailTb.html(speace);
+                var p = $("<pre></pre>").text(data.InterviewContent);
+                contentTd.append(p);
+            })
+        }
+
+        //todo dropdownlist預設值?? 跟Edit的日期帶入 Index的日期顯示 yyyy/MM/dd
+
+        //function dropdownselect()
+        //{
+        //    var i = null;
+        //    var obj = $("#UserDropdown");
+        //    for (i = 0; i < obj.options.length; i++) {
+        //        if (obj.options[i].value == userval) // strDefault == 預設值
+        //        {
+        //            obj.selectedIndex = i;
+        //            return;
+        //        }
+        //    }
+
+        //}
+
+        function search() {
+            var a = $("#UserDropdown").val();
+            var s = $("#interviewList_filter search").text(a);
+        }
+
+        function openNav() {
+            document.getElementById("myNav").style.width = "100%";
+        }
+
+        function closeNav() {
+            document.getElementById("myNav").style.width = "0%";
+        }
+
+    </script>
+}

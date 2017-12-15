@@ -1,0 +1,49 @@
+﻿@model msit116apexLayout.Models.ManageLoginsViewModel
+@using Microsoft.Owin.Security
+@{
+    ViewBag.Title = "外部登入管理";
+}
+@{
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+    
+        if (Model.CurrentLogins.Count > 0)
+        {
+            <h5>已使用的外部登入</h5>
+            <div>
+                @foreach (var account in Model.CurrentLogins)
+                {
+                    <div>
+                        @if (ViewBag.ShowRemoveButton)
+                    {
+                        using (Html.BeginForm("RemoveLogin", "Account"))
+                        {
+                                @Html.AntiForgeryToken()
+                                <div>
+                                    @Html.Hidden("loginProvider", account.LoginProvider)
+                                    @Html.Hidden("providerKey", account.ProviderKey)
+
+                                    <button type="submit" class="btn btn-warning" title="移除您的 @account.LoginProvider 登入" ><i class="fa fa-trash" aria-hidden="true"></i>移除 @account.LoginProvider</button>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+            </div>
+    }
+    if (Model.OtherLogins.Count > 0)
+    {
+                <h5>未使用的外部登入</h5>
+                using (Html.BeginForm("LinkLogin", "Account"))
+                {
+                <div id="socialLoginList">
+                    <p>
+                        @foreach (AuthenticationDescription p in Model.OtherLogins)
+                        {
+                            <button type="submit" class="btn btn-info" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="使用 @p.Caption 帳戶登入"><i class="fa fa-plus" aria-hidden="true"></i> @p.AuthenticationType</button>
+                        }
+                    </p>
+                </div>
+                }
+                }
+
+                }

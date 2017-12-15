@@ -1,0 +1,61 @@
+﻿@model msit116apexLayout.Models.Leave
+
+@{
+    ViewBag.Title = "請假清單";
+}
+
+
+
+<div>
+    <div class="alert alert-secondary  bg-warning">
+        <div style=" width:100%; text-align:center; " class="print-btn">
+            <h4>休假清單</h4>
+        </div>
+
+    </div>
+
+
+
+    <hr />
+
+    <div class="book detail img" style="margin-left:auto; margin-right:auto;">
+        <img src="@Url.Action("GetImage","Leaves",new {id=Model.ID })" />
+        <div class="infos">
+            <h2 class="name">員工姓名:@ViewBag.name</h2>
+          
+            <h4 class="name">@Html.DisplayNameFor(model => model.Lav_StartTime):@Html.DisplayFor(model => model.Lav_StartTime)</h4>
+            <h4 class="name">@Html.DisplayNameFor(model => model.Lac_EndTime): @Html.DisplayFor(model => model.Lac_EndTime)  </h4>
+            <h4 class="name">@Html.DisplayNameFor(model => model.Lac_Agent): <span class="red">@Html.DisplayFor(model => model.User1.AspNetUsers.Name)</span></h4>
+            <h4 class="name">@Html.DisplayNameFor(model => model.Lac_Tag): <span class="red">@Html.DisplayFor(model => model.Lac_Tag)</span></h4>
+            <h4 class="name"> 假別:<span class="red">@Html.DisplayFor(model => model.Leavecategory.LeavecategoryName)</span></h4>
+        
+           
+</div>
+    </div>
+    <br />
+@if (Model.Lav_ReviewID == 1 || Model.Lav_ReviewID == 2)
+            {
+    <div class="book detail img" style="margin-left:auto; margin-right:auto;">
+       
+            <h1 class="name">
+                @Html.DisplayNameFor(model => model.LavSupervisor):@Html.DisplayFor(model => model.LavSupervisor)
+            </h1>
+
+      
+    </div>
+}
+    </div>
+<br />
+<div style=" width:100%; text-align:center; " class="print-btn">
+ 
+    @Html.ActionLink("修改假單", "Edit", new { id = Model.ID }, new { @class = "noprint btn btn-primary" })
+    @Html.ActionLink("返回", "Index", null, new { @class = "noprint btn btn-danger" })
+
+</div>
+
+   
+
+@section scripts{
+    
+
+}

@@ -1,0 +1,178 @@
+﻿@model IEnumerable<msit116apexLayout.Models.AspNetUsers>
+@{
+    ViewBag.Title = "Index";
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>SetPassword</th>
+            <th>Name</th>
+            <th>UserName</th>
+            <th>
+                手機
+            </th>
+            <th>
+                住家電話
+            </th>
+            <th>
+                生日
+            </th>
+            <th>
+                國家
+            </th>
+            <th>
+                通訊地址
+            </th>
+            <th>
+                戶籍地址
+            </th>
+            <th>
+                職業
+            </th>
+            <th>
+                照片
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var anu in Model)
+        {
+            <tr>
+                <td>
+                    <label>@anu.Id</label>
+                </td>
+                <td>
+                    @Html.EditorFor(n => anu.Email)
+                </td>
+                <td>
+                    <input name="setUserPassword" value="P@ssw0rd"/>
+                    <label>點選複製</label>
+                    <input name="fastCopypwd" type="text" value="P@ssw0rd" />
+                </td>
+                <td>
+                    @Html.EditorFor(n => anu.Name)
+                </td>
+                <td>
+                    @Html.EditorFor(n => anu.UserName)
+                </td>
+                <td>
+                    @Html.EditorFor(n => anu.PhoneNumber)
+                </td>
+                <td>
+                    @Html.EditorFor(n => anu.Telephone)
+                </td>
+                <td>
+                    @Html.EditorFor(n => anu.BirthDay)
+                </td>
+                <td>
+                    @Html.EditorFor(n => anu.Country)
+                </td>
+                <td>
+                    @Html.EditorFor(n => anu.MailingAddress)
+                </td>
+                <td>
+                    @Html.EditorFor(n => anu.ResidenceAddress)
+                </td>
+                <td>
+                    @Html.EditorFor(n => anu.Title)
+                </td>
+                <td>
+                    <img name="ImagePhoto" src="@string.Format("{0}?userid={1}",@Url.Action("GetImageFile", "Manage", new { area = "" }),@anu.Id)" style="height:200px;width:200px;border-radius:50%" />
+                    <input id="@string.Format("Photo{0}",anu.Id)" name="Photo" type="file" class="btn btn-info" style="width:100px" />
+                </td>
+                <td>
+                    <button type="button" name="saveUserChange">儲存</button>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+
+
+@section scripts{
+    <script>
+        $(function () {
+            $("input[name='fastCopypwd']").click(function () {
+                $(this).select();
+                document.execCommand('copy');
+            });
+            $("input[name='Photo']").change(function () {
+                readURL(this);
+            });
+
+            function readURL(input) {
+                var fileinputbtn = input;
+                var imgele = $(fileinputbtn).prev();
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(input.files[0]);
+                    reader.onload = function (e) {
+                        var fileContent = e.target.result;
+                        $(imgele).attr("src", fileContent);
+                        $(fileinputbtn).css('width', '200px');
+                    }
+
+
+                }
+            }
+
+            $("button[name ='saveUserChange']").click(function () {
+                var userId = $(this).parent().parent().children("td:eq(0)").children("label").text();
+                var userEmail = $(this).parent().parent().children("td:eq(1)").children("input").val();
+                var userPassword = $(this).parent().parent().children("td:eq(2)").children("input[name='setUserPassword']").val();
+                var userName = $(this).parent().parent().children("td:eq(3)").children("input").val();
+                var userUserName = $(this).parent().parent().children("td:eq(4)").children("input").val();
+                var userPhoneNumber = $(this).parent().parent().children("td:eq(5)").children("input").val();
+                var userTelephone = $(this).parent().parent().children("td:eq(6)").children("input").val();
+                var userBirthDay = $(this).parent().parent().children("td:eq(7)").children("input").val();
+                var userCountry = $(this).parent().parent().children("td:eq(8)").children("input").val();
+                var userMailingAddress = $(this).parent().parent().children("td:eq(9)").children("input").val();
+                var userResidenceAddress = $(this).parent().parent().children("td:eq(10)").children("input").val();
+                var userTitle = $(this).parent().parent().children("td:eq(11)").children("input").val();
+                var returnArray = {};
+                returnArray["Id"] = userId;
+                returnArray["Email"] = userEmail;
+                returnArray["Password"] = userPassword;
+                returnArray["Name"] = userName;
+                returnArray["UserName"] = userUserName;
+                returnArray["PhoneNumber"] = userPhoneNumber;
+                returnArray["Telephone"] = userTelephone;
+                returnArray["BirthDay"] = userBirthDay;
+                returnArray["Country"] = userCountry;
+                returnArray["MailingAddress"] = userMailingAddress;
+                returnArray["ResidenceAddress"] = userResidenceAddress;
+                returnArray["Title"] = userTitle;
+
+                $.post('@Url.Action("ManageAccounts", "Manage", new { area=""})', returnArray, function (data) {
+                    alert(data);
+                });
+
+                var fdata = new FormData();
+                var fileele = document.getElementById("Photo" + userId);
+                var file = fileele.files[0];
+            fdata.append("Id", userId);
+            fdata.append("Photo", file);
+            $.ajax({
+                type: 'post',
+                url: '@Url.Action("UpdateUserImageFile", "Manage", new { area = "" })',
+                data: fdata,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    alert(data);
+                }
+            });
+            });
+    });
+    </script>
+}

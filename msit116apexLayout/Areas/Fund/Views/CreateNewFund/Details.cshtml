@@ -1,0 +1,74 @@
+﻿@model msit116apexLayout.Models.FundMaster
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>FundMaster</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FundName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FundName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SetUpDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SetUpDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Custodian)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Custodian)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FundScale)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FundScale)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StarRank)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StarRank)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FundStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FundStatus)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.FundID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

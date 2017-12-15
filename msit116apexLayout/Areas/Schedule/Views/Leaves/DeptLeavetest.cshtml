@@ -1,0 +1,362 @@
+﻿@model msit116apexLayout.ViewModels.LeaveUserViewModel1
+@{
+    ViewBag.Title = "部門搜尋";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+@section styles{
+    <link href="~/Areas/Schedule/Content/dist/remodal.css" rel="stylesheet" />
+    <link href="~/Areas/Schedule/Content/dist/remodal-default-theme.css" rel="stylesheet" />
+    <style>
+        .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+            vertical-align: middle;
+            color: #444444;
+            font-size: 9.0pt;
+            font-family: 微软雅黑, sans-serif;
+            text-align: center;
+            font-weight: bold;
+            min-width: 20px;
+        }
+
+        .tbcell {
+            color: #000000;
+            font-size: 9.0pt;
+            font-weight: bold;
+            font-family: 微软雅黑, sans-serif;
+            text-align: center;
+            vertical-align: middle;
+            width: 35px;
+        }
+
+
+        td.tbheader {
+            color: #444444;
+            font-size: 9.0pt;
+            font-family: 微软雅黑, sans-serif;
+            text-align: center;
+            font-weight: bold;
+            min-width: 20px;
+        }
+
+        li.current a {
+            background-color: #00FFFF;
+        }
+
+        .remodal-bg.with-red-theme.remodal-is-opening,
+        .remodal-bg.with-red-theme.remodal-is-opened {
+            filter: none;
+        }
+
+        .remodal-overlay.with-red-theme {
+            background-color: #808080;
+        }
+
+        .remodal.with-red-theme {
+            background: #808080;
+        }
+
+        .cellred {
+            width: 10px;
+            height: 10px;
+            background-color: #ff99cc;
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+
+
+
+}
+
+<div style=" width:100%; text-align:center; " class="print-btn">
+    <h2 style="font-size:40px;">部門請假搜尋</h2>
+    </div>
+    @Html.Action("test2")
+
+
+    <div class="card">
+        <div class="card-header  bg-warning">
+            <h5>部門每月休假狀態</h5>
+        </div>
+        <div class="card-body">
+
+            <table class="table table-striped" style="width:60%;margin:auto;">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.user.First().Department.departmentName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.user.First().UserName)
+                        </th>
+                        <th>
+                            日期
+                        </th>
+
+                </thead>
+                @foreach (var item in Model.leave)
+            {
+                    <tr>
+                        <td class="tbheader">
+                            @Html.DisplayFor(modelItem => item.User.Department.departmentName)
+                        </td>
+                        <td class="tbheader">
+                            @Html.DisplayFor(modelItem => item.User.AspNetUsers.Name)
+                        </td>
+                        <td class="tbheader">
+                            @Html.DisplayFor(modelItem => item.Lav_StartTime.Day)
+                        </td>
+
+                    </tr>
+                }
+
+            </table>
+            @*<table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.user.First().Department.departmentName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.user.First().UserName)
+                        </th>
+                       
+                        @for (int i = 1; i <= ViewBag.s2; i++)
+                        {
+                            <th>
+                                @i
+                            </th>
+                        }
+
+                </thead>
+                @foreach (var item in Model.user)
+            {
+                    <tr>
+                        <td class="tbheader">
+                            @Html.DisplayFor(modelItem => item.Department.departmentName)
+                        </td>
+                        <td class="tbheader">
+                            @Html.DisplayFor(modelItem => item.AspNetUsers.Name)
+                        </td>
+                    
+                       
+                            @foreach (var items in Model.leave)
+                            {
+                                for (int i=1; i <= ViewBag.s2; i++)
+                                {
+                                    if (items.Lav_StartTime.Day == i&&item.UserID==items.Lav_ID)
+                                    {
+                                        <td>123</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                }
+
+                            }
+
+                      
+                       
+
+                    </tr>
+                }
+
+            </table>*@
+        </div>
+    </div>
+
+
+
+
+    @section scripts{
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.5/vue.js'></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.4/zepto.js"></script>
+
+        @*<script>window.Zepto || document.write('<script src="~/Areas/Schedule/script/zepto.min.js"></script>')</script>*@
+        <script src="~/Areas/Schedule/Content/dist/remodal.js"></script>
+        <script>
+
+            $(document).ready(function () {
+
+                var vm = new Vue({
+                    el: "#app",
+                    data: {
+                        classdatas: []
+                    }
+                });
+                var Today = new Date();
+                var toyear = Today.getYear() + 1900;
+                for (i = 2015; i <= toyear; i++) {   //新增年
+                    var opt = window.document.createElement("option");  //<option >
+                    //opt.setAttribute("value", i);  //<option value=1,2...>
+                    //var optTxt = document.createTextNode(i);  //1,2,3.....
+                    //opt.appendChild(optTxt);  //<option value=1>1</option>
+                    opt.value = i;
+                    opt.innerHTML = i;
+                    document.getElementById('year1').appendChild(opt);
+
+                }
+
+
+
+
+                var Today = new Date();
+                var param1 = getParameterName("sss");
+                console.log(param1);
+                if (param1 == "") {
+
+                    $("#sss")[0].selectedIndex = 0;
+
+                } else {
+                    $("#sss").val(param1);
+                }
+
+
+                var param = getParameterName("i");
+                if (param == "") {
+                    param = 1
+                }
+
+
+                for (i = 2015; i <= toyear; i++) {   //新增年
+                    var opt = window.document.createElement("option");  //<option >
+                    //opt.setAttribute("value", i);  //<option value=1,2...>
+                    //var optTxt = document.createTextNode(i);  //1,2,3.....
+                    //opt.appendChild(optTxt);  //<option value=1>1</option>
+                    opt.value = i;
+                    opt.innerHTML = i;
+                    document.getElementById('year').appendChild(opt);
+
+                }
+
+
+
+                function getParameterName(skey) {
+                    var s = location.search.replace(/^\?/, '');
+                    if (s == '' || skey == null || skey == '') return unescape(s);
+                    var re = new RegExp('(&|^)' + skey + '=([^&]*)(&|$)');
+                    var a = re.exec(s);
+                    return unescape(a ? a[2] : '');
+                }
+                var param2 = getParameterName("year");
+                if (param2 == "") {
+                    param2 = Today.getFullYear();
+                }
+                var param3 = Today.getFullYear();
+                $("#year").val(param2);
+                $("#year1").val(param2);
+
+                $("#testss").change(function () {
+                    var ss = $("#testss").val();
+                    var ss1 = $("#year1").val();
+                    var data2 = {
+                        ans1: ss,
+                        ans2: ss1
+                    }
+
+                    $.ajax({
+                        url:"@Url.Action("annualleave")",
+                    data: data2,
+                    type: 'post',
+                    //contentType: "application/json;",
+                    traditional: true,
+                    success: function (res) {
+                        vm.classdatas = res;
+             }
+
+            })
+                })
+
+                  var ss = $("#testss").val();
+                    var ss1 = $("#year1").val();
+                    var data2 = {
+                        ans1:ss,
+                        ans2:ss1
+                    }
+
+                       $.ajax({
+                    url:"@Url.Action("annualleave")",
+                    data: data2,
+                    type: 'post',
+                    //contentType: "application/json;",
+                    traditional: true,
+                    success: function (res) {
+                        vm.classdatas = res;
+             }
+
+            })
+
+
+                    $("#year1").change(function () {
+                    var ss = $("#testss").val();
+                    var ss1 = $("#year1").val();
+                    var data2 = {
+                        ans1:ss,
+                        ans2:ss1
+                    }
+
+                       $.ajax({
+                    url:"@Url.Action("annualleave")",
+                    data: data2,
+                    type: 'post',
+                    //contentType: "application/json;",
+                    traditional: true,
+                    success: function (res) {
+                        vm.classdatas = res;
+             }
+
+            })
+                })
+
+
+
+                $('.form-inline input')[param - 1].setAttribute("class", "btn-flat btn-sm btn-success");
+
+
+            })
+        </script>
+        <script>
+            $(document).on('opening', '.remodal', function () {
+                console.log('opening');
+            });
+
+            $(document).on('opened', '.remodal', function () {
+                console.log('opened');
+            });
+
+            $(document).on('closing', '.remodal', function (e) {
+                console.log('closing' + (e.reason ? ', reason: ' + e.reason : ''));
+            });
+
+            $(document).on('closed', '.remodal', function (e) {
+                console.log('closed' + (e.reason ? ', reason: ' + e.reason : ''));
+            });
+
+            $(document).on('confirmation', '.remodal', function () {
+                console.log('confirmation');
+            });
+
+            $(document).on('cancellation', '.remodal', function () {
+                console.log('cancellation');
+            });
+
+            //  Usage:
+            //  $(function() {
+            //
+            //    // In this case the initialization function returns the already created instance
+            //    var inst = $('[data-remodal-id=modal]').remodal();
+            //
+            //    inst.open();
+            //    inst.close();
+            //    inst.getState();
+            //    inst.destroy();
+            //  });
+
+            //  The second way to initialize:
+            $('[data-remodal-id=modal2]').remodal({
+                modifier: 'with-red-theme'
+            });
+        </script>
+
+    }

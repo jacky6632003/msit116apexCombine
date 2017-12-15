@@ -1,0 +1,310 @@
+﻿@model msit116apexLayout.Models.Leave
+@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "申請請假單";
+}
+@section styles{
+
+    <link href="~/Areas/Schedule/Content/daterangepicker.css" rel="stylesheet" />
+
+    <style>
+        .thumb {
+            width: 280px;
+        }
+    </style>
+}
+<div style=" width:100%; text-align:center; " class="print-btn">
+    <div style="margin:0px auto;"><span class="" style="font-size:40px;">New建立<span>@User.Identity.GetUserName()</span>請假單</span></div>
+    </div>
+    <p>@Html.ActionLink("個人請假清單", "Index", "", new { @class = "noprint btn btn-danger" })</p>
+    @using (Html.BeginForm("Create", "Leaves", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            <hr />
+            <div id="accordion" role="tablist">
+                <div class="card">
+                    <div class="card-header bg-warning" role="tab" id="headingOne">
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="color:black">
+                                1.請假人信息
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapseOne" class="collapse " role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+
+                                <div class="col-md-10">
+                                    <p class="h2"> 員工帳號: @User.Identity.GetUserName()</p>
+                                    <p class="h2">員工姓名:@ViewBag.name</p>
+                                    <p class="h2">部門:@ViewBag.DepartmentName</p>
+                                    @*@Html.EditorFor(model => model.Lav_ID, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Lav_ID, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="card">
+                <h5 class="card-header bg-warning">2.申請種類</h5>
+                <div class="card-body" id="app">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Lav_StartTime)
+                            @Html.EditorFor(model => model.Lav_StartTime, new { htmlAttributes = new { @class = "form-control", placeholder = "開始時間" } })
+                            @Html.ValidationMessageFor(model => model.Lav_StartTime, "", new { @class = "text-danger" })
+                            <img v-if="classdatas.length==0" src="~/Areas/Schedule/images/5-121204193Q9.gif" />
+                            <h4 v-for="asb in classdatas">
+                                <span v-if="asb.day.annualleaveUsingDay<45"> 你今年已經年假:{{asb.day.annualleaveUsingDay}}小時</span>
+                                <span v-else style="color:red"> 你今年已經請假:{{asb.day.annualleaveUsingDay}}小時請小心</span>
+                            </h4>
+                        </div>
+                        <div class="form-group col-md-4">
+                            @Html.LabelFor(model => model.Lac_EndTime)
+                            @Html.EditorFor(model => model.Lac_EndTime, new { htmlAttributes = new { @class = "form-control", placeholder = "結束時間" } })
+                            @Html.ValidationMessageFor(model => model.Lac_EndTime, "", new { @class = "text-danger" })
+                            <span id='idsp2'></span>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>共計(小時):(9小時/天)</label>
+                            @*<input name="txt_hours" type="text" value="" id="txt_hours" class="form-control" style="width:80px;" />*@
+                            @Html.EditorFor(model => model.Lav_Day, new { htmlAttributes = new { @class = "form-control", placeholder = "小時" } })
+                            <span id='idsp3'></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Lac_LeavecategoryID, "假別")
+                            @Html.DropDownList("Lac_LeavecategoryID", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Leavecategory.LeavecategoryName, "", new { @class = "text-danger" })
+                            <p v-for="asb in classdatas " style="color:#808080">{{asb.LeavecategoryTag}}</p>
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Lac_Agent)
+                            @Html.DropDownList("Lac_Agent", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Leavecategory.LeavecategoryName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(model => model.Lac_Tag)
+                            @Html.EditorFor(model => model.Lac_Tag, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Lac_Tag, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(p => p.LeaveImage)
+                            @Html.EditorFor(p => p.LeaveImage, new { htmlAttributes = new { type = "file", @class = "form-control", placeholder = " Image" } })
+                            <img id="img1" class="thumb img-thumbnail img-fluid" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div style=" width:100%; text-align:center; " class="print-btn">
+
+                <input type="submit" value="建立" class="btn btn-default" id="submit" />
+                @Html.ActionLink("個人請假清單", "Index", "", new { @class = "noprint btn btn-danger" })
+                <input type="button" value="Demo" class="btn btn-info" id="Demo" />
+            </div>
+
+        </div>
+
+    }
+
+    @section scripts{
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.5/vue.js'></script>
+        <script src="~/Areas/Schedule/script/laydate/laydate.js"></script>
+
+        <script>
+        $(document).ready(function () {
+
+            var vm = new Vue({
+                el: "#app",
+                data:
+                {
+                    classdatas:[]
+                }
+            });
+            var s = $("#Lac_LeavecategoryID").val();
+            var data1 = {
+                Lac_LeavecategoryID: s,
+
+
+            }
+             $.ajax({
+                    url: "@Url.Action("Createjson")",
+                    data: data1,
+                    type: 'post',
+                    success: function (res) {
+
+                        vm.classdatas = res;
+                    }
+                })
+            laydate.render({
+                elem: '#Lav_StartTime'
+                , type: 'datetime'
+            });
+            laydate.render({
+                elem: '#Lac_EndTime '
+                , type: 'datetime'
+            });
+
+            $('#LeaveImage').change(function () {
+                var theFile = this.files[0];
+                var reader = new FileReader();
+                reader.readAsDataURL(theFile);
+                reader.addEventListener("load", function (event) {
+                    $('#img1').attr('src', event.target.result);
+                })
+            })
+
+            document.getElementById("Lac_EndTime").onblur = Lac_EndTime;
+            document.getElementById("Lac_EndTime").onchang = Lac_EndTime;
+            document.getElementById("Lac_EndTime").onmousemove = Lac_EndTime;
+            document.getElementById("Lac_EndTime").onmouseout = Lac_EndTime;
+            document.getElementById("Lac_EndTime").onmousedown = Lac_EndTime;
+            $("#Lac_LeavecategoryID").change(function () {
+
+                var s = $("#Lac_LeavecategoryID").val();
+                var data1 = {
+                    Lac_LeavecategoryID: s,
+
+
+                }
+                $.ajax({
+                    url: "@Url.Action("Createjson")",
+                    data: data1,
+                    type: 'post',
+                    success: function (res) {
+
+                        vm.classdatas = res;
+                    }
+                })
+            })
+
+
+            function Lac_EndTime() {
+                var starttime = $('#Lav_StartTime').val();
+                var endtime = $('#Lac_EndTime').val();
+                var from_date = new Date(starttime);
+                var end_date = new Date(endtime);
+
+
+                var teststarttime = starttime.split(' ', 3);
+                var test1 = teststarttime[0].split('-', 3);
+                var test2 = teststarttime[1].split(':', 3);
+
+                var st1 = test1[0] + "-" + (test1[1] - 1) + "-" + test1[2];
+
+                var teststarttime2 = endtime.split(' ', 3);
+                var test12 = teststarttime2[0].split('-', 3);
+                var test22 = teststarttime2[1].split(':', 3);
+
+
+                var st2 = test12[0] + "-" + (test12[1] - 1) + "-" + test12[2];
+
+
+
+
+                var surplusHours = 0;
+                var time_different = ((end_date - from_date) / 86400000);
+
+                var days = time_different.toFixed(2);
+                var dayss = days - parseInt(days);
+                var daysss = parseInt(dayss * 24);//小時數
+                var dayscomp = compdate(st1, st2);//去假日天數
+                var allhour = daysss+2;
+                var alldayy = (dayscomp * 9) ;
+                var alldayy2 = (dayscomp);
+                if (allhour >= 9) {
+                    allhour = 9;
+                }
+
+
+               // var alltest = alldayy2 * 9 + allhour;
+
+
+                //$("#txt_hours").val(alldayy);
+                $("#Lav_Day").val(alldayy + allhour);
+                var span = $('<span></span>').text("共" + alldayy2 + "天又" + allhour + "小時").attr('id',"idsp3");
+                $('#idsp3').html(span);
+
+                if (Date.parse(starttime).valueOf() > Date.parse(endtime).valueOf()) {
+
+                    document.getElementById("idsp2").innerHTML =
+                        "<span style='color:red' id='idsp2'>注意開始時間不能晚於結束時間！</span>";
+                } else if (Date.parse(starttime).valueOf() < Date.parse(endtime).valueOf()) {
+
+                    document.getElementById("idsp2").innerHTML =
+                        "<span style='color:red' id='idsp2'></span>";
+
+
+                }
+
+
+
+
+
+            }
+
+
+            function compdate(st1, ed1) {
+
+                var st, ed, aaa, bbb, st2;
+                aaa = st1.split("-");//alert(aaa);
+                bbb = ed1.split("-");//alert(bbb);
+                st = new Date(aaa[0], (aaa[1] - 1), aaa[2], "00", "00", "00");
+                ed = new Date(bbb[0], (bbb[1] - 1), bbb[2], "00", "00", "00");
+                var tmp = 86400000;
+                var days = Math.round((ed.getTime() - st.getTime()) / tmp);
+                var workDays = 0;//工作日
+                var holiday = new Array("10-11", "10-03", "10-02"); //自行添加假日
+                var uuu = new Array("日", "一", "二", "三", "四", "五", "六");
+                for (var i = 1; i <= days; i++) {
+
+                    st2 = new Date();
+                    st2.setTime(st.getTime() + tmp * i);   //   i   天以後的日期
+
+                   // alert(uuu[st2.getDay()]);
+                    if (st2.getDay() != 0 && st2.getDay() != 6)   //不是周六、周日
+                    {
+
+                        var str = (st2.getMonth() + 1) + "-" + st.getDate();
+                        if (holiday.toString().indexOf(str) < 0)   //不是自訂的假日
+                        {
+                            //alert(str);
+                            workDays++;
+                        }
+                    }
+                }
+
+                return workDays;//天數日
+
+            }
+
+
+
+            $("#Demo").click(function () {
+
+                $("#Lav_StartTime").val("2017-12-08 09:00:00");
+                $("#Lac_EndTime").val("2017-12-12 17:00:00");
+                //$("#Lav_Day").val(9.00);
+                $("#Lac_Tag").val("歇息");
+            });
+
+        })
+        </script>
+
+
+    }

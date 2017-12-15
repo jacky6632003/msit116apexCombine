@@ -1,0 +1,166 @@
+﻿@model msit116apexLayout.Models.Leave
+@{
+    ViewBag.Title = "審查假單";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+<div style=" width:100%; text-align:center; " class="print-btn">
+    <h2>審查假單</h2>
+</div>
+    @section styles{
+
+
+        <style>
+            .thumb {
+                width: 280px;
+            }
+        </style>
+    }
+
+
+    @using (Html.BeginForm("ReviewEdit", "Leaves", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+
+
+        <div id="accordion" role="tablist">
+            <div class="card">
+                <div class="card-header" role="tab" id="headingOne">
+                    <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            請假人訊息
+                        </a>
+                    </h5>
+                </div>
+
+                <div id="collapseOne" class="collapse " role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="form-horizontal">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.ID)
+                            @*@Html.HiddenFor(model => model.Lav_ReviewID)*@
+                            <div class="form-group">
+                                請假系統員工ID
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.Lav_ID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.Lav_ID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.User.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.User.AspNetUsers.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <br />
+
+        <div class="card">
+            <h4 class="card-header">審查</h4>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Lav_StartTime)
+                        @Html.EditorFor(model => model.Lav_StartTime, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Lav_StartTime, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-5">
+                        @Html.LabelFor(model => model.Lac_EndTime)
+                        @Html.EditorFor(model => model.Lac_EndTime, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Lac_EndTime, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label>共計</label>
+                        <input name="Lav_Day" type="text" value="" id="Lav_Day" class="form-control" readonly="readonly" />
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Lac_LeavecategoryID, "假別")
+                        @Html.EditorFor(model => model.Leavecategory.LeavecategoryName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @*@Html.DropDownList("Lac_LeavecategoryID", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })*@
+                        @Html.ValidationMessageFor(model => model.Leavecategory.LeavecategoryName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Lac_Agent, "代理人")
+                        @Html.EditorFor(model => model.User1.AspNetUsers.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @*@Html.DropDownList("Lac_Agent", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })*@
+                        @Html.ValidationMessageFor(model => model.User1.AspNetUsers.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Lac_Tag)
+                        @Html.EditorFor(model => model.Lac_Tag, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Lac_Tag, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(p => p.LeaveImage)
+                        <img id="img1" class="thumb img-thumbnail" src="@Url.Action("GetImage","Leaves",new {id=Model.ID })" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Lav_ReviewID)
+                    @Html.DropDownList("Lav_ReviewID", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Lav_ReviewID, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.LavSupervisor, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.LavSupervisor, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.LavSupervisor, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+        </div>
+        <br />
+        <div style=" width:100%; text-align:center; " class="print-btn">
+
+            <input type="submit" value="儲存" class="btn btn-default" />
+            @Html.ActionLink("返回", "Review", null, new { @class = "noprint btn btn-danger" })
+            <input type="button" value="Demo" class="btn btn-info" id="Demo" />
+        </div>
+
+
+
+
+    }
+
+    @section scripts{
+
+        <script src="~/Areas/Schedule/script/laydate/laydate.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                var starttime = $('#Lav_StartTime').val();
+                var endtime = $('#Lac_EndTime').val();
+                var from_date = new Date(starttime);
+                var end_date = new Date(endtime);
+                var time_different = (end_date - from_date) / 86400000 * 24 / 24 * 9;
+                $("#Lav_Day").val(time_different.toFixed(2));
+
+
+                $('#LeaveImage').change(function () {
+                    var theFile = this.files[0];
+                    var reader = new FileReader();
+                    reader.readAsDataURL(theFile);
+                    reader.addEventListener("load", function (event) {
+                        $('#img1').attr('src', event.target.result);
+                    })
+                })
+            })
+        </script>
+
+
+
+    }

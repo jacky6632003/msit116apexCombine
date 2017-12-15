@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/jquery-ui.min.css" rel="stylesheet" />
+    <link href="Content/font-awesome.min.css" rel="stylesheet" />
+    <style>
+        /*div{
+            border:5px solid black;
+            height:100px;
+        }*/
+        /*label{
+            width:100px;
+            height:50px;
+        }
+        td{
+            width:200px;
+        }*/
+        .editOverrideAlert {
+            font-size: 1.3em;
+            padding: 1em;
+            text-align: center;
+            width: auto;
+            word-wrap: break-word;
+            height: auto;
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <script src="Scripts/jquery-3.2.1.min.js"></script>
+    
+</head>
+<body>
+    <!--<button type="button" id="btn1">123</button>
+    <button type="button" id="btn2">321</button>
+    <div id="div1"><label name="lab1">lab1</label></div>
+    
+    <div id="div2"></div>
+
+    <table>
+        <thead>
+            <tr><th></th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div name="divc"></div>
+                </td>
+                <td><div name="divc"></div></td>
+                <td><div name="divc"></div></td>
+            </tr>
+        </tbody>
+    </table>-->
+    <button id="testBtnAlert">Test</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script src="Scripts/jquery-ui.min.js"></script>
+    <script>
+        $(function () {
+            //$('#btn1').click(function () {
+            //    if ($('#div1').children('label[name="lab1"]').length > 0) {
+            //        $('label[name="lab1"]').animateAppendTo('#div2', 1000);
+            //    }
+            //    else {
+            //            $('label[name="lab1"]').animateAppendTo('#div1', 1000);
+            //    }
+            //});
+            //$('#btn2').click(function () {
+            //    if ($('#div1').children('label[name="lab1"]').length > 0) {
+            //        $('label[name="lab1"]').animateAppendTo('div[name="divc"]', 1000);
+            //    }
+            //    else {
+            //        $('label[name="lab1"]').animateAppendTo('#div1', 1000);
+            //    }
+            //});
+
+            //$.fn.animateAppendTo = function (sel, speed) {
+            //    var $this = this;
+            //    if ($(sel).length == 1 && $this.length == 1) {
+            //        var newEle = $this.clone(true).appendTo(sel);
+            //        var newPos = newEle.position();
+            //        newEle.hide();
+            //        $this.css('position', 'absolute').animate(newPos, speed, function () {
+            //            newEle.show();
+            //            $this.remove();
+            //        });
+            //        return newEle;
+            //    }
+            //    if ($(sel).length > 1 && $this.length == 1) {
+            //        $this.css('position', 'absolute');
+            //        $.each($(sel), function () {
+            //            var newEle = $this.clone(true).appendTo(this);
+            //            var newPos = newEle.position();
+            //            newEle.hide();
+            //            var $cloneani = $this.clone(true).appendTo($this.parent());
+            //            $cloneani.animate(newPos, speed, function () {
+            //                newEle.show();
+            //                newEle.css('position', 'static');
+            //                $cloneani.remove();
+            //            });
+            //        });
+            //        $this.remove();
+            //        return newEle;
+            //    }
+            //    if ($(sel).length == 1 && $this.length > 1) {
+            //        $this.css('position', 'absolute');
+            //        var newEle = $($($this).first()).clone(true).appendTo($(sel));
+            //        $.each($this, function () {
+            //            var newPos = newEle.position();
+            //            var $cloneani = $(this).clone(true).appendTo($(this).parent());
+            //            $cloneani.animate(newPos, speed, function () {
+            //                newEle.show();
+            //                newEle.css('position', 'static');
+            //                $cloneani.remove();
+            //            });
+            //        });
+            //        newEle.hide();
+            //        $this.remove();
+            //        return newEle;
+            //    }
+            //};
+        });
+
+        $(function () {
+            $('#testBtnAlert').click(function () {
+                alert('TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest');
+            });
+
+            
+        });
+
+        window.alert = function (message) {
+            $(document.createElement('div'))
+                .attr({ title: '提醒視窗', 'class': 'editOverrideAlert' })
+                .html(message)
+                .dialog({
+                    buttons: [{
+                        text: "關閉",
+                        "class": 'btn btn-info',
+                        click: function () {
+                            //$(this).dialog('close');
+                            $(this).remove();
+                        }
+                    }],
+                    close: function () {
+                        $(this).remove();
+                    },
+                    draggable: true,
+                    modal: true,
+                    resizable: false,
+                    show: {
+                        effect: "blind",
+                        duration: 200
+                    }                  
+                }).prev(".ui-dialog-titlebar").addClass("bg-dark text-white");
+        };
+    </script>
+</body>
+</html>

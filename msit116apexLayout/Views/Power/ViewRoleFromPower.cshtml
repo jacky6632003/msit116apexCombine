@@ -1,0 +1,243 @@
+﻿@model IEnumerable<msit116apexLayout.Models.RoleFromPowersViewModel>
+
+<div>
+    <div class="form-inline" style="margin:5px;border:1px solid #CCC;padding:3px;border-radius:3px">
+        <label style="padding:3px;font-weight:bold">篩選 角色/ 部門/ 使用者/ 全部</label>
+        <select id="selectrfpFilter" class="form-control">
+            <option>請選擇</option>
+            <option value="0">角色</option>
+            <option value="1">部門</option>
+            <option value="2">使用者</option>
+            <option value="3">全部</option>
+        </select>
+    </div>
+    <div style="margin:5px;border:1px solid #CCC;padding:3px;border-radius:3px">
+        <label style="padding:3px;font-weight:bold">內容篩選</label>
+        <input id="selectrfpSecondFilterAll" type="checkbox" checked />
+        <label for="selectrfpSecondFilterAll">選擇全部</label>
+        <div id="selectrfpSecondFilterCKbox" class="form-inline">
+
+        </div>
+    </div>
+</div>
+
+
+<ul>
+    @foreach(var rfpvm in Model)
+    {
+        <li>
+            <span>@rfpvm.uPages.pageName</span>
+            <ul>
+                @foreach(var rfp in rfpvm.roleFromPower)
+                {
+                    <li>
+                        <span>@rfp.uPower.powerName</span>
+
+                        <div name="rfpRole" style="margin:2px;display:none;">
+                            <div>
+                                <ul>
+                                    @foreach (var role in rfp.uRolesDpmtUserIdUserNames)
+                                    {
+                                        <li>
+                                            <span name="@string.Format("rfpRolerid{0}",@role.uRoles.uRoleID)">
+                                            @string.Format("{0}<{1}>", @role.uRoles.uRoleName, @role.Department)
+                                            </span>
+                                            <ul>
+                                                @foreach (var roleuser in role.userIdUserName) {
+                                                    <li>
+                                                        <span>
+                                                            @string.Format("{0}<{1}>",@roleuser.UserName,roleuser.UserID)
+                                                        </span>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div name="rfpDpmt" style="margin:2px;display:none">
+                            部門
+                            <div>
+                                <ul>
+                                    @foreach (var dpmt in rfp.Department)
+                                    {
+                                        <li>
+                                            <span>@dpmt</span>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>                            
+                        </div>
+                        
+                        <div name="rfpUser" style="margin:2px;display:none">
+                            使用者
+                            <div>
+                                <ul>
+                                    @foreach (var useri in rfp.UserIDNames)
+                                    {
+                                        <li>
+                                            <span name="@string.Format("rfpUseruid{0}",useri.UserID)">
+                                            @string.Format("{0}<{1}>", useri.UserName, @useri.UserID)                                                
+                                            </span>
+                                            <ul>
+                                                @foreach (var useriur in useri.uRolesDpmts)
+                                                {
+                                                <li>
+                                                    <span>
+                                                        @string.Format("{0}<{1}>",useriur.uRoles.uRoleName,useriur.Department)
+                                                    </span>
+                                                </li>
+                                                }
+                                            </ul>
+
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </li>
+    }
+</ul>
+
+<script>
+    $(function () {
+        $('#selectrfpSecondFilterAll').change(function () {
+            $('#selectrfpSecondFilterCKbox :checkbox').prop("checked", $(this).prop("checked"));
+            secondFilterCKboxFunction();
+        });
+        $('#selectrfpFilter').on('change', function () {
+            var sx2s = $('#selectrfpSecondFilterCKbox');
+            $('#selectrfpSecondFilterAll').prop("checked", true);
+            $(sx2s).children().remove();
+            $.each($('div[name="rfpRole"]').children("div").children("ul").children("li"), function () {
+                $(this).children("span").parent().show('blind', null, 200);
+            });
+
+            $.each($('div[name="rfpUser"]').children("div").children("ul").children("li"), function () {
+                $(this).children("span").parent().show('blind', null, 200);
+            });
+
+
+            switch ($(this).val()) {
+                case "0":
+                    $.get("@Url.Action("GetRolesList", "Power",new { area=""})", null, function (data) {
+                        $.each(data, function (idv, objv) {
+                            var sx2ckbox = $("<input/>").attr("type", "checkbox").attr("value", objv.uRoles.uRoleName).attr("id", "ckboxfid" + objv.uRoles.uRoleID).prop("checked", true);
+                            var sx2lab = $("<label></label>").text(objv.uRoles.uRoleName + "<" + objv.Department + ">").attr("for", "ckboxfid" + objv.uRoles.uRoleID);
+                            var sx2 = $("<div class='form-inline' style='border:solid 1px #CCC;padding:3px;border-radius:3px'></div>").append(sx2ckbox).append(sx2lab);
+                            sx2s.append(sx2);
+                        });
+
+                        $('div[name="rfpRole"]').show('blind', null, 200, function () {
+                            $(this).children("div").show('blind', null, 200);
+                            $('div[name="rfpDpmt"]').hide('blind', null, 200);
+                            $('div[name="rfpUser"]').hide('blind', null, 200);
+                        });
+                    });
+                    
+                    break;
+                case "1":
+                    $('div[name="rfpDpmt"]').show('blind', null, 200, function () {
+                        $(this).children("div").show('blind', null, 200);
+                        $('div[name="rfpRole"]').hide('blind', null, 200);
+                        $('div[name="rfpUser"]').hide('blind', null, 200);
+                    });
+                    break;
+                case "2":
+                    $.get("@Url.Action("GetEmployeesList2", "Power",new { area=""})", null, function (data) {
+                        $.each(data, function (idv, objv) {
+                            var sx2ckbox = $("<input/>").attr("type", "checkbox").attr("value", objv.UserName).attr("id", "ckboxfid" + objv.UserID).prop("checked", true);
+                            var sx2lab = $("<label></label>").text(objv.UserName + "<" + objv.UserID + ">").attr("for", "ckboxfid" + objv.UserID);
+                            var sx2 = $("<div class='form-inline' style='border:solid 1px #CCC;padding:3px;border-radius:3px'></div>").append(sx2ckbox).append(sx2lab);
+                            sx2s.append(sx2);
+                        });
+
+                        $('div[name="rfpUser"]').show('blind', null, 200, function () {
+                            $(this).children("div").show('blind', null, 200);
+                            $('div[name="rfpRole"]').hide('blind', null, 200);
+                            $('div[name="rfpDpmt"]').hide('blind', null, 200);
+                        });
+                    });                    
+                    break;
+                case "3":
+                    $('div[name="rfpRole"]').show('blind', null, 200);
+                    $('div[name="rfpDpmt"]').show('blind', null, 200);
+                    $('div[name="rfpUser"]').show('blind', null, 200);
+                    $('div[name="rfpRole"]').children("div").show('blind', null, 200);
+                    $('div[name="rfpDpmt"]').children("div").show('blind', null, 200);
+                    $('div[name="rfpUser"]').children("div").show('blind', null, 200);
+                    break;
+                default:
+                    $('div[name="rfpRole"]').hide('blind', null, 200);
+                    $('div[name="rfpDpmt"]').hide('blind', null, 200);
+                    $('div[name="rfpUser"]').hide('blind', null, 200);
+                    break;
+            }
+
+        });
+        $('#selectrfpSecondFilterCKbox').on('change', ':checkbox', secondFilterCKboxFunction);
+        function secondFilterCKboxFunction() {
+            var ssfck = $('#selectrfpSecondFilterCKbox :checkbox');
+            var select1selected = $('#selectrfpFilter').val();
+            switch (select1selected) {
+                case "0":
+                    var cktextlist = $(ssfck).parent().parent().children("div").children("input:checked");
+                    var uncktextlist = $(ssfck).parent().parent().children("div").children("input:not(:checked)");
+                    $.each(cktextlist, function () {
+                        //var cktext = $(this).val();
+                        var ckidnum = $(this).attr("id").split("ckboxfid")[1];
+                        //console.log(cktext);
+                        $.each($('div[name="rfpRole"]').children("div").children("ul").children("li"), function () {
+                            //$(this).children("span:contains('" + cktext + "')").parent().show('blind', null, 200);
+                            $(this).children("span[name='rfpRolerid" + ckidnum + "']").parent().show('blind', null, 200);
+                        });
+                    });
+                    $.each(uncktextlist, function () {
+                        //var cktext = $(this).val();
+                        var ckidnum = $(this).attr("id").split("ckboxfid")[1];
+                        //console.log(cktext);
+                        $.each($('div[name="rfpRole"]').children("div").children("ul").children("li"), function () {
+                            //$(this).children("span:contains('" + cktext + "')").parent().hide('blind', null, 200);
+                            $(this).children("span[name='rfpRolerid" + ckidnum + "']").parent().hide('blind', null, 200);
+                        });
+                    });
+
+                    break;
+                case "1":
+                    break;
+                case "2":
+                    var cktextlist = $(ssfck).parent().parent().children("div").children("input:checked");
+                    var uncktextlist = $(ssfck).parent().parent().children("div").children("input:not(:checked)");
+                    $.each(cktextlist, function () {
+                        //var cktext = $(this).val();
+                        var ckidnum = $(this).attr("id").split("ckboxfid")[1];
+                        //console.log(cktext);
+                        $.each($('div[name="rfpUser"]').children("div").children("ul").children("li"), function () {
+                            //$(this).children("span:contains('" + cktext + "')").parent().show('blind', null, 200);
+                            $(this).children("span[name='rfpUseruid" + ckidnum + "']").parent().show('blind', null, 200);
+                        });
+                    });
+                    $.each(uncktextlist, function () {
+                        //var cktext = $(this).val();
+                        var ckidnum = $(this).attr("id").split("ckboxfid")[1];
+                        //console.log(cktext);
+                        $.each($('div[name="rfpUser"]').children("div").children("ul").children("li"), function () {
+                            //$(this).children("span:contains('" + cktext + "')").parent().hide('blind', null, 200);
+                            $(this).children("span[name='rfpUseruid" + ckidnum + "']").parent().hide('blind', null, 200);
+                        });
+                    });
+                    
+                    break;
+                case "3":
+                    break;
+                default:
+                    break;
+            }
+        };
+    });
+</script>

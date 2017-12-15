@@ -1,0 +1,87 @@
+﻿@model IEnumerable<msit116apexLayout.Models.AspNetUsers>
+
+@*<script src="~/Scripts/jquery-3.2.1.min.js"></script>*@
+@*<script src="~/Content/bootstrap.min.js"></script>*@
+<script src="~/Areas/CRM/Script/datatables.min.js"></script>
+<link href="~/Areas/CRM/Script/datatables.min.css" rel="stylesheet" />
+
+@section styles{
+    <style>
+        .masterdiv {
+            margin: 2em
+        }
+
+        .nakadiv {
+            margin: 1em
+        }
+
+        .monostyle {
+            width: 400px
+        }
+
+        .h {
+            margin-left: 4em
+        }
+
+        .content {
+            width: 1000px;
+            height: 15em
+        }
+    </style>
+}
+
+    <div style="margin-right:10em">
+        <div class="row">
+            <h2 class="h">新增會員關聯</h2>
+        </div>
+        <hr style="border-bottom:1px solid black;"/>
+
+        <div style="margin-left:3em">
+
+            @using (Html.BeginForm())
+            {
+                <table id="table" class="table table-hover" style="width:1800px">
+                    <thead id="userTh" class="bg-warning">
+                        <tr>
+                            <th style="width:280px;padding-left:5.2em"><h3>頭像</h3></th>
+                            <th style="width:200px;padding-left:1.5em"><h3>會員姓名</h3></th>
+                            <th style="padding-left:2em;width:150px"><h3 style="width:3em">職稱</h3> </th>
+                            <th style="width:10em"><h3 style="padding-left:2em">生日</h3></th>
+                            <th style="padding-left:2em;width:350px"><h3 style="padding-left:2em">電子郵件</h3></th>
+                            <th style="padding-left:3em"><h3 style="padding-left:1.2em">手機號碼</h3></th>
+                            <th style="width:200px;padding-left:1em"><h3>新增關聯</h3></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var n in Model)
+                {
+                    string BirthDay = "";
+                    if (n.BirthDay != null)
+                    {
+                        BirthDay = n.BirthDay.Value.ToShortDateString();
+                    }
+
+                    <tr>
+                        <td style="background-color:burlywood;padding-left:0em">
+                            <img style="height:160px;width:160px;border-radius:50%; margin-left:3em" src="@Url.Action("GetUserImageFile", "InterviewRecords", new { area = "CRM", userid = n.Id })" />
+                        </td>
+                        <td style="padding-top:4.3em;padding-left:2.5em"><h5> @n.Name</h5></td>
+                        <td style="padding-top:4.3em;padding-left:1.5em"><h5>@n.Title</h5></td>
+                        <td style="padding-top:4.3em;padding-left:3em"><h5>@BirthDay</h5></td>
+                        <td style="padding-top:4.3em;padding-left:1.5em;width:350px"><h5 style="padding-left:2em">@n.Email</h5></td>
+                        <td style="padding-top:4.3em;padding-left:3em"><h5 style="padding-left:1.5em">@n.Telephone</h5></td>
+                        <td style="padding-top:2.3em;padding-left:0px">
+                            <a href="@Url.Action("create_partial", "Partial", new { area = "CRM", Userid = n.Id })" class="btn btn-primary" style="margin-top:1em; margin-left:3em">新增</a>
+                        </td>
+                    </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+<script>
+    $(document).ready(function () {
+
+    })
+</script>

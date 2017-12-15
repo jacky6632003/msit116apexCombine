@@ -1,0 +1,16 @@
+﻿@model msit116apexLayout.Models.ResendValidationEmailViewModel
+@{
+    ViewBag.Title = "Email驗證";
+    Layout = null;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>驗證信已發送</p>
+
+@if (Model.CallbackUrl != null)
+{
+    <p>
+        或是使用<a href="@Model.CallbackUrl">進行驗證</a>.
+    </p>
+}

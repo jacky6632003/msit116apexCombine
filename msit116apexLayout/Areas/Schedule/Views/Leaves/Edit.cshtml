@@ -1,0 +1,177 @@
+﻿@model msit116apexLayout.Models.Leave
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "修改假單";
+}
+
+<h2>修改假單</h2>
+
+@section styles{
+
+
+    <style>
+        .thumb {
+            width: 280px;
+        }
+    </style>
+}
+
+
+
+@using (Html.BeginForm("Edit", "Leaves", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+        @*@Html.HiddenFor(model => model.Lav_ReviewID)*@
+       
+
+        
+    </div>
+
+    <div id="accordion" role="tablist">
+        <div class="card">
+            <div class="card-header bg-warning " role="tab" id="headingOne">
+                <h5 class="mb-0">
+                    <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="color:black">
+                       員工資料
+                    </a>
+                </h5>
+            </div>
+
+            <div id="collapseOne" class="collapse " role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    <div class="form-group">
+                        員工請假系統ID
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.Lav_ID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.Lav_ID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                       
+                        <div class="col-md-12">
+                            
+                            <p>員工姓名:@ViewBag.name</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <br />
+        <div class="card">
+            <div class="card-header bg-warning">
+                修改假單
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Lav_StartTime)
+                        @Html.EditorFor(model => model.Lav_StartTime, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Lav_StartTime, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-5">
+                        @Html.LabelFor(model => model.Lac_EndTime)
+                        @Html.EditorFor(model => model.Lac_EndTime, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Lac_EndTime, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label>共計</label>
+                        @Html.EditorFor(model => model.Lav_Day, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Lac_LeavecategoryID, "假別")
+                        @Html.DropDownList("Lac_LeavecategoryID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Lac_LeavecategoryID, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Lac_Agent, "代理人編號")
+                        @Html.DropDownList("Lac_Agent", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Leavecategory.LeavecategoryName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Lac_Tag, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.EditorFor(model => model.Lac_Tag, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Lac_Tag, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(p => p.LeaveImage, new { @class = "col-sm-2 control-label" })
+                        @Html.EditorFor(p => p.LeaveImage, new { htmlAttributes = new { type = "file", @class = "form-control", placeholder = " Image" } })
+                        <img id="img1" class="thumb img-thumbnail" src="@Url.Action("GetImage","Leaves",new {id=Model.ID })" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style=" width:100%; text-align:center; " class="print-btn">
+
+            <input type="submit" value="儲存" class="btn btn-default" />
+            @Html.ActionLink("反回", "index", "", new { @class = "noprint btn btn-danger" })
+        </div>
+
+        }
+
+
+        @section scripts{
+
+            <script src="~/Areas/Schedule/script/laydate/laydate.js"></script>
+
+            <script>
+                laydate.render({
+                    elem: '#Lav_StartTime'
+                    , type: 'datetime'
+                });
+                laydate.render({
+                    elem: '#Lac_EndTime '
+                    , type: 'datetime'
+                });
+            </script>
+            <script>
+                $(document).ready(function () {
+                    $('#LeaveImage').change(function () {
+                        var theFile = this.files[0];
+                        var reader = new FileReader();
+                        reader.readAsDataURL(theFile);
+                        reader.addEventListener("load", function (event) {
+                            $('#img1').attr('src', event.target.result);
+                        })
+                    })
+                    document.getElementById("Lac_EndTime").onblur = Lac_EndTime;
+                    document.getElementById("Lac_EndTime").onchang = Lac_EndTime;
+                    function Lac_EndTime() {
+                        var starttime = $('#Lav_StartTime').val();
+                        var endtime = $('#Lac_EndTime').val();
+                        var from_date = new Date(starttime);
+                        var end_date = new Date(endtime);
+                        var time_different = (end_date - from_date) / 86400000 * 24 / 24 * 9;
+                        $("#txt_hours").val(time_different.toFixed(2));
+                        $("#Lav_Day").val(time_different.toFixed(2));
+                        if (Date.parse(starttime).valueOf() > Date.parse(endtime).valueOf()) {
+
+                            document.getElementById("idsp2").innerHTML =
+                                "<span style='color:red' id='idsp2'>注意開始時間不能晚於結束時間！</span>";
+                        } else if (Date.parse(starttime).valueOf() < Date.parse(endtime).valueOf()) {
+
+                            document.getElementById("idsp2").innerHTML =
+                                "<span style='color:red' id='idsp2'></span>";
+
+
+                        }
+                    }
+                })
+            </script>
+
+
+
+        }

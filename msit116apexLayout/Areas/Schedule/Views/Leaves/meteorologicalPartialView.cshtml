@@ -1,0 +1,161 @@
+﻿@model IEnumerable<msit116apexLayout.Models.Events>
+    <h5>台灣天氣</h5>
+<select class="form-control" id="meteorologicalID" name="meteorologicalID">
+    <option value="1">台北</option>
+    <option value="13">基隆</option>
+    <option value="20">新北</option>
+    <option value="22">連江</option>
+    <option value="53">宜蘭</option>
+    <option value="65">新竹</option>
+    <option value="81">桃園</option>
+    <option value="94">苗栗</option>
+    <option value="112">台中</option>
+    <option value="141">彰化</option>
+    <option value="167">南投</option>
+    <option value="182">嘉義</option>
+    <option value="200">雲林</option>
+    <option value="220">台南</option>
+    <option value="257">高雄</option>
+    <option value="295">澎湖</option>
+    <option value="301">金門</option>
+    <option value="307">屏東</option>
+    <option value="340">台東</option>
+    <option value="357">花蓮</option>
+    
+</select>
+<br />
+@section styles{
+    <link href="~/Areas/Schedule/Content/style3.css" rel="stylesheet" />
+
+    <style>
+        .thumb {
+            width: 280px;
+        }
+    </style>
+}
+
+<div id="app">
+    @*<div class="card mt-2" style="width:auto;">
+        <img class="card-img-top " v-bind:src="'https://works.ioa.tw/weather/img/weathers/zeusdesign/' + list.img" alt="" style="width:180px">
+        <div class="card-body">
+            <p class="card-text">更新時間:{{list.at}} </p>
+        </div>
+    </div>*@
+
+
+    <div class="book detail img"  style="width:auto;">
+        <img  v-bind:src="'https://works.ioa.tw/weather/img/weathers/zeusdesign/' + list.img" alt="" >
+        <div class="infos">
+            <p class="name">更新時間:</p>
+                 <p class="name">{{list.at}}</p>
+              <p class="name">天氣敘述:{{list.desc}}</p>
+            <p class="name">溫度:{{list.temperature}}</p>
+            <p class="name">雨量:{{list.rainfall}}</p>
+        </div>
+    </div>
+</div>
+<br />
+<table class="thead-dark">
+    <thead>
+        <tr>
+            <th>
+                部門
+            </th>
+            <th>
+                行程內容
+            </th>
+            <th>
+                起始時間
+            </th>
+            @*<th>
+                結束時間
+            </th>*@
+        </tr>
+    </thead>
+    <tbody>
+        
+        @foreach (var item in Model)
+        {
+            <tr>
+                @switch (item.ThemeColor)
+                {
+                    case "red":
+                        <td>
+                            總經理
+                        </td>
+                        break;
+                    case "Blue":
+                        <td>
+                            人資部
+                        </td>
+                        break;
+                    case "deeppink":
+                        <td>
+                            資訊部
+                        </td>
+                        break;
+                    case "Green":
+                        <td>
+                            財務部
+                        </td>
+                        break;
+                    default:
+                        <td>
+                            自己
+                        </td>
+                        break;
+                }
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Start)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.End)
+                </td>*@
+               
+
+            </tr>
+        }
+
+
+    </tbody>
+</table>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.5/vue.js'></script>
+<script>
+    //1中正區 2大同區 3中山 4松山 5大安 6.萬華 7.信義 8.士林 9.北投 10內湖 11南港 12文山
+    $(document).ready(function () {
+                    var obj = [];
+                    var vm = new Vue({
+            el: "#app",
+            data: {
+                        list: null
+            }
+                })
+        var s = $("#meteorologicalID").val();
+        $.ajax({
+            url: 'https://works.ioa.tw/weather/api/weathers/' + s + '.json',
+            success: function (res) {
+                vm.list = res;
+
+            }
+        });
+
+        $('#meteorologicalID').change(function () {
+            var s = $("#meteorologicalID").val();
+            $.ajax({
+                url: 'https://works.ioa.tw/weather/api/weathers/' + s + '.json',
+                success: function (res) {
+                    vm.list = res;
+
+                }
+            });
+        });
+
+    })
+
+
+
+</script>

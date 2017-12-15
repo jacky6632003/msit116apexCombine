@@ -1,0 +1,258 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<msit116apexLayout.Models.Leave>
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "假單列表";
+}
+@section styles{
+
+    <link href="~/Areas/Schedule/src/css/layui.css" rel="stylesheet" />
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    <style>
+        .aaa {
+            color: white;
+        }
+    </style>
+}
+<div style=" width:100%; text-align:center; " class="print-btn">
+    <span class="badge badge-warning" style="font-size:40px;"><span>@User.Identity.GetUserName()</span>請假清單</span>
+
+    </div>
+<br />
+    @*<a href="@Url.Action("ExportToExcel")" class="btn btn-primary">匯出</a>*@
+
+
+    @Html.Action("IndexPartialView")
+
+
+
+    <div id="accordion" role="tablist">
+        <div class="card">
+            <div class="card-header bg-warning" role="tab" id="headingOne">
+                <h5 class="mb-0">
+                    <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="font-size:20px;">
+                        個人請假清單
+                    </a>
+                </h5>
+            </div>
+
+            <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    <table class="table table-striped  table-hover" lay-filter="parse-table-demo">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>
+                                    <p>員工</p>
+                                </th>
+                                <th>
+                                    @*@Html.DisplayNameFor(model => model.First().Lav_StartTime)*@
+                                    @Html.ActionLink(@Html.DisplayNameFor(model => model.First().Lav_StartTime).ToHtmlString() + "(點選可排序)", "Index", "Leaves", new { sortBy = ViewBag.sortStartTime, page = Request.QueryString["page"], year = Request.QueryString["year"] }, new { @class = "aaa" })
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.First().Lac_EndTime)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.First().Lac_Agent)
+                                </th>
+
+                                <th>
+                                    @*@Html.DisplayNameFor(model => model.First().Lac_LeavecategoryID)*@
+                                    @Html.ActionLink(@Html.DisplayNameFor(model => model.First().Lac_LeavecategoryID).ToHtmlString() + "(點選可排序)", "Index", "Leaves", new { sortBy = ViewBag.sortLeavecategory, page = Request.QueryString["page"], year = Request.QueryString["year"] }, new { @class = "aaa" })
+                                </th>
+                                <th>
+                                    @*@Html.DisplayNameFor(model => model.First().Lav_ReviewID)*@
+                                    @Html.ActionLink(@Html.DisplayNameFor(model => model.First().Lav_ReviewID).ToHtmlString() + "(點選可排序)", "Index", "Leaves", new { sortBy = ViewBag.sortReview, page = Request.QueryString["page"], year = Request.QueryString["year"] }, new { @class = "aaa" })
+                                </th>
+                                <th>
+                                    修改
+                                </th>
+
+                                <th>
+                                    刪除
+                                </th>
+                                <th>
+                                    列印
+                                </th>
+                                <th>
+                                    詳細清單
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.User.AspNetUsers.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Lav_StartTime)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Lac_EndTime)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.User1.AspNetUsers.Name)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Leavecategory.LeavecategoryName)
+                                </td>
+
+
+                                @switch (item.Lav_ReviewID)
+                                {
+                                    case 1:
+                                        <td>
+                                            <p style="color:#DC3545" class="h5">
+                                                @Html.DisplayFor(modelItem => item.Review.ReviewName)
+                                            </p>
+                                        </td>
+                                        break;
+                                    case 2:
+                                        <td>
+                                            <p style="color:#FFC107" class="h5">
+                                                @Html.DisplayFor(modelItem => item.Review.ReviewName)
+                                            </p>
+                                        </td>
+                                        break;
+                                    case 3:
+                                        <td>
+                                            <p style="color:#17A2B8" class="h5">
+                                                @Html.DisplayFor(modelItem => item.Review.ReviewName)
+                                            </p>
+                                        </td>
+                                        break;
+                                    default:
+                                        <td>
+                                            <p style="color:palegreen">
+                                                @Html.DisplayFor(modelItem => item.Review.ReviewName)
+                                            </p>
+                                        </td>
+                                        break;
+
+                                }
+                                @if (item.Lav_ReviewID == 1)
+                                {
+                                    <td>
+                                        <a class="btn btn-secondary " href="@Url.Action("Details","Leaves", new { id = item.ID })"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>已同意</a>
+                                        @*@Html.ActionLink("已經同意不能修改", "Details", new { id = item.ID }, new { @class = "btn btn-secondary " })*@
+                                    </td>
+                                }
+                                else if (item.Lav_ReviewID == 2)
+                                {
+                                    <td>
+                                        <a class="btn btn-warning" href="@Url.Action("Details","Leaves", new { id = item.ID })"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>拒絕</a>
+                                        @*@Html.ActionLink("拒絕", "Details", new { id = item.ID }, new { @class = "btn btn-warning " })*@
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        @Html.ActionLink("修改", "Edit", new { id = item.ID }, new { @class = "btn btn-info " })
+                                    </td>
+
+                                }
+
+
+                                @if (item.Lav_ReviewID == 1)
+                {
+                                    <td>
+                                        <a class="btn btn-secondary " href="@Url.Action("Details","Leaves", new { id = item.ID })"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>已同意</a>
+                                        @*@Html.ActionLink("已經同意不能刪除", "Details", new { id = item.ID }, new { @class = "btn btn-secondary " })*@
+                                    </td>
+                                }
+                                else if (item.Lav_ReviewID == 2)
+                                {
+                                    <td>
+                                        <a class="btn btn-warning " href="@Url.Action("Details","Leaves", new { id = item.ID })"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>已拒絕</a>
+                                        @*@Html.ActionLink("拒絕不能刪除", "Details", new { id = item.ID }, new { @class = "btn btn-warning " })*@
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <a class="btn btn-danger " href="@Url.Action("Delete","Leaves", new { id = item.ID })"><i class="fa fa-trash" aria-hidden="true"></i>刪除</a>
+                                        @*@Html.ActionLink("刪除", "Delete", new { id = item.ID }, new { @class = "btn btn-danger " })*@
+
+                                    </td>
+                                }
+                                @if (item.Lav_ReviewID == 1)
+                                {
+                                    <td>
+                                        <a class="btn btn-light " href="@Url.Action("print","Leaves", new { id = item.ID })"><i class="fa fa-print" aria-hidden="true"></i>列印</a>
+                                        @*@Html.ActionLink("列印", "print", new { id = item.ID }, new { @class = "btn btn-light " })*@
+
+                                    </td>
+
+                                }
+                                else if (item.Lav_ReviewID == 2)
+                                {
+                                    <td>
+                                        <a class="btn btn-warning " href="@Url.Action("Details","Leaves", new { id = item.ID })"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>拒絕中</a>
+                                        @*@Html.ActionLink("拒絕不能列印", "Details", new { id = item.ID }, new { @class = "btn btn-warning " })*@
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <a class="btn btn-info  " href="@Url.Action("Details","Leaves", new { id = item.ID })"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>處理中</a>
+                                        @*@Html.ActionLink("處理中不能列印", "Details", new { id = item.ID }, new { @class = "btn btn-info " })*@
+                                    </td>
+                                }
+
+                                <td>
+                                    <a class="btn btn-primary " href="@Url.Action("Details","Leaves", new { id = item.ID })"><i class="fa fa-list" aria-hidden="true"></i> 詳細清單</a>
+                                    @*@Html.ActionLink("詳細清單", "Details", new { id = item.ID }, new { @class = "btn btn-primary " })*@
+
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                    @Html.PagedListPager(Model, i => Url.Action("Index", new { page = i, sortBy = Request.QueryString["sortBy"], year = Request.QueryString["year"] }), PagedListRenderOptions.Classic)
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <table id="demo"></table>
+    @section scripts{
+
+
+        <script src="~/Areas/Schedule/src/layui.js"></script>
+        <script>
+        $(document).ready(function () {
+
+
+            function getParameterName(skey) {
+                var s = location.search.replace(/^\?/, '');
+                if (s == '' || skey == null || skey == '') return unescape(s);
+                var re = new RegExp('(&|^)' + skey + '=([^&]*)(&|$)');
+                var a = re.exec(s);
+                return unescape(a ? a[2] : '');
+            }
+            var param2 = getParameterName("year");
+            if (param2 == "") {
+                param2 = Today.getFullYear();
+            }
+            console.log(param2);
+            $("#year").val(param2);
+
+        })
+
+        </script>
+
+    }

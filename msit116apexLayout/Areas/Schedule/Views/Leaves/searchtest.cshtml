@@ -1,0 +1,43 @@
+﻿@model IEnumerable<msit116apexLayout.Models.Leave>
+@{
+    ViewBag.Title = "searchtest";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<h2>searchtest</h2>
+@section styles{
+
+    <link href="~/Areas/Schedule/src/css/layui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+}
+
+
+@Html.Action("searchPartialView")
+
+
+
+<table class="table " lay-filter="parse-table-demo">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+        </tr>
+        </thead>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Leavecategory.LeavecategoryName)
+        </td>
+    </tr>
+}
+
+        </table>

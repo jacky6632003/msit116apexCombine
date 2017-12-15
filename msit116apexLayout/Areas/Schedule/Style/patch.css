@@ -1,0 +1,31 @@
+﻿body {
+  font-family: 'Segoe UI Semilight','Segoe UI','Microsoft Yahei',Tahoma,Arial,sans-serif,Helvetica, "Helvetica Neue", Helvetica,  Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;
+}
+
+.red {
+ color:#ee0000; font-weight:normal;  
+}
+
+table.dataTable tbody tr.selected {
+    background-color: #b0bed9; color:#ffffff; 
+}
+
+
+.btn-flat {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  border-width: 1px;
+}
+
+
+ .img_line { border-bottom:solid 1px #ddd;  width:100%; height:1px;  margin:10px;     margin-left:0px;     }
+
+
+ 
+	.cellred{  width:20px; height:20px;  background-color:#ff99cc; margin:0px; padding:0px;   }
+    .cellblue{ width:20px; height:20px;  background-color:#3399cc; margin:0px; padding:0px;}
+    .weekday{ background-color:#fff0f0;}	

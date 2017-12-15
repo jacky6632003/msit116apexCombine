@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+
+    @*<link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />*@
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    @*<script src="~/Scripts/modernizr-2.6.2.js"></script>*@
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    @*<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />*@
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+    <style>
+
+    </style>
+    @RenderSection("styles", false)
+</head>
+<body>
+    @*<div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                    </ul>
+                </div>
+            </div>
+        </div>*@
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #DDDDDD">
+            <a class="navbar-brand" href="@Url.Action("Index","Default",new { area=""})">寶碩投資績效系統</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item" style="width:7.5em; margin-left:5em;">
+                        <a class="nav-link" href="@Url.Action("Index","FundOverview")">基金總覽 <span class="sr-only">(current)</span></a>
+                    </li>
+                    @*<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            理財專區
+                        </a>
+                        @*<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="@Url.Action("Index","FundOverView")">基金總覽</a>
+                            <a class="dropdown-item" href="#">品牌旗艦館</a>
+                            <a class="dropdown-item" href="#">精選台股基金</a>
+                        </div>*@
+                    @*</li>*@
+                    <li class="nav-item" style="width:7.5em;">
+                        @Html.ActionLink("購物車", "Index", "Cart", null, new { @class = "nav-link",style= "float:left" })
+                        <span id="cartHasNums" class="badge badge-light" style="background-color:red;color:white;vertical-align:middle;float:left"></span>
+                    </li>
+                    <li class="nav-item" style="width:7.5em;">
+                        @if (Request.Cookies[".AspNet.ApplicationCookie"] != null)
+                        {
+                            <img src="@Url.Action("GetImageFile", "Account", new { area = "" })" style="height:40px;width:40px;border-radius:50%;float:left" />
+                        }
+                        @Html.ActionLink("我的帳戶", "Index", "FundOrderAccount", null, new { @class = "nav-link" })
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <br />
+
+    <div class="container-fluid body-content">
+        @RenderBody()
+        @*<hr />*@
+        @*<footer>
+                <p>&copy; @DateTime.Now.Year - Bianco Made</p>
+            </footer>*@
+    </div>
+
+    @RenderSection("scripts", false)
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+
+    @*<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>*@
+    <script>
+        window.alert = function (message) {
+            $(document.createElement('div'))
+                .attr({ title: '提醒視窗', 'class': 'editOverrideAlert' })
+                .html(message)
+                .dialog({
+                    buttons: [{
+                        text: "關閉",
+                        "class": 'btn btn-info',
+                        click: function () {
+                            //$(this).dialog('close');
+                            $(this).remove();
+                        }
+                    }],
+                    close: function () {
+                        $(this).remove();
+                    },
+                    draggable: true,
+                    modal: true,
+                    resizable: false,
+                    show: {
+                        effect: "blind",
+                        duration: 200
+                    }
+                }).prev(".ui-dialog-titlebar").addClass("bg-dark text-white");
+        };
+        $(function () {
+            $.get("@Url.Action("GetCartNum", "Cart", new { area="Fund"})", null, function (data) {
+                $('#cartHasNums').text(data);
+            });
+            $('body').click(function () {
+                $.get("@Url.Action("GetCartNum", "Cart", new { area="Fund"})", null, function (data) {
+                    $('#cartHasNums').text(data);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+﻿@model IEnumerable<msit116apexLayout.Areas.Stock.Models.Partial.StockTradingRecordModel>
+
+@{
+    ViewBag.Title = "寶碩投資績效系統_交易紀錄進階查詢";
+   
+}
+
+@section styles{
+
+    <style>
+
+        .radiusbtn2 {
+            -webkit-border-radius: 6px;
+            -moz-border-radius: 6px;
+            border-radius: 6px;
+            border: solid #bccfdb 2px;
+        }
+
+            .radiusbtn2:hover {
+                background: #f2faff;
+                background-image: -webkit-linear-gradient(top, #f2faff, #baccd6);
+                background-image: -moz-linear-gradient(top, #f2faff, #baccd6);
+                background-image: -ms-linear-gradient(top, #f2faff, #baccd6);
+                background-image: -o-linear-gradient(top, #f2faff, #baccd6);
+                background-image: linear-gradient(to bottom, #f2faff, #baccd6);
+                text-decoration: none;
+                color: #e58224;
+            }
+
+        select {
+            -webkit-appearance: button;
+            -moz-appearance: button;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -webkit-padding-end: 20px;
+            -moz-padding-end: 20px;
+            -webkit-padding-start: 2px;
+            -moz-padding-start: 2px;
+            background: #ffeac0;
+            background-image: -webkit-linear-gradient(top, #E5E5E5, #F4F4F4); /* For Chrome and Safari */
+            background-image: -moz-linear-gradient(top, #E5E5E5, #F4F4F4); /* For old Fx (3.6 to 15) */
+            background-image: -ms-linear-gradient(top, #E5E5E5, #F4F4F4); /* For pre-releases of IE 10*/
+            background-image: -o-linear-gradient(top, #E5E5E5, #F4F4F4); /* For old Opera (11.1 to 12.0) */
+            background-image: linear-gradient(to bottom, #E5E5E5, #F4F4F4); /* Standard syntax; must be last */
+            background-position: center right;
+            background-repeat: no-repeat;
+            border: 1px solid #AAA;
+            border-radius: 2px;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+            color: #555;
+            font-size: inherit;
+            margin: 0;
+            overflow: hidden;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .radiusbtn3 {
+            -webkit-border-radius: 6px;
+            -moz-border-radius: 6px;
+            border-radius: 6px;
+            border: solid #bccfdb 2px;
+        }
+    </style>
+}
+
+<h2>交易紀錄 - 進階查詢</h2>
+
+<div>
+    @Html.Action("STA_Partialview", new { STRAC = ViewBag.strac, STRSID = ViewBag.strsid, STRBS = ViewBag.strbs ,DATES = ViewBag.dates ,DATEE = ViewBag.datee })
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.STR_AccountID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.STR_ID)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.StockInfoModel.SI_StockID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StockInfoModel.SI_StockName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.STR_BuySold)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.STR_OrderPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.STR_Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.STR_Volume)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.STR_OrderTime)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.STR_STR_EnterTreasuryTime)
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.STR_AccountID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.STR_ID)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.StockInfoModel.SI_StockID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StockInfoModel.SI_StockName)
+            </td>
+            @if (item.STR_BuySold == true)
+        {
+                <td>
+                    <p style="color:red">買</p>
+                </td>
+        }
+        else if (item.STR_BuySold == false)
+        {
+            <td>
+                <p style="color:green">賣</p>
+            </td>
+        }
+            <td>
+                @Html.DisplayFor(modelItem => item.STR_OrderPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.STR_Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.STR_Volume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.STR_OrderTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.STR_STR_EnterTreasuryTime)
+            </td>
+
+        </tr>
+    }
+
+</table>

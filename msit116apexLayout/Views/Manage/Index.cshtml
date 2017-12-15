@@ -1,0 +1,219 @@
+﻿@model msit116apexLayout.Models.ManageIndexViewModel
+@{
+    ViewBag.Title = "帳戶管理";
+}
+
+@section styles{
+    <style>
+        #overlayLoadAct {
+            height: 100%;
+            width: 100%;
+            display: none;
+            position: fixed;
+            z-index: 10001;
+            top: 0;
+            left: 0;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0, 0.7);
+        }
+
+        #overlayLoadActContent {
+            position: relative;
+            top: 10%;
+            width: 100%;
+            margin-top: 2em;
+            padding: 10px;
+            background-color: white;
+        }
+
+        #overlayLoadAct > #overlayLoadActClosebtn {
+            padding: 8px;
+            text-decoration: none;
+            font-size: 60px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+            position: absolute;
+            top: -20px;
+            right: 0;
+        }
+
+            #overlayLoadAct > #overlayLoadActClosebtn:hover {
+                cursor: pointer;
+                color: #f1f1f1;
+            }
+
+
+        .blockDivC {
+            padding: 0;
+            margin: 3px;
+            border: 1px solid aqua;
+            background-color: white;
+            min-height: 200px;
+        }
+
+            .blockDivC:hover {
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            }
+
+        .blockDivCHeader {
+            font-size: 25px;
+            padding: 6px;
+            cursor: move;
+        }
+
+        .blockDivCContent {
+            padding: 6px;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+        <div class="card">
+            <h4 class="card-header bg-info text-white">@ViewBag.Title</h4>
+            <div class="card-body row">
+                @*<p class="text-success">@ViewBag.StatusMessage</p>*@
+                <div class="col-sm-8">
+                    <div class="card">
+                        <h4 class="card-header bg-dark text-white">基本資料</h4>
+                        <div id="userPersonData" class="card-body">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="card">
+                        <h4 class="card-header bg-dark text-white">設定</h4>
+                        <div class="card-body">
+                            <div class="row" id="manageDivSortable" style="margin-left:0px;margin-right:0px;display:none">
+                                <div id="AOrderPwd" class="blockDivC">
+                                    <h5 class="blockDivCHeader bg-dark text-white">密碼</h5>
+                                    <div class="blockDivCContent">
+                                        @if (Model.HasPassword)
+                                        {
+                                            <button type="button" id="btnChangePwd" class = "btn btn-success" style="cursor:pointer">修改您的密碼</button>
+                                            @*@Html.ActionLink("修改您的密碼", "ChangePassword", null, new { @class = "btn btn-success" })*@
+                                        }
+                                        else
+                                        {
+                                            <button type="button" id="btnSetPwd" class="btn btn-primary" style="cursor:pointer">設定您的密碼</button>
+                                            @*@Html.ActionLink("設定您的密碼", "SetPassword", null, new { @class = "btn btn-primary" })*@
+                                        }
+                                    </div>
+                                </div>
+                                <div id="AOrderGoogleAuth" class="blockDivC">
+                                    <h5 class="blockDivCHeader bg-dark text-white">Google Authenticator</h5>
+                                    <div class="blockDivCContent">
+                                        @if (Model.IsGoogleAuthenticatorEnabled)
+                                        {
+                                            @Html.ActionLink("停用驗證", "DisableGoogleAuthenticator", null, new { @class = "btn btn-warning" })
+                                        }
+                                        else
+                                        {
+                                            @Html.ActionLink("啟用驗證", "EnableGoogleAuthenticator", null, new { @class = "btn btn-primary" })
+                                        }
+                                    </div>
+                                </div>
+                                <div id="AOrderSocialLogin" class="blockDivC">
+                                    <h5 class="blockDivCHeader bg-dark text-white">外部登入</h5>
+                                    <div class="blockDivCContent">
+                                        @Html.Action("_PartialManageSocialLogin", "Account")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="overlayLoadAct">
+    <a id="overlayLoadActClosebtn">&times;</a>
+    <div id="overlayLoadActContent">
+    </div>
+</div>
+@section scripts{
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script>
+        $(function () {
+            $.get("@Url.Action("GetUserPreferenceAOrder", "Account",new { area=""})",null, function (data) {
+                if (data.UserId !== undefined)
+                {
+                    //delete data.UserId;
+                    //var array = [];
+                    //for (a in data) {
+                    //    array.push([a, data[a]])
+                    //}
+                    //array.sort(function (a, b) { return a[1] - b[1] });
+                    //array.reverse();
+                    //var result = array;
+                    //console.log(result);
+                    //$.each(result, function (k, v) {
+                    //    //display the key and value pair
+                    //    console.log(v[1] + ' is ' + v[0]);
+                    //});
+                    if (data.SocialLogin == 0) {
+                        $("#AOrderSocialLogin").insertAfter($("#manageDivSortable>div:eq(" + parseInt(data.SocialLogin) + ")"));
+                        $("#AOrderPwd").insertAfter($("#manageDivSortable>div:eq(" + parseInt(data.Pwd) + ")"));
+                        $("#AOrderGoogleAuth").insertAfter($("#manageDivSortable>div:eq(" + parseInt(data.GoogleAuth) + ")"));                                                
+                    }
+                    else
+                    {
+                        $("#AOrderPwd").insertAfter($("#manageDivSortable>div:eq(" + parseInt(data.Pwd) + ")"));
+                        $("#AOrderGoogleAuth").insertAfter($("#manageDivSortable>div:eq(" + parseInt(data.GoogleAuth) + ")"));
+                        $("#AOrderSocialLogin").insertAfter($("#manageDivSortable>div:eq(" + parseInt(data.SocialLogin) + ")"));
+                    }
+                    $('#manageDivSortable').show();
+                }
+            });
+            console.log($('#AOrderPwd').index());
+            console.log($('#AOrderGoogleAuth').index());
+            console.log($('#AOrderSocialLogin').index());
+            $('#manageDivSortable').sortable({
+                stop: function (event, ui) {
+                    var updata = {
+                        UserId: "",
+                        Pwd: $('#AOrderPwd').index(),
+                        GoogleAuth: $('#AOrderGoogleAuth').index(),
+                        SocialLogin: $('#AOrderSocialLogin').index(),
+                    };
+                    $.post("@Url.Action("SetUserPreferenceAOrder", "Account",new { area=""})", updata, function (data) {});
+                }
+            });
+            $('#manageDivSortable>.card>.card-header').css({ 'cursor': 'move' });
+            $('#overlayLoadActClosebtn').click(closeNav);
+
+            $('#btnChangePwd').click(function () {
+                $('#overlayLoadActContent').load('@Url.Action("ChangePassword")', function () {
+                    openNav();
+                });
+            });
+
+             $('#btnSetPwd').click(function () {
+                $('#overlayLoadActContent').load('@Url.Action("SetPassword")', function () {
+                    openNav();
+                });
+            });
+
+             $('#userPersonData').load('@Url.Action("ChangeUserPersonData")', function () { });
+
+
+        });
+        function openNav() {
+            //$('#overlayLoadAct').css({ 'display': 'block' });
+            $("#overlayLoadAct").toggle('fade', null, 300);
+        };
+        function closeNav() {
+            //$('#overlayLoadAct').css({ 'display': 'none' });
+            $("#overlayLoadAct").toggle('fade', null, 300);
+            $('#overlayLoadActContent').html('');
+        };
+    </script>
+}

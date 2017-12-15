@@ -1,0 +1,21 @@
+﻿.logDivFocus {
+    display: block;
+    border-width: 5px;
+    border-color: orange;
+}
+
+.logDivHidden {
+    display: none;
+}
+
+#mIcon, #eIcon {
+    font-size: 200px;
+}
+
+#logBtnDiv a {
+    width: 20rem;
+}
+
+#mIconText, #eIconText {
+    font-size: x-large;
+}

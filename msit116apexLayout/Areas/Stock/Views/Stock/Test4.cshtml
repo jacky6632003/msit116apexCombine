@@ -1,0 +1,61 @@
+﻿@model msit116apexLayout.Areas.Stock.Controllers.StockController.DashboardModel
+
+@{
+    ViewBag.Title = "Test4";
+}
+
+
+<table>
+    <thead>
+        <tr>
+            <th style="width:400px">隨機股票股價</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <label>@Html.DisplayFor(item => item.SSSRandomName1)</label>
+                @if (Model.SSSRandomPrice1 <= 50)
+                {
+                    <label style="color:forestgreen">@Html.DisplayFor(item => item.SSSRandomPrice1)</label>
+                }
+                else if (Model.SSSRandomPrice1 > 50)
+                {
+                    <label style="color:red">@Html.DisplayFor(item => item.SSSRandomPrice1)</label>
+                }
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>@Html.DisplayFor(item => item.SSSRandomName2)</label>
+                @if (Model.SSSRandomPrice2 <= 50)
+                {
+                    <label style="color:forestgreen">@Html.DisplayFor(item => item.SSSRandomPrice2)</label>
+                }
+                else if (Model.SSSRandomPrice2 > 50)
+                {
+                    <label style="color:red">@Html.DisplayFor(item => item.SSSRandomPrice2)</label>
+                }
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>@Html.DisplayFor(item => item.SSSRandomName3)</label>
+                @if (Model.SSSRandomPrice3 <= 50)
+                {
+                    <label style="color:forestgreen">@Html.DisplayFor(item => item.SSSRandomPrice3)</label>
+                }
+                else if (Model.SSSRandomPrice3 > 50)
+                {
+                    <label style="color:red">@Html.DisplayFor(item => item.SSSRandomPrice3)</label>
+                }
+
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+

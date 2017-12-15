@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "textmessageIndex";
+}
+
+<h2>textmessageIndex</h2>
+@*1v1*@
+<input  id="toU"/>
+<input  id="toMe"/>
+<input type="button" id="btn0" value="btn0"/>
+<ul id="receive">
+
+
+</ul>
+
+@*1vS*@
+
+<ul id="groupMessage">
+
+</ul>
+<input  id="toUsers"/>
+<input  id="toMessage"/>
+<input type="button" id="btngroup" value="btngroup"/>
+<script type="text/javascript">
+    //1v1
+        $(function () {
+            // Declare a proxy to reference the hub.
+            //chatHub要符合Class類別和黨名
+            var chat = $.connection.chatHub;
+
+            // Create a function that the hub can call to broadcast messages.
+            //監聽接收 broadcastMessage (接收訊息)
+            chat.client.smessage1v1 = function (name, message) {
+                $("<li></li>").text(name + " : " + message).appendTo($("#receive"));
+            };
+
+            //送出訊息
+            $("#btn0").click(function () {
+                var toU = $("#toU").val();
+                var toMe = $("#toMe").val();
+                //叫用controller的方法(send1v1),傳送訊息
+                $.post("@Url.Action("send1v1", "Messages",new { area = "CRM"})", { toUser: toU, message: toMe }, function () {});
+            });
+    });
+
+    ////1vS
+    //$(function () {
+    //    var chat = $.connection.MessageHub;
+    //    var groupMessage = $("#groupMessage");
+    //    //接收訊息
+    //    chat.client.SendMessageToGroup = function (fromUserID, groupName, msgContent)
+    //    {
+    //        $("<li></li>").text(fromUserID + "  :  " + msgContent).appendTo(groupMessage);
+    //    }
+
+    //   //送出訊息
+    //    $()
+
+
+    //});
+</script>

@@ -1,0 +1,232 @@
+﻿@model msit116apexLayout.Models.Leave
+
+@section styles{
+
+   
+
+<link href="~/Areas/Schedule/Style/patch.css" rel="stylesheet" />
+}
+
+    <div style=" width:700px; text-align:center; margin:10px auto; font-size:20px;     ">
+        <h1>
+            員工請假表（人事部存根）
+        </h1>
+
+        <div style=" width:700px; text-align:left; margin:10px auto;  font-size:12px;      ">
+            列印時間：<span id="lbl_print2">
+              
+            </span>
+            &nbsp;&nbsp;&nbsp;&nbsp;   ID:@Html.DisplayFor(model => model.User.UserID)
+        </div>
+        <table border="1" cellSpacing="0" borderColorDark="#ffffff" cellPadding="0" style="  line-height:32px; table-layout:fixed" width="700px" align=center>
+
+
+            <tr>
+                <td width="20%">部門：</td>
+                <td width="30%">
+                    <span id="truename" class="gwTextInput">@Html.DisplayFor(model=> model.User.Department.departmentName)</span>
+
+
+                </td>
+                <td width="20%">姓名：</td>
+                <td width="30%">
+                    <span id="lbl_name1" class="gwTextInput">@Html.DisplayFor(model => model.User.UserName)</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>小時(9時/天)：</td>
+                <td>
+                    <span id="lbl_day1" class="gwTextInputd">@Html.DisplayFor(model => model.Lav_Day)</span>
+                </td>
+                <td>事由：</td>
+                <td>
+                    <span id="lbl_reason1" class="gwTextInput">@Html.DisplayFor(model => model.Lac_Tag)</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>時間 從：</td>
+                <td>
+                    <span id="lbl_from1" class="gwTextInput">@Html.DisplayFor(model => model.Lav_StartTime)</span>
+                </td>
+                <td>到：</td>
+                <td>
+                    <span id="lbl_to1" class="gwTextInput">@Html.DisplayFor(model => model.Lac_EndTime)</span>
+                </td>
+            </tr>
+            <tr>
+                <td>主管留言</td>
+                <td  colspan="3">
+                <span id="lbl_from1" class="gwTextInput">@Html.DisplayFor(model => model.LavSupervisor)</span>
+                </td>
+                
+            </tr>
+
+
+        </table>
+
+    </div>
+    <br /> <br />
+<div class="img_line"></div>
+<div style=" width:700px; text-align:center; margin:10px auto; font-size:20px;     ">
+    <h1>
+        員工請假表（員工存根）
+    </h1>
+
+    <div style=" width:700px; text-align:left; margin:10px auto;  font-size:12px;      ">
+        列印時間：<span id="lbl_print1">
+          
+        </span>
+        &nbsp;&nbsp;&nbsp;&nbsp;   ID:@Html.DisplayFor(model => model.User.UserID)
+    </div>
+    <table border="1" cellSpacing="0" borderColorDark="#ffffff" cellPadding="0" style="  line-height:32px; table-layout:fixed" width="700px" align=center>
+
+
+        <tr>
+            <td width="20%">部門：</td>
+            <td width="30%">
+                <span id="truename" class="gwTextInput">@Html.DisplayFor(model => model.User.Department.departmentName)</span>
+
+
+            </td>
+            <td width="20%">姓名：</td>
+            <td width="30%">
+                <span id="lbl_name1" class="gwTextInput">@Html.DisplayFor(model => model.User.UserName)</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td>小時(9時/天)：</td>
+            <td>
+                <span id="lbl_day2" class="gwTextInput">@Html.DisplayFor(model => model.Lav_Day)</span>
+            </td>
+            <td>事由：</td>
+            <td>
+                <span id="lbl_reason1" class="gwTextInput">@Html.DisplayFor(model => model.Lac_Tag)</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td>時間 從：</td>
+            <td>
+                <span id="lbl_from1" class="gwTextInput">@Html.DisplayFor(model => model.Lav_StartTime)</span>
+            </td>
+            <td>到：</td>
+            <td>
+                <span id="lbl_to1" class="gwTextInput">@Html.DisplayFor(model => model.Lac_EndTime)</span>
+            </td>
+        </tr>
+        <tr>
+            <td>主管留言</td>
+            <td colspan="3">
+                <span id="lbl_from1" class="gwTextInput">@Html.DisplayFor(model => model.LavSupervisor)</span>
+            </td>
+            
+        </tr>
+
+
+    </table>
+    <br /> <br />
+    <div class="img_line"></div>
+    <div style=" width:700px; text-align:center; margin:10px auto; font-size:20px;     ">
+        <h1>
+            員工請假表（財務部存根）
+        </h1>
+
+        <div style=" width:700px; text-align:left; margin:10px auto;  font-size:12px;      ">
+            列印時間：<span id="showbox">
+               
+            </span>
+            &nbsp;&nbsp;&nbsp;&nbsp;   ID:@Html.DisplayFor(model => model.User.UserID)
+        </div>
+        <table border="1" cellSpacing="0" borderColorDark="#ffffff" cellPadding="0" style="  line-height:32px; table-layout:fixed" width="700px" align=center>
+
+
+            <tr>
+                <td width="20%">部門：</td>
+                <td width="30%">
+                    <span id="truename" class="gwTextInput">@Html.DisplayFor(model => model.User.Department.departmentName)</span>
+
+
+                </td>
+                <td width="20%">姓名：</td>
+                <td width="30%">
+                    <span id="lbl_name1" class="gwTextInput">@Html.DisplayFor(model => model.User.UserName)</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>小時(9時/天)：</td>
+                <td>
+                    <span id="lbl_day3" class="gwTextInput">@Html.DisplayFor(model => model.Lav_Day)</span>
+                </td>
+                <td>事由：</td>
+                <td>
+                    <span id="lbl_reason1" class="gwTextInput">@Html.DisplayFor(model => model.Lac_Tag)</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>時間 從：</td>
+                <td>
+                    <span id="lbl_from1" class="gwTextInput">@Html.DisplayFor(model => model.Lav_StartTime)</span>
+                </td>
+                <td>到：</td>
+                <td>
+                    <span id="lbl_to1" class="gwTextInput">@Html.DisplayFor(model => model.Lac_EndTime)</span>
+                </td>
+            </tr>
+            <tr>
+                <td>主管留言</td>
+                <td colspan="3">
+                    <span id="lbl_from1" class="gwTextInput">@Html.DisplayFor(model => model.LavSupervisor)</span>
+                </td>
+            
+            </tr>
+
+
+        </table>
+
+    </div>
+</div>
+    <div style=" width:100%; text-align:center; " class="print-btn">
+        <input type="button" Class="noprint btn" value="關閉" onclick="window.close();" />
+
+        <input type="button" Class="noprint btn" value="列印" onclick="window.print();" />
+
+
+    </div>
+
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            var starttime= $("#lbl_from1").html()
+            var endtime = $('#lbl_to1').html();
+            var from_date = new Date(starttime);
+            var end_date = new Date(endtime);
+            var time_different = (end_date - from_date) / 86400000 * 24 / 24 * 9;
+            ShowTime();
+            
+            //$("#lbl_day3").html(time_different.toFixed(2));
+            //$("#lbl_day1").html(time_different.toFixed(2));
+            //$("#lbl_day2").html(time_different.toFixed(2));
+             function ShowTime()
+        {
+            var NowDate = new Date();
+            var d = NowDate.getDay();
+            var dayNames = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+            document.getElementById('showbox').innerHTML =  NowDate.toLocaleString() + '（' + dayNames[d] + '）';
+            document.getElementById('lbl_print1').innerHTML = NowDate.toLocaleString() + '（' + dayNames[d] + '）';
+            document.getElementById('lbl_print2').innerHTML = NowDate.toLocaleString() + '（' + dayNames[d] + '）';
+            setTimeout('ShowTime()', 1000);
+        }
+        })
+
+    
+    </script>
+
+
+}

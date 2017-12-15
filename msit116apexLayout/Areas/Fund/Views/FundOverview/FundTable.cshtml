@@ -1,0 +1,217 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<msit116apexLayout.Areas.Fund.ViewModels.FundTable>
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+
+
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active btn btn-outline-secondary" id="home-tab" data-toggle="tab" href="#FundOverAll" role="tab" aria-controls="home" aria-selected="true">資訊總覽</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link btn btn-outline-secondary" id="profile-tab" data-toggle="tab" href="#FundPerformance" role="tab" aria-controls="profile" aria-selected="false">績效表現</a>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="FundOverAll" role="tabpanel" aria-labelledby="home-tab">
+        <table class="table table-hover table-striped">
+            <thead class="bg-warning">
+                <tr class="textCenter">
+                    <th style="vertical-align:middle">
+                        @Html.DisplayNameFor(f=>f.First().FundName)
+                    </th>
+                    <th style="vertical-align:middle">
+                        @Html.DisplayNameFor(f=>f.First().NetValue)
+                        <div id="span1" class="t">
+                            @Html.DisplayNameFor(f=>f.First().Date)
+                        </div>
+                    </th>
+                    <th style="vertical-align:middle">
+                        <span>漲跌</span>
+                    </th>
+                    <th style="vertical-align:middle">
+                        @Html.DisplayNameFor(f=>f.First().FundCurrencyCode)
+                    </th>
+                    <th style="vertical-align:middle">
+                        @Html.DisplayNameFor(f=>f.First().FundScale)
+                    </th>
+                    @*<th style="vertical-align:middle">
+                        @Html.DisplayNameFor(f => f.First().ClickRate)
+                    </th>*@
+                    <th style="vertical-align:middle">
+                        @Html.DisplayNameFor(f => f.First().StarRank)
+                    </th>
+                    <th style="vertical-align:middle">
+                        <span>購物車</span>
+                    </th>                  
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var goods in Model)
+                {
+                    <tr>
+                        <td style="vertical-align:middle">
+                            @Html.ActionLink(Html.DisplayFor(f => goods.FundName).ToHtmlString(), "fundInfo", "FundOverview", new { id = goods.FundID }, null)                           
+                        </td>
+                        <td class="textCenter" style="vertical-align:middle">                            
+                            @if (goods.NetValue > 0)
+                            {
+                                <span class="red">@Html.DisplayFor(f => goods.NetValue)</span>
+                                <div id="span1" class="t">
+                                    @Html.DisplayFor(f=>goods.Date)
+                                </div>
+}
+                            @if (goods.NetValue < 0)
+                            {
+                                <span class="green">@Html.DisplayFor(f => goods.NetValue)</span>
+                                <div id="span1" class="t">
+                                    @Html.DisplayFor(f => goods.Date)
+                                </div>
+}
+                            @if (goods.NetValue == 0)
+                            {
+                                <span>@Html.DisplayFor(f => goods.NetValue)</span>
+                                <div id="span1" class="t">
+                                    @Html.DisplayFor(f => goods.Date)
+                                </div>
+}                           
+                        </td>
+                        <td class="textCenter" style="vertical-align:middle"> 
+                            @if(goods.ValueChange > 0)
+                             {
+                                <span class="red">@Html.DisplayFor(f => goods.ValueChange)</span>                       
+                             }
+                            @if(goods.ValueChange < 0)
+                             {
+                                <span class="green">@Html.DisplayFor(f => goods.ValueChange)</span> 
+                             }
+                            @if(goods.ValueChange == 0)
+                             {
+                                <span>@Html.DisplayFor(f => goods.ValueChange)</span>
+                             }                            
+                        </td>
+                        <td class="textCenter" style="vertical-align:middle">
+                            @Html.DisplayFor(f => goods.FundCurrencyCode)
+                        </td>
+                        <td style="vertical-align:middle">
+                            @Html.DisplayFor(f => goods.FundScale)
+                        </td>
+                        @*<td class="textCenter" style="vertical-align:middle">
+                            @Html.DisplayFor(f => goods.ClickRate)
+                        </td>*@
+                        <td class="textCenter" style="vertical-align:middle">                           
+                            @for (int i = 1; i <= goods.StarRank; i++)
+                            {
+                                <img name="idstar0" class="blind" src="@Href("~/Areas/Fund/Images/star.png")" alt="Images/star" />
+                            }
+                            @for (int i = goods.StarRank + 1; i <= 5; i++)
+                            {
+                                <img name="idstar0" class="dark" src="@Href("~/Areas/Fund/Images/star.png")" alt="Images/star" />
+                            }                         
+                        </td>                     
+                        <td class="textCenter" style="vertical-align:middle">                       
+                            @*@Html.ActionLink("x","AddToCart","FundOverview",new {id = goods.GoodID },new {@class= "forAlert btn btn-danger",style= "background: url(@Href('~/ Areas/Fund/Images/shopping_cart.png'))" })*@
+                            <a class="forAlert" href="@Url.Action("AddToCart","FundOverview",new {id = goods.GoodID })">
+                                <img name="idcart1" src="@Href("~/Areas/Fund/Images/shopping-cart2.png")" alt="addToCart" />
+                            </a>                          
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="FundPerformance" role="tabpanel" aria-labelledby="profile-tab">
+        <table class="table table-hover table-striped">
+            <thead class="bg-warning textCenter">
+                <tr>
+                    <th style="vertical-align:middle">
+                        @Html.DisplayNameFor(f => f.First().FundName)
+                    </th>
+                    <th style="vertical-align:middle">
+                        <span>近三個月</span>
+                    </th>
+                    <th style="vertical-align:middle">
+                        <span>近六個月</span>
+                    </th>
+                    <th style="vertical-align:middle">
+                        <span>近一年</span>
+                    </th>
+                    <th style="vertical-align:middle">
+                        <span>近五年</span>
+                    </th>
+                    <th style="vertical-align:middle">
+                        <span>購物車</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var goods in Model)
+                {
+                    <tr>
+                        <td style="vertical-align:middle">
+                            @Html.ActionLink(Html.DisplayFor(f => goods.FundName).ToHtmlString(), "xxxx", "xxxx", new { id = goods.FundID }, null)
+                        </td>
+                        <td class="textCenter" style="vertical-align:middle">
+                            @if (goods.threeMonths > 0)
+                            {
+                                <span class="red">@Html.DisplayFor(f => goods.threeMonths)</span>            }
+                            @if (goods.threeMonths < 0)
+                            {
+                                <span class="green">@Html.DisplayFor(f => goods.threeMonths)</span> }
+                            @if (goods.threeMonths == 0)
+                            {
+                                <span>@Html.DisplayFor(f => goods.threeMonths)</span>
+                            }                         
+                        </td>
+                        <td class="textCenter" style="vertical-align:middle">
+                            @if (goods.sixMonths > 0)
+                            {
+                                <span class="red">@Html.DisplayFor(f => goods.sixMonths)</span>            }
+                            @if (goods.sixMonths < 0)
+                            {
+                                <span class="green">@Html.DisplayFor(f => goods.sixMonths)</span> }
+                            @if (goods.sixMonths == 0)
+                            {
+                                <span>@Html.DisplayFor(f => goods.sixMonths)</span>
+                            }
+                        </td>
+                        <td class="textCenter" style="vertical-align:middle">
+                            @if (goods.oneYear > 0)
+                            {
+                                <span class="red">@Html.DisplayFor(f => goods.oneYear)</span>            }
+                            @if (goods.oneYear < 0)
+                            {
+                                <span class="green">@Html.DisplayFor(f => goods.oneYear)</span> }
+                            @if (goods.oneYear == 0)
+                            {
+                                <span>@Html.DisplayFor(f => goods.oneYear)</span>
+}
+                        </td>
+                        <td class="textCenter" style="vertical-align:middle">
+                            @if (goods.fiveYear > 0)
+                            {
+                                <span class="red">@Html.DisplayFor(f => goods.fiveYear)</span>            }
+                            @if (goods.fiveYear < 0)
+                            {
+                                <span class="green">@Html.DisplayFor(f => goods.fiveYear)</span> }
+                            @if (goods.fiveYear == 0)
+                            {
+                                <span>@Html.DisplayFor(f => goods.fiveYear)</span>
+}
+                        </td>
+                        <td class="textCenter" style="vertical-align:middle">
+                            @*@Html.ActionLink("加入購物車", "AddToCart", "FundOverview", new { id = goods.GoodID }, new { @class = "forAlert btn btn-danger" })*@
+                            <a class="forAlert" href="@Url.Action("AddToCart","FundOverview",new {id = goods.GoodID })">
+                                <img name="idcart2" src="@Href("~/Areas/Fund/Images/shopping-cart2.png")" alt="addToCart" />
+                            </a>
+                        </td>                  
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+    @Html.PagedListPager(Model, i => Url.Action("Index", new { page = i, sortBy = Request.QueryString["sortBy"] }), PagedListRenderOptions.Classic)
+   
+

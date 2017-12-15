@@ -1,0 +1,60 @@
+﻿@model IEnumerable<msit116apexLayout.Models.UserNewsViewModel>
+
+<table>
+    <thead>
+        <tr>
+            <th>寄送者</th>
+            <th>訊息標題</th>
+            <th>訊息時間</th>
+        </tr>
+    </thead>
+    <tbody>
+        @*@foreach (var unvm in Model)
+        {
+            <tr>
+                <td>
+                    @unvm.FromUserName
+                </td>
+                <td>
+                    @unvm.UserNews.msgTitle
+                </td>
+                <td>
+                    @unvm.UserNews.time
+                </td>
+            </tr>
+        }*@
+        <tr>
+            <td>
+                王小明
+            </td>
+            <td>
+                等待覆核
+            </td>
+            <td>
+                2017/11/19 下午 02:08:34
+            </td>
+        </tr>
+        <tr>
+            <td>
+                系統訊息
+            </td>
+            <td>
+                權限更動
+            </td>
+            <td>
+                2017/11/23 上午 08:08:53
+            </td>
+        </tr>
+        <tr>
+            <td>
+                系統訊息
+            </td>
+            <td>
+                完成交易
+            </td>
+            <td>
+                2017/11/23 下午 02:08:34
+            </td>
+        </tr>
+    </tbody>
+</table>

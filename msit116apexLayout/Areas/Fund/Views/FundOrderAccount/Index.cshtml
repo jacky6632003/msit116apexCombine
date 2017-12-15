@@ -1,0 +1,239 @@
+﻿@model msit116apexLayout.Areas.Fund.ViewModels.FundViewModel
+@{
+    ViewBag.Title = "我的帳戶";
+}
+@section styles{
+
+
+
+}
+
+
+<div>
+    <div>
+        @*<div id="accordion" role="tablist">
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingOne">
+                        <h5 class="mb-0">
+                            <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Collapsible Group Item #1
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingTwo">
+                        <h5 class="mb-0">
+                            <a class="collapsed" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Collapsible Group Item #2
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body">
+                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" role="tab" id="headingThree">
+                        <h5 class="mb-0">
+                            <a class="collapsed" data-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Collapsible Group Item #3
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="card-body">
+                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        <br />
+        <div>
+            <nav aria-label="breadcrumb" role="navigation">
+                <ol class="breadcrumb" style="background-color:	#444444">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","FundOverview")" style="color:#FFFFFF">基金總覽</a></li>
+                    <li class="breadcrumb-item active" aria-current="page" style="color:#DDAA00">我的帳戶</li>
+                </ol>
+            </nav>
+        </div>
+        <br />
+        <div id="accordion" role="tablist">
+            <div style="float:left;margin:auto;padding-top:24px;padding-left:50px">
+                <h3><span class="badge badge-pill badge-dark">單筆申購</span></h3>
+                @foreach (var item in Model.FundOrderAccountA)
+                {
+                    <div style="width:700px;">
+
+
+                        <div class="card">
+                            <div class="card-header" role="tab" id="heading_@Html.DisplayFor(g=>item.GoodID)" style="background-color:#F3A712;">
+                                <h5 class="mb-0">
+                                    <a data-toggle="collapse" href="#collapse_@Html.DisplayFor(g=>item.GoodID)" aria-expanded="true" aria-controls="collapse_@Html.DisplayFor(g=>item.GoodID)" style="color:#F1F7ED">
+                                        @Html.DisplayFor(g => item.FundName)-@Html.DisplayFor(g => item.TradeTypeName)
+                                    </a>
+                                </h5>
+                            </div>
+
+                            <div id="collapse_@Html.DisplayFor(g=>item.GoodID)" class="collapse show" role="tabpanel" aria-labelledby="heading_@Html.DisplayFor(g=>item.GoodID)" data-parent="#accordion">
+                                <div class="card-body">
+                                    <table class="table table-bordered table-hover">
+                                        <tbody>
+                                            <tr class="table-active">
+                                                <td class="table-active" style="width:150px;background-color:#333333; color:white">
+                                                    @Html.DisplayNameFor(x => item.FundName)
+                                                </td>
+                                                <td class="table-active">
+                                                    @Html.DisplayFor(x => item.FundName)
+                                                </td>
+                                            </tr>
+                                            <tr class="table-light">
+                                                <td style="width:150px;background-color:#333333; color:white">
+                                                    @Html.DisplayNameFor(x => item.NetValue)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(x => item.NetValue)
+                                                </td>
+                                            </tr>
+                                            @*<tr class="table-active">
+                                                <td class="table-active" style="width:150px;background-color:#333333; color:white">
+                                                    @Html.DisplayNameFor(x => item.boughtPrice)
+                                                </td>
+                                                <td class="table-active">
+                                                    @Html.DisplayFor(x => item.boughtPrice)
+                                                </td>
+                                            </tr>*@
+                                            <tr class="table-light">
+                                                <td style="width:150px;background-color:#333333; color:white">
+                                                    @Html.DisplayNameFor(x => item.TradePrice)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(x => item.TradePrice)
+                                                </td>
+                                            </tr>
+                                            <tr class="table-active">
+                                                <td class="table-active" style="width:150px;background-color:#333333; color:white">
+                                                    @Html.DisplayNameFor(x => item.ChargeFeePercentage)%
+                                                </td>
+                                                <td class="table-active">
+                                                    @Html.DisplayFor(x => item.ChargeFeePercentage)%
+                                                </td>
+                                            </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>}
+            </div>
+            <br />
+            <div style="float:left;margin:auto;">
+                <h3><span class="badge badge-pill badge-dark">定期定額</span></h3>
+                @foreach (var item in Model.FundOrderAccountB)
+                {
+                    <div style="width:700px;">
+                        <div class="card">
+                            <div class="card-header" role="tab" id="heading2_@Html.DisplayFor(g=>item.OrderDetailID)" style="background-color:#F3A712;">
+                                <h5 class="mb-0">
+                                    <a data-toggle="collapse" href="#collapse2_@Html.DisplayFor(g=>item.OrderDetailID)" aria-expanded="true" aria-controls="collapse2_@Html.DisplayFor(g=>item.OrderDetailID)" style="color:#F1F7ED">
+                                        @Html.DisplayFor(g => item.FundName)-@Html.DisplayFor(g => item.TradeTypeName)
+                                    </a>
+                                </h5>
+                            </div>
+
+                            <div id="collapse2_@Html.DisplayFor(g=>item.OrderDetailID)" class="collapse show" role="tabpanel" aria-labelledby="heading2_@Html.DisplayFor(g=>item.OrderDetailID)" data-parent="#accordion">
+                                <div class="card-body">
+                                    <table class="table table-bordered table-hover">
+                                        <tbody>
+                                            <tr class="table-active">
+                                                <td class="table-active" style="width:150px;background-color:#333333; color:white">
+                                                    @Html.DisplayNameFor(x => item.FundName)
+                                                </td>
+                                                <td class="table-active">
+                                                    @Html.DisplayFor(x => item.FundName)
+                                                </td>
+                                            </tr>
+                                            <tr class="table-light">
+                                                <td style="width:150px;background-color:#333333; color:white">
+                                                    @Html.DisplayNameFor(x => item.NetValue)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(x => item.NetValue)
+                                                </td>
+                                            </tr>
+                                            @*<tr class="table-active">
+                                                <td class="table-active" style="width:150px;background-color:#333333; color:white">
+                                                    @Html.DisplayNameFor(x => item.boughtPrice)
+                                                </td>
+                                                <td class="table-active">
+                                                    @Html.DisplayFor(x => item.boughtPrice)
+                                                </td>
+                                            </tr>*@
+                                            <tr class="table-light">
+                                                <td style="width:150px;background-color:#333333; color:white">
+                                                    @Html.DisplayNameFor(x => item.TradePrice)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(x => item.TradePrice)
+                                                </td>
+                                            </tr>
+                                            <tr class="table-active">
+                                                <td class="table-active" style="width:150px;background-color:#333333; color:white">
+                                                    @Html.DisplayNameFor(x => item.ChargeFeePercentage)%
+                                                </td>
+                                                <td class="table-active">
+                                                    @Html.DisplayFor(x => item.ChargeFeePercentage)%
+                                                </td>
+                                            </tr>
+                                            <tr class="table-light">
+                                                <td style="width:150px;background-color:#333333; color:white">
+                                                    <span>@Html.DisplayNameFor(x => item.ChargeDateName)</span>
+                                                </td>
+                                                <td>
+                                                    <span>每月 </span>@Html.DisplayFor(x => item.ChargeDateName)<span> 號</span>
+                                                </td>
+                                            </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>}
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

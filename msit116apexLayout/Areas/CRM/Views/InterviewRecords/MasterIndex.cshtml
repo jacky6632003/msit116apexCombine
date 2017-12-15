@@ -1,0 +1,68 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model   IEnumerable<msit116apexLayout.Areas.CRM.Models.UserData>
+@{
+    ViewBag.Title = "MasterIndex";
+}
+@*<script src="~/Scripts/jquery-3.2.1.min.js"></script>
+    <script src="~/Content/bootstrap.min.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+<div >
+        <div class="row">
+            <div class="col">
+                <h2 id="EmName" style="margin-left:5em;padding-top:0.5em"></h2>
+            </div>
+            <div class="col" style="padding-left:8.5em">
+                @Html.ActionLink("建立會員關係", "Viewcreate_partial", "Partial", new { area = "CRM" }, htmlAttributes: new { @class = "btn btn-success", @style = "margin-left:9em;width:200px;height:65px;padding-top:1.1em" })
+            </div>
+        </div>
+        <hr style="border-bottom:1px solid black;" />
+
+    @*填入所負責會員頭像跟基本資料*@
+    <div style="margin-left:3em">
+        <table id="table" class="table table-hover" style="width:1800px">
+            <thead id="userTh" class="bg-warning">
+                <tr>
+                    <th style="width:280px;padding-left:5.2em"><h3>頭像</h3></th>
+                    <th style="width:200px;padding-left:1.5em"><h3>會員姓名</h3></th>
+                    <th style="padding-left:2em;width:150px"><h3 style="width:3em">職稱</h3> </th>
+                    <th style="width:10em"><h3 style="padding-left:2em">生日</h3></th>
+                    <th style="padding-left:2em;width:350px"><h3 style="padding-left:2.5em">電子郵件</h3></th>
+                    <th style="padding-left:2em"><h3 style="padding-left:1.2em">手機號碼</h3></th>
+                    <th style="width:200px;padding-left:1em"><h3>訪談紀錄</h3></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var n in Model)
+                {
+                    string BirthDay = "";
+                    if (n.BirthDay != null)
+                    {
+                        BirthDay = n.BirthDay.Value.ToShortDateString();
+                    }
+
+                    <tr>
+                        <td style="background-color:burlywood;padding-left:0em">
+                            <img style="height:160px;width:160px;border-radius:50%; margin-left:3em" src="@Url.Action("GetUserImageFile", "InterviewRecords", new { area = "CRM", userid = n.UserID })" />
+                        </td>
+                        <td style="padding-top:4.3em;padding-left:2.5em"><h5> @n.Name</h5></td>
+                        <td style="padding-top:4.3em;padding-left:1.5em"><h5>@n.Title</h5></td>
+                        <td style="padding-top:4.3em;padding-left:3em"><h5>@BirthDay</h5></td>
+                        <td style="padding-top:4.3em;padding-left:2.5em;width:350px"><h5 style="padding-left:2em">@n.Email</h5></td>
+                        <td style="padding-top:4.3em;padding-left:3em"><h5 style="padding-left:1em">@n.Telephone</h5></td>
+                        <td style="padding-top:2.3em;">
+                            <a href="@Url.Action("parameterIndex","InterviewRecords",new { area="CRM", userid = n.UserID})" class="btn btn-primary" style="margin-top:2em;margin-left:1em">訪談紀錄</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#EmName").text("@ViewBag.EmData.Name");
+        })
+    </script>
+}

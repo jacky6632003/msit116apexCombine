@@ -1,0 +1,97 @@
+﻿@*@model IEnumerable<msit116apexLayout.Models.AspNetUsers>*@
+@model IEnumerable<msit116apexLayout.Models.UserDataModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Country)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IdentityCardNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ResidenceAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MailingAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Telephone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BirthDay)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsEmp)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Country)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IdentityCardNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ResidenceAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MailingAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Telephone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BirthDay)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PhoneNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsEmp)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit","Test", new { UserName = item.UserName },null) |
+            @Html.ActionLink("Details", "Details", "Test", new { UserName = item.UserName }, null) |
+            @Html.ActionLink("Delete", "Delete", "Test", new { UserName = item.UserName }, null)
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,92 @@
+﻿@model msit116apexLayout.Models.RoleEditPowersViewModel
+
+@using (Html.BeginForm("EditRolePower", "Power", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "editRolePowerForm" }))
+{
+    <p id="editRolePowerSuccess" class="text-success">@ViewBag.StatusMessage</p>
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    @Html.HiddenFor(n => n.roleID)
+    <ul>
+        @foreach (var pgPowers in Model.roleEditPgPowers)
+        {
+            <li>
+                <input type="checkbox" id="@string.Format("pgID{0}",pgPowers.uPages.pageID)" />
+                
+                <label for="@string.Format("pgID{0}",pgPowers.uPages.pageID)">@pgPowers.uPages.pageName</label>
+                <ul>
+                    @foreach (var power in pgPowers.roleEditPowers)
+                    {
+                        <li>
+                            @Html.CheckBox(string.Format("powerID{0}", power.powerID), power.hasPower)
+                            @*<input type="checkbox" id="@string.Format("powerID{0}", power.powerID)" />*@
+                            <label for="@string.Format("powerID{0}", power.powerID)">@power.powerName</label>
+
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+    </ul>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input id="btnEditRolePowerSubmit" type="button" value="完成編輯" class="btn btn-primary" />
+        </div>
+    </div>
+}
+
+<script>
+    $(function () {
+        $('#btnEditRolePowerSubmit').click(function () {
+
+            //var formArray = $('#editRolePowerForm').serializeArray();
+            var powerChecks = $('#editRolePowerForm input[name^=powerID]');
+            var returnArray = {};
+            returnArray["roleID"] = $('#editRolePowerForm input[name="roleID"]').val();
+            $.each(powerChecks, function () {
+                if ($(this).prop("checked"))
+                    returnArray[$(this).attr("name")] = $(this).attr("name").split("powerID")[1];
+            });
+
+            $.post('@Url.Action("EditRolePower")', returnArray, function (data) {
+                $('#loadEditRolePowerContent').html(data);
+                $.get('@Url.Action("ViewRoleFromPower")', function (data) {
+                    $('#loadViewRoleFromPowerContent').html(data);
+                });
+                $.get('@Url.Action("ViewRoleLevel")', function (data) {
+                    $('#loadViewRoleLevelContent').html(data);
+                });
+            });
+        });
+        $('input[id^=pgID]').click(function () {
+            var x = $(this).next().next("ul").children().children("input");
+            $(x).prop("checked", $(this).prop("checked"));
+        });
+        $('input[id^=powerID]').click(function () {
+            if ($(this).prop("checked")) {
+                var checkSelect = true;
+                $.each($(this).parent().siblings().children("input"), function () {
+                    if ($(this).prop("checked") == false)
+                        checkSelect = false;
+                });
+                $(this).parent().parent().prev().prev().prop("checked", checkSelect);
+            }
+            else
+                $(this).parent().parent().prev().prev().prop("checked", false);
+            //console.log($(this).parent().parent().prev().prev().prop("checked"));
+        });
+        checkPowerPage();
+        function checkPowerPage()
+        {
+            $.each($('input[id^=pgID]'), function () {
+                var pagepowerChildren = $(this).next().next("ul").children().children("input[id^=powerID]");
+                var checkppc = true;
+                $.each(pagepowerChildren, function () {
+                    if ($(this).prop("checked") != true)
+                        checkppc = false;
+                });
+                if (checkppc)
+                    $(this).prop("checked", true);
+            });
+        };
+    });
+
+</script>

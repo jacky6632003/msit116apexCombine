@@ -1,0 +1,25 @@
+﻿@using Microsoft.AspNet.Identity
+@using msit116apexLayout.Extensions
+@if (Request.Cookies[".AspNet.ApplicationCookie"] == null)
+{
+    <a href="@Url.Action("Login","Account",new {area="" })" class="btn btn-outline-warning my-2 mx-1 my-sm-0">
+        <i class='fa fa-sign-in' aria-hidden='true'></i>
+        登入
+    </a>
+}
+else
+{
+    <a href="@Url.Action("Logout", "Account",new {area="" })" class="btn btn-warning my-2 mx-1 my-sm-0">
+        <i class='fa fa-sign-out' aria-hidden='true'></i>
+        
+        @User.Identity.GetUserSName()
+        &lt
+        @User.Identity.GetUserName()
+        &gt
+        登出
+        @if (Request.Cookies[".AspNet.ApplicationCookie"] != null)
+        {
+            <img src="@Url.Action("GetImageFile", "Account", new { area = "" })" style="height:28px;width:28px;border-radius:50%;float:left" />
+        }
+    </a>
+}

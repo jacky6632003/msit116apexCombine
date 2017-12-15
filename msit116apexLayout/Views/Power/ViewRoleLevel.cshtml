@@ -1,0 +1,190 @@
+﻿@model msit116apexLayout.Models.RoleLevelWithPowerViewModel
+
+<div style="border:1px solid #CCC;border-radius:3px;margin:5px;padding:3px">
+    <div>
+        <span style="font-weight:bold">角色階層圖</span>
+    </div>
+    @Html.Raw(@fromTreeRoot())
+</div>
+    @functions
+{
+        public string RoleTreeView(int nodeRoleID,int levelcolor)
+        {
+            string result = "<li>";
+            foreach (var rlvm in Model.roleLevelViewModel)
+            {
+                if (rlvm.uRoles.uRoleID == nodeRoleID)
+                {
+                    result += "<input type='checkbox' id='uroleckbox" + rlvm.uRoles.uRoleID + "'/>";
+                    result += "<label for='uroleckbox"+ rlvm.uRoles.uRoleID + "' name='plRoleID" + rlvm.uRoles.uRoleID + "'>";
+                    result += rlvm.uRoles.uRoleName;
+                    result += "</label>";
+                    result += "<input type='color' value='#CCCCCC'>";
+                }
+            }
+            foreach (var rlvm in Model.roleLevelViewModel)
+            {
+                if (rlvm.uRoles.supervisorID == nodeRoleID)
+                {
+                    levelcolor++;
+                    result += "<ul>";
+                    result += RoleTreeView(rlvm.uRoles.uRoleID, levelcolor);
+                    result += "</ul>";
+                    levelcolor--;
+                }
+            }
+
+            result += "</li>";
+            return result;
+        }
+    }
+
+    @functions
+{
+        public string fromTreeRoot()
+        {
+            string result = "<ul>";
+            int levelcolor = 0;            
+            List<int> treeRoots = new List<int>();
+            foreach (var rlvm in Model.roleLevelViewModel)
+            {
+                if (rlvm.uRoles.supervisorID.HasValue == false)
+                    treeRoots.Add(rlvm.uRoles.uRoleID);
+            }
+            foreach (var i in treeRoots)
+            {
+                result += RoleTreeView(i, levelcolor);
+            }
+            result += "</ul>";
+            return result;
+        }
+}
+<div style="border:1px solid #CCC;border-radius:3px;margin:5px;padding:3px">
+    <div>
+        <span style="font-weight:bold">對應權限圖</span>
+    </div>
+    <ul>
+        @foreach (var ppvm in Model.pagePowersViewModel)
+    {
+            <li>
+                <span>
+                    @ppvm.uPages.pageName
+                </span>
+                <ul>
+                    @foreach(var urp in ppvm.uPowers)
+                {
+                        <li>
+                            <span>
+                                @urp.powerName
+                            </span>
+                            @*<div>
+                                @foreach (var rlvm in Model.roleLevelViewModel)
+                            {
+                                foreach (var rlvmurp in rlvm.uRolePowers)
+                                {
+                                    if (urp.powerID == rlvmurp.powerID)
+                                    {
+                                        foreach (var runas in rlvm.rolesUserNames)
+                                        {
+                                                <span name="@string.Format("plUserID{0}",@runas.uRoleUser.uUserID)">
+                                                    @runas.UserName
+                                                </span>
+                                        }
+                                    }
+                                }
+                            }
+                            </div>*@
+                            <div>
+                                @foreach (var rlvm in Model.roleLevelViewModel)
+                            {
+                                foreach (var rlvmurp in rlvm.uRolePowers)
+                                {
+                                    if (urp.powerID == rlvmurp.powerID)
+                                    {
+                                            <span name="@string.Format("plRoleID{0}",@rlvm.uRoles.uRoleID)" style="display:none">
+                                                @rlvm.uRoles.uRoleName
+                                            </span>
+                                    }
+                                }
+                            }
+                            </div>
+                        </li>
+                }
+                </ul>
+            </li>
+
+
+    }
+    </ul>
+</div>
+<script>
+    $(function () {
+        $('input[type="color"]').change(function () {            
+            var xid = $(this).prev().prev().attr("id").split("uroleckbox")[1];
+            var strColor = $(this).val();
+            console.log(xid);
+            console.log(strColor);
+            if ($(this).prev().prev().prop("checked"))
+                $(this).prev().css("background", strColor);
+            $('span[name="plRoleID' + xid + '"]')
+                .css("background", strColor);
+        });
+        $('input:checkbox[id^="uroleckbox"]').change(function () {
+            var chresult = $(this).prop("checked");
+            var chresultid = $(this).attr("id").split("uroleckbox")[1];
+            var strColor = $(this).next().next().val();
+            if (chresult)
+            {                
+                $('span[name="plRoleID' + chresultid + '"]')
+                    .css("background", strColor)
+                    .show();
+            }
+            else
+            {
+                $('span[name="plRoleID' + chresultid + '"]')
+                    .css("background", "")
+                    .hide();
+            }
+        });
+        $('label[name^="plUserID"]').hover(function () {
+            var x = $(this).attr("name");
+            var strColor = $(this).next().val();
+            $(this).css("background", strColor);
+            $('span[name="'+x+'"]')
+                .css("background", strColor)
+                .show();
+        }, function () {
+            var x = $(this).attr("name");
+            var xid = x.split("plUserID")[1];
+            var chresult = $('input:checkbox[id="uroleckbox' + xid + '"]').prop("checked");
+            if (!chresult) {
+                $(this).css("background", "");
+                $('span[name="' + x + '"]')
+                    .css("background", "")
+                    .hide();
+            }
+        });
+        $('label[name^="plRoleID"]').hover(function () {
+            var x = $(this).attr("name");
+            var strColor = $(this).next().val();
+            $(this).css("background", strColor);
+            $('span[name="' + x + '"]')
+                .css("background", strColor)
+                .show();
+            $('li[name="' + x + '"]')
+                .css("background", strColor);
+        }, function () {
+            var x = $(this).attr("name");
+            var xid = x.split("plRoleID")[1];
+            var chresult = $('input:checkbox[id="uroleckbox' + xid + '"]').prop("checked");
+            if (!chresult) {
+                $(this).css("background", "");
+                $('span[name="' + x + '"]')
+                    .css("background", "")
+                    .hide();
+                $('li[name="' + x + '"]')
+                    .css("background", "");
+            }
+        });
+    });
+</script>

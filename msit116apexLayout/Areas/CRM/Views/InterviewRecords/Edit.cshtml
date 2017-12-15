@@ -1,0 +1,155 @@
+﻿@model msit116apexLayout.Models.InterviewRecords
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@section styles{
+    <style>
+        .masterdiv {
+            margin: 2em
+        }
+
+        .nakadiv {
+            margin: 1em
+        }
+
+        .monostyle {
+            width: 400px
+        }
+
+        .h {
+            margin-left: 2em
+        }
+
+        .content {
+            width: 1000px;
+            height: 15em
+        }
+    </style>
+    }
+<div style="width:1800px">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.InterviewID)
+
+        @Html.HiddenFor(model => model.UserID)
+
+        <div class="form-horizontal masterdiv">
+            <h2 class="h" style="margin-top:1em;color:darkgoldenrod">修改紀錄</h2>
+            <hr style="border-bottom:1px solid black" />
+
+
+            <div class="h row" style="margin-left:10em">
+                <div class="col">
+                    <div class="form-group nakadiv">
+                        <h3>
+                            @Html.LabelFor(model => model.Interviewer_Name, htmlAttributes: new { @class = "control-label col" })
+                        </h3>
+                        <div class="col">
+                            <label class="form-control monostyle">
+                                @Html.DisplayFor(model => model.Interviewer_Name, new { htmlAttributes = new { @class = "form-control " } })
+                            </label>
+                            @Html.ValidationMessageFor(model => model.Interviewer_Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group nakadiv">
+                        <h3>
+                            @Html.LabelFor(model => model.Interviewee_Name, htmlAttributes: new { @class = "control-label col" })
+                        </h3>
+                        <div class="col-md-10">
+                            @{
+                                SelectList list = new SelectList(ViewBag.userlist, "Name", "Name", ViewBag.selectd);
+                            }
+                            @Html.DropDownListFor(m => m.Interviewee_Name, list, null, htmlAttributes: new { @class = "form-control monostyle" })
+                            @Html.ValidationMessageFor(model => model.Interviewee_Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group nakadiv">
+                        <h3>
+                            @Html.LabelFor(model => model.C_Type_ID, htmlAttributes: new { @class = "control-label col" })
+                        </h3>
+                        <div class="col-md-10">
+                            @Html.DropDownList("C_Type_ID", null, htmlAttributes: new { @class = "form-control monostyle" })
+                            @Html.ValidationMessageFor(model => model.C_Type_ID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group nakadiv">
+                        <h3>
+                            @Html.LabelFor(model => model.StartTime, htmlAttributes: new { @class = "control-label col" })
+                        </h3>
+                        <div class="col">
+                            @{ 
+                                var year = Model.StartTime.Value.Year;
+                                var month = Model.StartTime.Value.Month;
+                                var day = Model.StartTime.Value.Day;
+                                var date = string.Format("{0}-{1}-{2}", year, month, day);
+                            }
+                            @*繫結會刷掉,不能使用*@
+                            @*@Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control monostyle", type = "date"},value =string.Format("{0}-{1}-{2}", Model.StartTime.Value.Year, Model.StartTime.Value.Month, Model.StartTime.Value.Day) })*@
+                            <input type="date" id="StartTime" name="StartTime" class="form-control monostyle" value="@string.Format("{0}-{1}-{2}", Model.StartTime.Value.Year, Model.StartTime.Value.Month, Model.StartTime.Value.Day)"/>
+                            @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group nakadiv">
+                        <h3>
+                            @Html.LabelFor(model => model.C_Location, htmlAttributes: new { @class = "control-label col" })
+                        </h3>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.C_Location, new { htmlAttributes = new { @class = "form-control monostyle" } })
+                            @Html.ValidationMessageFor(model => model.C_Location, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col" style="margin-left:3em;margin-right:3em">
+                    <div class="form-group container">
+                        <h3>
+                            @Html.LabelFor(model => model.InterviewContent, htmlAttributes: new { @class = "control-label col" })
+                        </h3>
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.InterviewContent, new { htmlAttributes = new { @class = "form-control content" }, style = "width:1000px; height:15em;    " })
+                            @Html.ValidationMessageFor(model => model.InterviewContent, "", new { @class = "text-danger" })
+                        </div>
+                        @Html.EditorFor(model => model.CreateTime, new { htmlAttributes = new { @class = "form-control", type = "hidden" } })
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="儲存" class="btn btn-primary " />
+                                @Html.ActionLink("取消", "Index", "", new { @class = "btn btn-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+         }
+    </div>
+
+
+@section scripts{
+    <script>
+            function changeName() {
+                var ID = $("#UserID").val();
+                var IeeName = $("#Interviewee_Name");
+                $.get("@Url.Action("changename", "InterviewRecords", new { Area = "CRM"})", { "Name": ID }, function (data) {
+                    $.each(data, function (i, v) {
+                        IeeName.val(v);
+                    })
+                })
+            }
+    </script>
+}
+
+

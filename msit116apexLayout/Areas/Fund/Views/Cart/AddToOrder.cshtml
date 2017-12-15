@@ -1,0 +1,319 @@
+﻿@model msit116apexLayout.Areas.Fund.ViewModels.FundViewModel
+@{
+    ViewBag.Title = "AddToOrder";
+}
+@section styles{
+    <style>
+        .t {
+            border-top: 1px solid black;
+        }
+        /*.r {
+            border-right: 1px solid black;
+            height: 100%;
+        }*/
+        .CurrencySelect {
+            width: 10em;
+            height: 2em;
+            /*text-align: center;*/
+        }
+        .dateSelect {
+            width: 10em;
+            height: 2em;
+            /*text-align: center;*/
+        }
+        .TradePrice {
+            width: 5em;
+            height: 2em;
+        }
+        .textCenter {
+            text-align: center;
+        }
+        .Transparent {
+            background-color: Transparent;
+            background-repeat: no-repeat;
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            outline: none;
+        }
+    </style>
+}
+
+
+@using (Html.BeginForm("AddToOrder", "Cart", FormMethod.Post, new { novalidate = "novalidate" }))
+{
+    <div>
+        <div>
+            <nav aria-label="breadcrumb" role="navigation">
+                <ol class="breadcrumb" style="background-color:	#444444">
+                    @*<li class="breadcrumb-item"><a href="@Url.Action("Index","FundOverview")" style="color:#FFFFFF">基金總覽</a></li>
+                    <li class="breadcrumb-item active"><a href="@Url.Action("Index","Cart")" style="color:#FFFFFF">您的購物車</a></li>*@
+                    <li class="breadcrumb-item active" aria-current="page" style="color:#DDAA00">選擇帳戶和交易金額</li>
+                </ol>
+            </nav>
+        </div>
+        <h3>單筆申購</h3>
+        <div>
+            <table id="tableA" class="table table-hover table-striped">
+                <thead class="bg-warning">
+                    <tr class="textCenter">
+                        <th style="vertical-align:middle">
+                            @Html.DisplayNameFor(x => x.FundMaster.First().FundName)
+                        </th>
+                        <th style="vertical-align:middle;width:200px">
+                            @Html.DisplayNameFor(x => x.FundCompany.First().FundCpyName)
+                            <div id="span1" class="t">
+                                @Html.DisplayNameFor(x => x.FundType.First().FundTypeName)
+                            </div>
+                        </th>
+                        <th style="vertical-align:middle;width:200px">
+                            @string.Format("{0}({1})", @Html.DisplayNameFor(x => x.FundDetail.First().NetValue), @Html.DisplayNameFor(x => x.FundCurrency.First().FundCurrencyName))
+                            <div id="span1" class="t">
+                                @Html.DisplayNameFor(x => x.FundDetail.First().Date)
+                            </div>
+                        </th>
+                        <th style="vertical-align:middle;width:200px">
+                            @Html.DisplayNameFor(x => x.FundTradeCurrency.First().TradeCurrencyCode)
+                            <div id="span1" class="t">
+                                @*@Html.DisplayNameFor(x => x.FundDetail.First().Date)*@
+                                扣款銀行
+                            </div>
+                        </th>
+                        <th style="vertical-align:middle">
+                            @Html.DisplayNameFor(x => x.FundOrderDetail.First().TradePrice)
+                        </th>
+                        <th style="vertical-align:middle">
+                            @Html.DisplayNameFor(x => x.FundOrderDetail.First().Amount)
+                            <div class="t">
+                                @Html.DisplayNameFor(x => x.ChargeFee.First().ChargeFeePercentage)<span> %</span>
+                            </div>
+                        </th>
+                        <th style="vertical-align:middle">
+                            <span>刪除</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cart in Model.OrderTypeA)
+                    {
+                        <tr>
+                            <td style="vertical-align:middle">
+                                @Html.DisplayFor(c => cart.FundName)
+                            </td>
+                            <td class="textCenter" style="vertical-align:middle">
+                                @Html.DisplayFor(c => cart.FundCpyName)
+                                <div id="span1" class="t">
+                                    @Html.DisplayFor(c => cart.FundTypeName)
+                                </div>
+                            </td>
+                            <td class="textCenter" style="vertical-align:middle">
+                                @string.Format("{0}({1})", @Html.DisplayFor(c => cart.NetValue), @Html.DisplayFor(c => cart.FundCurrencyCode))
+                                <div id="span1" class="t">
+                                    @Html.DisplayFor(c => cart.Date)
+                                </div>
+                            </td>
+                            <td class="CurrencyTD textCenter" style="vertical-align:middle">                              
+                                <select id="currency" name="currencyA_@Html.DisplayFor(c=>cart.RecordID)" class="CurrencySelect"></select>
+                                @*<input type="" name="bankA_@Html.DisplayFor(c=>cart.RecordID)"/>*@
+                                <div></div>
+                            </td>
+                            <td class="textCenter" style="vertical-align:middle">
+                                <input type="number" name="textA_@Html.DisplayFor(c=>cart.RecordID)" min="1000" step="1000" class="TradePrice"/>
+                            </td>
+                            <td class="textCenter" style="vertical-align:middle">
+                                <span></span>
+                                <div id="span1" class="t">
+                                    @Html.DisplayFor(c => cart.ChargeFeePercentage)
+                                </div>
+                            </td>
+                            <td class="textCenter" style="vertical-align:middle">
+                                <a class="forAlert" href="@Url.Action("DeleteCartFromAddToOrder","Cart",new { id = cart.RecordID })">
+                                    <img name="idDelete" src="@Href("~/Areas/Fund/Images/delete.png")" alt="addToCart" />
+                                </a>
+                                @*@Html.ActionLink("刪除", "DeleteCartFromAddToOrder", "Cart", new { id = cart.RecordID }, new { @class = "btn btn-danger" })*@
+                            </td>
+                        </tr>
+}
+                </tbody>
+            </table>
+        </div>
+        <h3>定期定額</h3>
+        <div>
+            <table class="table table-hover table-striped">
+                <thead class="bg-warning">
+                    <tr class="textCenter">
+                        <th style="vertical-align:middle">
+                            @Html.DisplayNameFor(x => x.FundMaster.First().FundName)
+                        </th>
+                        <th style="vertical-align:middle">
+                            @Html.DisplayNameFor(x => x.FundCompany.First().FundCpyName)
+                            <div id="span1" class="t">
+                                @Html.DisplayNameFor(x => x.FundType.First().FundTypeName)
+                            </div>
+                        </th>
+                        <th style="vertical-align:middle">
+                            @string.Format("{0}({1})", @Html.DisplayNameFor(x => x.FundDetail.First().NetValue), @Html.DisplayNameFor(x => x.FundCurrency.First().FundCurrencyName))
+                            <div id="span1" class="t">
+                                @Html.DisplayNameFor(x => x.FundDetail.First().Date)
+                            </div>
+                        </th>
+                        <th style="vertical-align:middle">
+                            @Html.DisplayNameFor(x=>x.FundChargeDate.First().ChargeDateName)
+                        </th>
+                        <th style="vertical-align:middle">
+                            @Html.DisplayNameFor(x => x.FundTradeCurrency.First().TradeCurrencyCode)
+                            <div class="t">
+                                @*@Html.DisplayNameFor(x => x.FundDetail.First().Date)*@
+                                扣款銀行
+                            </div>
+                        </th>
+                        <th style="vertical-align:middle">
+                            @Html.DisplayNameFor(x => x.FundOrderDetail.First().TradePrice)
+                        </th>
+                        <th style="vertical-align:middle">
+                            @Html.DisplayNameFor(x => x.FundOrderDetail.First().Amount)
+                            <div id="span1" class="t">
+                                @Html.DisplayNameFor(x => x.ChargeFee.First().ChargeFeePercentage)<span> %</span>
+                            </div>
+                        </th>
+                        <th style="vertical-align:middle">
+                            <span>刪除</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cart in Model.OrderTypeB)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(c => cart.FundName)
+                            </td>
+                            <td class="textCenter" style="vertical-align:middle">
+                                @Html.DisplayFor(c => cart.FundCpyName)
+                                <div id="span1" class="t">
+                                    @Html.DisplayFor(c => cart.FundTypeName)
+                                </div>
+                            </td>
+                            <td class="textCenter" style="vertical-align:middle">
+                                @string.Format("{0}({1})", @Html.DisplayFor(x => cart.NetValue), @Html.DisplayFor(x => cart.FundCurrencyCode))
+                                <div id="span1" class="t">
+                                    @Html.DisplayFor(x => cart.Date)
+                                </div>
+                            </td>
+                            <td class="textCenter" style="vertical-align:middle">
+                                <select id="date" name="date_@Html.DisplayFor(c=>cart.RecordID)" class="dateSelect"></select>
+                            </td>                           
+                            <td class="CurrencyTD textCenter" style="vertical-align:middle">
+                                <select id="currency" name="currencyB_@Html.DisplayFor(c=>cart.RecordID)" class="CurrencySelect"></select>
+                                @*<input type="" name="bankB_@Html.DisplayFor(c=>cart.RecordID)" />*@
+                                <div></div>
+                            </td>
+                            <td class="textCenter" style="vertical-align:middle">
+                                <input type="number" name="textB_@Html.DisplayFor(c=>cart.RecordID)" min="1000" step="1000" class="TradePrice"/>
+                            </td>
+                            <td class="textCenter" style="vertical-align:middle">
+                                <span></span>
+                                <div id="span1" class="t">
+                                    @Html.DisplayFor(c => cart.ChargeFeePercentage)
+                                </div>
+                            </td>
+                            <td class="textCenter" style="vertical-align:middle">
+                                <a class="forAlert" href="@Url.Action("DeleteCartFromAddToOrder","Cart",new { id = cart.RecordID })">
+                                    <img name="idDelete" src="@Href("~/Areas/Fund/Images/delete.png")" alt="addToCart" />
+                                </a>
+                                @*@Html.ActionLink("刪除", "DeleteCartFromAddToOrder", "Cart", new { id = cart.RecordID }, new { @class = "btn btn-danger" })*@
+                            </td>
+                        </tr>
+}
+
+                </tbody>
+
+            </table>
+        </div>
+        <div class="textCenter">
+            <button type="submit" class="Transparent"><img name="idBuy" src="@Href("~/Areas/Fund/Images/Green-Buy.png")" alt="Buy Now" /></button>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('table input').on('mouseup keyup paste', function () {
+                var price = $(this).val() * 1 + ($(this).val() * ($(this).closest('td').next('td').find('div').text()) /100 );
+                $(this).closest('td').next('td').find('span:nth-child(1)').text(price)
+            });
+
+            $('.CurrencySelect').append($('<option></option>').val('0').text('請選擇帳戶'));
+            $('.dateSelect').append($('<option></option>').val('0').text('請選擇扣款日期'));
+            ajaxTradeCurrencyOptions();
+            ajaxChargeDateOptions();
+            
+
+            $('select[name^="currency"]').change(function () {
+                $(this).closest('td').find('div').empty();
+
+                 var selectedCurrencyId = $(this).val();                               
+                 pdata = { currencyId: selectedCurrencyId };
+                 var showThis = $(this);
+                 $.post('@Url.Action("GetBankAccount", "Cart",new { area="Fund"})', pdata, function (data) {
+                     if (data.length > 0) {                         
+                         $(showThis).closest('td').find('div').append(data);
+                     }
+                 });                 
+            });
+        });
+
+     
+
+        function ajaxTradeCurrencyOptions() {
+            //產生 Company 下拉選單
+            $.ajax({
+                url: '@Url.Action("GetCurrencyOption", "Cart",new { area="Fund"})',
+                    //data: { areaId: selectedAreaId, typeId: selectedTypeId, cpyId: selectedCpyId, cryId: selectedCryId },
+                    type: 'get',
+                    cache: false,
+                    anync: false,
+                    dataType: 'html',
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $('.CurrencySelect').append(data);
+                        }
+                    }
+            })
+        }
+
+        function ajaxChargeDateOptions() {
+            //產生 Company 下拉選單
+            $.ajax({
+                url: '@Url.Action("GetChargeDateOption", "Cart",new { area="Fund"})',
+                    //data: { areaId: selectedAreaId, typeId: selectedTypeId, cpyId: selectedCpyId, cryId: selectedCryId },
+                    type: 'get',
+                    cache: false,
+                    anync: false,
+                    dataType: 'html',
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $('.dateSelect').append(data);
+                        }
+                    }
+            })
+        }
+
+        @*function ajaxBankAccount() {
+            $.ajax({
+                url: '@Url.Action("GetBankAccount", "Cart",new { area="Fund"})',
+                data: { currencyId: 'TWD' },
+                    type: 'get',
+                    cache: false,
+                    anync: false,
+                    dataType: 'html',
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $('.CurrencyTD').append(data);
+                        }
+                    }
+            })
+        }*@
+    </script>
+    }

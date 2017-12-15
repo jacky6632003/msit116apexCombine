@@ -1,0 +1,26 @@
+﻿@model IEnumerable<SelectListItem>
+
+
+
+@using (Html.BeginForm("StockTradeAdvancedsearch", "Stock", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+
+    <label>依交易帳戶:</label>
+    @Html.DropDownList("strac", (IEnumerable<SelectListItem>)ViewBag.strac, new { @id = "strac" })
+
+    <label>依股票代碼:</label>
+    @Html.DropDownList("strsid", (IEnumerable<SelectListItem>)ViewBag.strsid, new { @id = "strsid" })
+
+    <label>依紀錄買/賣:</label>
+    @Html.DropDownList("strbs", (IEnumerable<SelectListItem>)ViewBag.strbs, new { @id = "strbs" })
+
+    <label>依入庫日期:</label>
+    <input type="date" class="radiusbtn3" name="dates" value="@ViewBag.strds"> <label>~</label> <input type="date" class="radiusbtn3" name="datee" value="@ViewBag.strde">
+    
+    
+    <input type="submit" value="搜尋" class="radiusbtn2" />
+
+    <input type="button" value="清空" style="float:right" onclick="window.location.href='@Url.Action("StockTradeAdvancedsearch","Stock",new {area="Stock" })'" class="radiusbtn2" />
+}
+
+

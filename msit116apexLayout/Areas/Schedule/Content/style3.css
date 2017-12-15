@@ -1,0 +1,84 @@
+﻿
+.bkl_icon {
+  width: 100px;
+}
+
+.book {
+    display: inline-block;
+    padding: 10px;
+    text-align: center;
+    width: 170px;
+    border: solid 3px #bbb;
+    line-height: 22px;
+    border-radius:10px;
+}
+.book a {
+  color: #555;
+}
+.book img {
+  width: 100%;
+}
+    .book .author, .book .price, .book .publish {
+        font-weight: normal;
+        margin: 0;
+        font-size: 14px;
+        font-family: 微軟正黑體;
+    }
+.book .author {
+  margin-top: 5px;
+}
+    .book .name {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 900;
+    }
+.book .name a {
+  color: #222;
+}
+.book .red {
+  font-weight: 900;
+  color: #d93800;
+}
+
+.book.detail {
+  display: block;
+  width: 50%;
+  text-align: left;
+  padding: 10px;
+  line-height: 24px;
+}
+.book.detail img {
+  width: 150px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.book.detail .infos {
+  display: inline-block;
+  width: calc(100% - 150px - 20px);
+  vertical-align: middle;
+}
+
+
+
+
+
+
+.big {
+  width: 280px;
+  height: 400px;
+  vertical-align: top;
+}
+.big img {
+  margin-bottom: 5px;
+}
+
+.detail.big {
+  height: initial;
+  padding: 20px;
+}
+.detail.big img {
+  width: 220px;
+}
+.detail.big .infos {
+  width: calc(100% - 220px - 20px);
+}

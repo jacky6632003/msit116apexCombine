@@ -1,0 +1,26 @@
+﻿@model msit116apexLayout.Models.Leavecategory
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>清單</h2>
+
+<div>
+  
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LeavecategoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LeavecategoryName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("修改", "Edit", new { id = Model.LeavecategoryID }) |
+    @Html.ActionLink("返回", "Index")
+</p>

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<msit116apexLayout.Models.ProcedureGetEmployees_Result>
+@{
+    ViewBag.Title = "EmlpoyeesManager";
+}
+        <table id="tbHad" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(p => p.UserName)</th>
+                    <th>@Html.DisplayNameFor(p => p.Name)</th>
+                    <th>@Html.DisplayNameFor(p => p.Email)</th>
+                    <th>@Html.DisplayNameFor(p => p.BirthDay)</th>
+                    <th>@Html.DisplayNameFor(p => p.Country)</th>
+                    <th>@Html.DisplayNameFor(p => p.PhoneNumber)</th>
+                    <th>@Html.DisplayNameFor(p => p.Telephone)</th>
+                    <th>@Html.DisplayNameFor(p => p.ResidenceAddress)</th>
+                    <th>@Html.DisplayNameFor(p => p.MailingAddress)</th>
+                    <th>@Html.DisplayNameFor(p => p.IdentityCardNumber)</th>
+                    <th>@Html.DisplayNameFor(p => p.Title)</th>
+                    <th>@Html.DisplayNameFor(p => p.RegisterDate)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var employee in Model)
+                {
+                    <tr>
+                        <th>@Html.EditorFor(ee => employee.UserName)</th>
+                        <th>@Html.EditorFor(ee => employee.Name)</th>
+                        <th>@Html.EditorFor(ee => employee.Email)</th>
+                        <th>@Html.EditorFor(ee => employee.BirthDay)</th>
+                        <th>@Html.EditorFor(ee => employee.Country)</th>
+                        <th>@Html.EditorFor(ee => employee.PhoneNumber)</th>
+                        <th>@Html.EditorFor(ee => employee.Telephone)</th>
+                        <th>@Html.EditorFor(ee => employee.ResidenceAddress)</th>
+                        <th>@Html.EditorFor(ee => employee.MailingAddress)</th>
+                        <th>@Html.EditorFor(ee => employee.IdentityCardNumber)</th>
+                        <th>@Html.EditorFor(ee => employee.Title)</th>
+                        <th>@Html.EditorFor(ee => employee.RegisterDate)</th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @Html.Action("NewEmlpoyee", "Account")
+

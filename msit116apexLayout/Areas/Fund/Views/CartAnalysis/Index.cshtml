@@ -1,0 +1,36 @@
+﻿@model msit116apexLayout.Areas.Fund.ViewModels.FundViewModel
+
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(x=>x.FundMaster.First().FundName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(x=>x.FundDetail.First().NetValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(x=>x.FundGoods.First().FundCurrencyCode)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model.LikeTable !=null){
+        foreach(var goods in Model.LikeTable)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(Html.DisplayFor(f => goods.FundName).ToHtmlString(), "fundInfo", "FundOverview", new { id = goods.FundID }, null)                  
+                </td>
+                <td>
+                    @Html.DisplayFor(x => goods.NetValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(x => goods.FundCurrencyCode)
+                </td>
+            </tr>
+        }
+        }
+    </tbody>
+</table>

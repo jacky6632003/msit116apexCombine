@@ -1,0 +1,41 @@
+﻿@model IEnumerable<msit116apexLayout.Models.Leavecategory>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>假別清單</h2>
+
+<p>
+    @Html.ActionLink("建立假別", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.LeavecategoryName)
+        </th>
+        <th>修改</th>
+        <th>清單</th>
+        <th>刪除</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.LeavecategoryName)
+        </td>
+        <td>
+            @Html.ActionLink("修改", "Edit", new { id=item.LeavecategoryID }, new { @class = "btn btn-info " }) 
+        <td>
+          
+            @Html.ActionLink("清單", "Details", new { id = item.LeavecategoryID }, new { @class = "btn btn-primary " }) 
+         
+        </td>
+        <td>
+        
+            @Html.ActionLink("刪除", "Delete", new { id = item.LeavecategoryID }, new { @class = "btn btn-danger " })
+        </td>
+    </tr>
+}
+
+</table>

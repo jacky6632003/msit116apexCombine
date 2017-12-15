@@ -1,0 +1,111 @@
+﻿@model msit116apexLayout.Models.InterviewRecords
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@section styles{
+    <style>
+        .masterdiv {
+            margin: 2em
+        }
+
+        .nakadiv {
+            margin: 1em
+        }
+
+        .monostyle {
+            padding: 1em;
+        }
+
+        .h {
+            margin-left: 2em
+        }
+        .hr {
+            width: 600px;
+            border-bottom: 1px solid black;
+        }
+    </style>
+}
+
+<h3 class="monostyle">詳細資料</h3>
+<hr />
+<div class="row masterdiv">
+    <div class="col">
+        <div class="nakadiv">
+            <h4 class="h"><b>@Html.DisplayNameFor(model => model.Interviewer_Name)</b></h4>
+            <hr style="width: 600px; border-bottom: 1px solid black;"/>
+            <label class="monostyle">@Html.DisplayFor(model => model.Interviewer_Name)</label>
+        </div>
+
+        <div class="nakadiv">
+            <h4 class="h"><b>@Html.DisplayNameFor(model => model.Interviewee_Name)</b></h4>
+            <hr style="width: 600px; border-bottom: 1px solid black;"/>
+            <label class="monostyle">@Html.DisplayFor(model => model.Interviewee_Name)</label>
+        </div>
+
+        <div class="nakadiv">
+            <h4 class="h"><b>@Html.DisplayNameFor(model => model.StartTime)</b></h4>
+            <hr style="width: 600px; border-bottom: 1px solid black;"/>
+            <label class="monostyle">@Html.DisplayFor(model => model.StartTime)</label>
+        </div>
+
+        <div class="nakadiv">
+            <h4 class="h"><b>@Html.DisplayNameFor(model => model.C_Location)</b></h4>
+            <hr style="width: 600px; border-bottom: 1px solid black;"/>
+            <label class="monostyle">@Html.DisplayFor(model => model.C_Location)</label>
+        </div>
+    </div>
+
+
+    <div class="col">
+     
+        <div class="nakadiv">
+            <h4 class="h"><b>@Html.DisplayNameFor(model => model.InterviewType.TypeName)</b></h4>
+            <hr style="width: 600px; border-bottom: 1px solid black;"/>
+            <label class="monostyle">@Html.DisplayFor(model => model.InterviewType.TypeName)</label>
+        </div>
+
+        <div class="nakadiv">
+            <h4 class="h"><b>@Html.DisplayNameFor(model => model.CreateTime)</b></h4>
+            <hr style="width: 600px; border-bottom: 1px solid black;"/>
+            <label class="monostyle">@Html.DisplayFor(model => model.CreateTime)</label>
+        </div>
+
+        <div>
+            <h4 class="h"><b>@Html.DisplayNameFor(model => model.LastModifyTime)</b></h4>
+            <hr style="width: 600px; border-bottom: 1px solid black;"/>
+            <label class="monostyle">@Html.DisplayFor(model => model.LastModifyTime)</label>
+        </div>
+    </div>
+</div>
+
+
+<div class="row h" @*style="border:solid 1px black;width:1600px;margin-left:8%"*@>
+    <div class="col">
+        <div class="nakadiv" @*style="margin-left:1em"*@>
+            <h4 class="h"><b>@Html.DisplayNameFor(model => model.InterviewContent)</b></h4>
+            <hr  style="border-bottom:1px solid black; width:1600px"/>
+            <label class="monostyle"><pre style="width:1600px">@Html.DisplayFor(model => model.InterviewContent)</pre></label>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row masterdiv">
+    <div class="col monostyle">
+        <div class="row">
+            <div class="col">
+                @Html.ActionLink("修改", "Edit", new { id = Model.InterviewID }, new { @class = "btn btn-danger", @style = "position:absolute;right:0px;height:60px;width:200px;color:white;" })
+            </div>
+            @*@style = "width:200px; margin-left:44.7%"*@
+            @* @Html.ActionLink("返回", "Index", "CRM/InterviewRecords", new { @class = "btn btn-info" })*@
+            <div class="col">
+                 <button  style="position:absolute;left:0px;width:200px;height:60px;" class="btn btn-info" onclick="closeNav()"><h3>返回</h3></button>
+            </div>
+
+        </div>
+        
+</div>
+    </div>

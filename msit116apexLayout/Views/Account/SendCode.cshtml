@@ -1,0 +1,25 @@
+﻿@model msit116apexLayout.Models.SendCodeViewModel
+@{
+    ViewBag.Title = "發送安全碼";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("SendCode", "Account", new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" })) {
+    @Html.AntiForgeryToken()
+    @Html.Hidden("rememberMe", @Model.RememberMe)
+    <h4>安全碼驗證</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            請選擇要使用的認證方式：
+            @Html.DropDownListFor(model => model.SelectedProvider, Model.Providers)
+            <input type="submit" value="發送" class="btn btn-default" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}

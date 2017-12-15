@@ -1,0 +1,51 @@
+﻿@model msit116apexLayout.Models.EmployeeViewModel
+@using (Html.BeginForm("NewEmlpoyee", "Account", FormMethod.Post, new { }))
+{
+<div id="newEmp" style="width:300px">
+    @Html.LabelFor(p => p.UserName)
+    <div style="display:inline">
+        <label>點選複製</label>
+        <input id="fastCopyEmail" type="text" value="x@x.com" />
+    </div>    
+    @Html.EditorFor(p => p.UserName )
+    @Html.LabelFor(p => p.Password)
+    <div style="display:inline">
+        <label>點選複製</label>
+        <input id="fastCopypwd" type="text" value="P@ssw0rd" />
+    </div> 
+        
+    @Html.EditorFor(p => p.Password)
+    @Html.LabelFor(p => p.Name)
+    @Html.EditorFor(p => p.Name)
+    @Html.LabelFor(p => p.BirthDay)
+    @Html.EditorFor(p => p.BirthDay)
+    @Html.LabelFor(p => p.Country)
+    @Html.EditorFor(p => p.Country)
+    @Html.LabelFor(p => p.PhoneNumber)
+    @Html.EditorFor(p => p.PhoneNumber)
+    @Html.LabelFor(p => p.Telephone)
+    @Html.EditorFor(p => p.Telephone)
+    @Html.LabelFor(p => p.ResidenceAddress)
+    @Html.EditorFor(p => p.ResidenceAddress)
+    @Html.LabelFor(p => p.MailingAddress)
+    @Html.EditorFor(p => p.MailingAddress)
+    @Html.LabelFor(p => p.IdentityCardNumber)
+    @Html.EditorFor(p => p.IdentityCardNumber)
+    @Html.LabelFor(p => p.Title)
+    @Html.EditorFor(p => p.Title)
+    <input type="submit" class="btn btn-primary" value="新增"/>
+</div>
+}
+
+    <script>
+        $("#newEmp>label").addClass("col-sm-12");
+        $("#newEmp>input").addClass("col-sm-12");
+        $("#fastCopypwd").click(function () {
+            $(this).select();
+            document.execCommand('copy');
+        });
+        $("#fastCopyEmail").click(function () {
+            $(this).select();
+            document.execCommand('copy');
+        });
+    </script>

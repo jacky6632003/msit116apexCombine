@@ -1,0 +1,87 @@
+﻿@model IEnumerable<msit116apexLayout.Models.uPowerWithBoolPage>
+
+<style>
+    .seleceEditPowerBtn {
+        /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+        border:3px dashed black;
+        font-weight:bold;
+    }
+</style>
+<div style="padding-left:1em">
+    <div class="row" style="margin:0px;padding:0px">
+        <div class="col-lg-4" style="border:1px silver solid;border-radius:3px">
+            <input type="hidden" id="selectRoleCEditPower" />
+            <ul>
+                @foreach (var upwbp in Model)
+            {
+                    <li>
+                        @upwbp.uPages.pageName
+                        <ul>
+                            @foreach (var upower in upwbp.uPowerWithBool)
+                        {
+                                <li>
+                                    @if (@upower.hasPower)
+                                {
+                                        <div>
+                                            <span>
+                                                @upower.uPowers.powerName
+                                            </span>
+                                            <button id="@string.Format("urpEditID{0}",@upower.uPowers.powerID)" class="btn btn-warning">
+                                                選擇編輯
+                                            </button>
+                                        </div>
+                                        <ul>
+                                            覆核角色
+                                            @foreach (var curole in upower.rolesConfirm)
+                                        {
+                                                <li>
+                                                    @string.Format("{0}<{1}>", @curole.uRoles.uRoleName, curole.Department)
+                                                </li>
+                                        }
+                                        </ul>
+                                }
+                                else
+                                {
+                                        <span style="color:silver">
+                                            @upower.uPowers.powerName
+                                        </span>
+                                }
+                                </li>
+                        }
+                        </ul>
+                    </li>
+            }
+            </ul>
+        </div>
+        <div class="col-lg-8" style="border:1px silver solid;border-radius:3px">
+            <span id="returnMessage1" class="text-success" style="display:none"></span>
+            <span id="returnMessage2" class="text-success" style="display:none"></span>
+            <div id="loadEditRoleConfirmRole">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('button[id^="urpEditID"]').click(function () {
+            $('#returnMessage1').text("").css("display","none");
+            $('#returnMessage2').text("").css("display", "none");
+            var oldpid = $('#selectRoleCEditPower').val();
+            $('button[id="urpEditID' + oldpid + '"]').removeClass("seleceEditPowerBtn").text("選擇編輯");
+            var newpid = $(this).attr("id").split("urpEditID")[1];
+            if (oldpid != newpid) {
+                $('#selectRoleCEditPower').val(newpid);
+                $(this).addClass("seleceEditPowerBtn").text("編輯中");
+                $.get("@Url.Action("EditRoleConfirm", "PowerConfirm", new { area=""})?upowerID=" + newpid, function (data) {
+                    $('#loadEditRoleConfirmRole').html(data);
+                });
+            }
+            else {
+                $('#selectRoleCEditPower').val("").text("選擇編輯");
+                $('#loadEditRoleConfirmRole').html("");
+            }
+
+        });
+    });
+</script>

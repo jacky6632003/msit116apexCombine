@@ -1,0 +1,395 @@
+﻿@model msit116apexLayout.ViewModels.LeavecategoryUserLeaveViewModel
+
+
+
+@section styles{
+
+    <link href="~/Areas/Schedule/src/css/layui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href="~/Areas/Schedule/Content/style2.css" rel="stylesheet" />
+<style>
+    .thumb {
+        width: 370px;
+        height: 245px;
+    }
+    .aaa {
+        display: inline-block;
+    }
+</style>
+
+}
+
+
+@{
+    ViewBag.Title = "搜尋假單";
+}
+<div style=" width:100%; text-align:center; " class="print-btn">
+    <h2 style="font-size:40px">搜尋假單</h2>
+    </div>
+    @*@Html.Action("test1")*@
+
+    @using (Html.BeginForm("test", "Leaves", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+
+        <table class="table table-hover search">
+            <tr>
+
+
+                <th width="150px">
+                    @Html.DisplayNameFor(model => model.review.First().ReviewName)
+                </th>
+
+                <td width="350px">
+                    <table id="ctl00_ContentPlaceHolder1_rbl_status" border="0" style="width:300px;">
+                        <tr>
+
+                            <td>
+                                @Html.RadioButton("RadioButton", 0, true)
+                                全部
+                            </td>
+                            @foreach (var item in Model.review)
+                            {
+                                <td>
+                                    @Html.RadioButton("RadioButton", @Html.DisplayFor(modelItem => item.ReviewID))
+                                    @Html.DisplayFor(modelItem => item.ReviewName)
+                                </td>
+                            }
+                        </tr>
+                    </table>
+
+                </td>
+            </tr>
+
+
+
+            <tr id="ctl00_ContentPlaceHolder1_tr_type">
+                <th>
+                    @Html.DisplayNameFor(model => model.leavecategory.First().LeavecategoryName)
+                </th>
+                <td colspan="5">
+                    @*<input type="checkbox" onclick="SelectAll(this, 'thetype')" />全選/反選
+
+                        &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <span id="thetype">
+                            <span id="spanid" style="display:inline-block;width:900px;">
+
+                                @foreach (var item in Model.leavecategory)
+                                {
+                                    // @Html.CheckBox("LeavecategoryID" + @Html.DisplayFor(modelItem => item.LeavecategoryID), false);
+                                    <input type="checkbox" name="LacCheckBox" value="@item.LeavecategoryName">
+                                    @Html.DisplayFor(modelItem => item.LeavecategoryName)
+                                    //@Html.LabelFor(modelItem => item.LeavecategoryID,, htmlAttributes: new { @class = "control-label" })
+
+                                }
+
+
+                            </span>
+                        </span>*@
+                    @Html.DropDownList("LacCheckBox", null, htmlAttributes: new { @class = "form-control" })
+                </td>
+            </tr>
+
+            <tr>
+
+
+                <th> 時間類別</th>
+                <td>
+                    <table id="ctl00_ContentPlaceHolder1_rbl_timetype" border="0" style="width:200px;">
+                        <tr></tr>
+                    </table>
+                </td>
+
+
+
+                <th>
+                    開始時間 從:
+                </th>
+                <td colspan="3">
+
+                    <input type="text" id="Lav_StartTime" class="form-control" name="Lav_StartTime" display="inline-block" style="width:180px;" />
+                    到:
+                    <input type="text" id="Lac_EndTime" class="form-control" name="Lac_EndTime" display="inline-block" style="width:180px;" />
+
+                </td>
+
+
+
+
+
+            </tr>
+
+
+
+            <tr>
+
+
+
+                <th>
+                    部門
+                </th>
+                <td>
+
+                    @Html.DropDownList("sss", null, htmlAttributes: new { @class = "form-control" })
+
+                </td>
+
+                <th>
+
+                    <label for="tags">姓名： </label>
+                </th>
+
+                <td>
+                    @*@Html.EditorFor(model => model.user.First().UserName, new { htmlAttributes = new { @class = "form-control"} })*@
+                    <input type="text" id="tags" class="form-control" name="tags">
+                </td>
+                <td colspan="2"></td>
+
+            </tr>
+            <tr>
+                <td colspan="6" align="center">
+                    <input type="button" value="搜索" id="btnsearch" class="btn btn-primary btn-flat" style="width:200px;" />
+                    @*<input type="submit" value="搜索" id="btnsearch" class="btn btn-primary btn-flat" style="width:200px;" />*@
+                    <input type="button" value="匯出" id="btnsearch2" class="btn btn-success   btn-flat" />
+                    <input type="button" value="清除" id="btnsearch3" class="btn btn-danger   btn-flat" />
+                    <input type="button" value="Demo" class="btn btn-info btn-flat" id="Demo" />
+                </td>
+
+            </tr>
+
+        </table>
+    }
+
+    <div class="form-group">
+        <div id="app">
+
+            @*<div class="classes aaa mr-5" >
+                    <h1>{{cls.Lav_ID}}</h1>
+                    <p>{{cls.Lav_StartTime}}</p>
+                    <p>{{cls.Lac_EndTime}}</p>
+                    <p>{{cls.Lac_LeavecategoryID}}</p>
+                    <p>{{cls.Lac_Agent}}</p>
+                    <p>{{cls.Review}}</p>
+                    <p>{{cls.Department}}</p>
+                    <img v-bind:src="cls.ID" class="thumb" title="image file" />
+                </div>*@
+
+
+
+            <h2 v-if="classdatas.length==0">等待搜尋中......</h2>
+            <div class="card" v-if="classdatas.length>0">
+                <div class="card-header">
+                    <h2>假單搜尋完成</h2>
+                </div>
+                <div class="card-body">
+                    <div style=" display: inline-block;" v-for="cls in classdatas" class="mt-5 mr-2 mb-5 ml-2">
+                        <div class="lea-ccc">
+                            <div class="teacher" v-bind:style="'background-image:url('+cls.IDUSER+')'"></div>
+                            <article class="cardtest ">
+
+
+                                <header class="cardtest__thumb">
+                                    <a v-bind:href="cls.ID" target="_blank"><img v-bind:src="cls.ID" class="thumb" /></a>
+                                </header>
+                                <div class="tag2">   &nbsp;&nbsp;請假單</div>
+
+
+                                <div class="cardtest__body">
+                                    <div class="cardtest__category"><a v-bind:href="cls.ID">附件</a></div>
+                                    <h2 class="cardtest__title"><a v-bind:href="cls.IDdetails">({{cls.Department}}){{cls.Lav_ID}}</a></h2>
+                                    <div class="cardtest__subtitle" v-if="cls.Review==='同意'">
+                                        {{cls.Lac_LeavecategoryID}}&nbsp;&nbsp;
+                                        <span style="color:#ff0000">審查狀態:同意</span>
+                                    </div>
+
+                                    <div class="cardtest__subtitle" v-else-if="cls.Review==='拒絕'">
+                                        {{cls.Lac_LeavecategoryID}}&nbsp;&nbsp;
+                                        <span style="color:#ffd800">審查狀態:拒絕</span>
+                                    </div>
+
+                                    <div class="cardtest__subtitle" v-else-if="cls.Review==='處理中'">
+                                        {{cls.Lac_LeavecategoryID}}&nbsp;&nbsp;
+                                        <span v-else-if="" style="color:#0026ff">審查狀態:處理中</span>
+                                    </div>
+                                    <div class="cardtest__subtitle" v-else>
+                                        {{cls.Lac_LeavecategoryID}}&nbsp;&nbsp;
+                                        <span></span>
+                                    </div>
+
+
+
+
+
+
+                                    <div class="progressbar">
+
+                                        <div class="valuebar" v-bind:style="'width:'+220*cls.UserDay/cls.Day+'px'"></div>
+                                    </div>
+
+                                    <div class="nowpeople"><p>已請年假{{cls.UserDay | capitalize}}/<span class="orange" style="color:orange">{{cls.Day}}天</span></p></div>
+                                    <p>開始時間: {{cls.Lav_StartTime}}</p> <p>結束時間{{cls.Lac_EndTime}}</p><p>共{{cls.LACDAY}}天</p>
+                                    <p class="cardtest__description">  {{cls.Lac_Tag}}</p>
+
+                                </div>
+
+
+                            </article>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+
+    @section scripts{
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.js"></script>
+
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.0/vue.js'></script>
+        <script src="~/Areas/Schedule/script/laydate/laydate.js"></script>
+
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+        laydate.render({
+            elem: '#Lav_StartTime'
+            , type: 'date'
+        });
+        laydate.render({
+            elem: '#Lac_EndTime '
+            , type: 'date'
+        });
+
+        $("#tags").autocomplete({
+            source:" @Url.Action("GetUserName", "Leaves")"
+        });
+        function SelectAll(aControl, div) {
+            var tempControl = aControl;
+            var isChecked = tempControl.checked;
+
+            elem = document.getElementById(div).getElementsByTagName("input");
+            for (var i = 0; i < elem.length; i++) {
+
+                if (elem[i].type == "checkbox" && elem[i].id != tempControl.id) {
+
+                    if (elem[i].checked != isChecked) {
+                        elem[i].click();
+
+                    }
+                }
+            }
+        }
+        </script>
+
+        <script>
+
+
+        $(document).ready(function () {
+
+            var vm = new Vue({
+                el: "#app",
+                data: {
+                    classdatas: []
+                }
+            }
+
+            );
+
+            Vue.filter('capitalize', function (value) {
+
+                return parseInt(value);
+            })
+
+
+            $("#btnsearch").click(function () {
+
+                var result = "";
+                $("input[type=radio]:checked").each(function () {
+                    result = $(this).val();
+                });
+                var c = [];
+                $("#spanid>input[type=checkbox]:checked").each(function () {
+                    c.push($(this).val());
+                    //console.log($(this).attr("name"));
+                });
+
+                var s = $("#sss").val();
+                var s1 = $("#LacCheckBox").val();
+                var data1 = {
+
+
+                    RadioButton: result,
+                    tags: $('input[name="tags"]').val(),
+                    Lav_StartTime: $('input[name="Lav_StartTime"]').val(),
+                    Lac_EndTime: $('input[name="Lac_EndTime"]').val(),
+                    LacCheckBox: s1,
+                    Department: s,
+                }
+                @*$.post("@Url.Action("test")", data1, function (data) {
+                    alert(data);
+
+                })*@
+                $.ajax({
+                    url:"@Url.Action("test")",
+                    data: data1,
+                    type: 'get',
+
+                    traditional: true,
+
+                    success: function (res) {
+
+                       vm.classdatas = res;
+                      console.log(res);
+                    }
+
+                })
+
+
+            })
+
+
+             $("#btnsearch2").click(function () {
+
+                var result = "";
+                $("input[type=radio]:checked").each(function () {
+                    result = $(this).val();
+                });
+                var s = $("#sss").val();
+                var s1 = $("#LacCheckBox").val();
+                var RadioButton = result;
+                var tags = $('input[name="tags"]').val();
+                var Lav_StartTime = $('input[name="Lav_StartTime"]').val();
+                var Lac_EndTime = $('input[name="Lac_EndTime"]').val();
+                var LacCheckBox = s1;
+                var Department = s;
+
+                var url = '@Url.Action("ExportToExceSearch")?RadioButton=' + RadioButton + '&tags=' + tags + '&Lav_StartTime=' + Lav_StartTime + '&Lac_EndTime=' + Lac_EndTime + '&LacCheckBox=' + LacCheckBox + '&Department=' + Department;
+
+                //window.open('@Url.Action("ExportToExceSearch")?RadioButton=' + RadioButton + '&tags=' + tags + '&Lav_StartTime=' + Lav_StartTime + '&Lac_EndTime=' + Lac_EndTime + '&LacCheckBox=' + LacCheckBox + '&Department=' + Department, '下載視窗', config = 'height=100px,width=100px');
+                window.location='@Url.Action("ExportToExceSearch")?RadioButton=' + RadioButton + '&tags=' + tags + '&Lav_StartTime=' + Lav_StartTime + '&Lac_EndTime=' + Lac_EndTime + '&LacCheckBox=' + LacCheckBox + '&Department=' + Department;
+            })
+
+
+             $('#btnsearch3').click(function () {
+
+                 location.reload();
+
+             });
+             $('#Demo').click(function () {
+
+                 $("#Lav_StartTime").val("2017-12-01");
+                 $("#Lac_EndTime").val("2017-12-07");
+             });
+
+
+        })
+
+
+
+        </script>
+
+    }

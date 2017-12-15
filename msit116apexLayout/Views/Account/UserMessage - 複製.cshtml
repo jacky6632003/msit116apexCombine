@@ -1,0 +1,455 @@
+﻿@model IEnumerable<msit116apexLayout.Models.UserNews>
+@{
+    ViewBag.Title = "通知";
+}
+
+@section styles{
+    <style>
+        table{
+            width:100%;
+        }
+            table>tbody>tr>td:nth-child(2) {
+                width: 25%;
+            }
+            table>tbody >tr>td:nth-child(3) {
+                width: 45%;
+            }
+            table>tbody>tr>td:nth-child(4) {
+                width: 15%;
+            }
+            table>tbody>tr>td:nth-child(5) {
+                width: 10%;
+            }
+            table>tbody>tr>td:nth-child(6) {
+                width: 5%;
+            }
+            table > thead > tr > th:nth-child(2) {
+                width: 25%;
+            }
+
+            table > thead > tr > th:nth-child(3) {
+                width: 45%;
+            }
+
+            table > thead > tr > th:nth-child(4) {
+                width: 15%;
+            }
+
+            table > thead > tr > th:nth-child(5) {
+                width: 10%;
+            }
+
+            table > thead > tr > th:nth-child(6) {
+                width: 5%;
+            }
+        #tablereadfalseAll{
+            display:none;
+        }
+        #tablereadtrueAll{
+            display:none;
+        }
+    </style>
+    }
+
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+        <div class="card">
+            <h4 class="card-header bg-dark text-white">
+                @ViewBag.Title
+            </h4>
+            <div class="card-body">
+                <table id="tablereadfalse">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <span>寄送者</span>
+                            </th>
+                            <th>
+                                <span>通知</span>
+                            </th>
+                            <th>
+                                <span>時間</span>
+                            </th>
+                            <th>
+                                <span>動作</span>
+                            </th>
+                            <th>
+                                <span>刪除</span>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th  colspan="5">
+                                <h5>未讀</h5>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr id="readfalse" style="border-bottom:solid 2px black">
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <td id="tablereadfalseSelectPage" style="display:none"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >
+                                <div id="tablereadfalsechoosePage" style="display:inline-block">
+                                    <input type="number" class="form-control" style="width:6em;display:inline" value="1"/><span>頁</span>
+                                    <button id="tablereadfalsechoosePageBtn" type="button" class="btn btn-primary">前往</button>
+                                    <button id="tablereadfalsePageBackwardBtn" type="button" class="btn btn-primary"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+                                </div>
+                                <div id="tablereadfalsePage" style="display:inline-block">
+
+                                </div>
+                                <div style="display:inline-block">
+                                    <button id="tablereadfalsePageForwardBtn" type="button" class="btn btn-primary"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="tablereadfalseAll" style="background-color:silver">
+                    <thead><tr></tr></thead>
+                    <tbody>
+                        @foreach (var userNews in Model)
+                        {
+                            if (!userNews.read)
+                            {
+                                <tr style="border-bottom:dotted 1px silver">
+                                    <td style="width:3em"></td>
+                                    <td>
+                                        @if (@userNews.fromUser == "msit116apex@gmail.com")
+                                        {
+                                            @userNews.fromUser <span>(系統管理員)</span>
+                                        }
+                                        else
+                                        {
+                                            @userNews.fromUser
+                                        }
+
+                                    </td>
+                                    <td>
+                                        <span>標題：</span>@userNews.msgTitle
+                                        <br />
+                                        <span>內容：</span>@userNews.msgContent
+                                        <br />
+                                        @if (@userNews.msgUrl != "")
+                                        {
+                                            <span>連結：</span><a href="@userNews.msgUrl" class="btn btn-success">連結</a>
+                                        }
+                                    </td>
+                                    <td>@string.Format("{0:yyyy/MM/dd HH:mm:ss}", @userNews.time)</td>
+                                    <td>
+                                        <button type="button" name="@string.Format("sn{0}",@userNews.sn)" data-read="true" href="" class="btn btn-info">變更為已讀</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" name="@string.Format("rm{0}",@userNews.sn)" href="" class="btn btn-danger">刪除</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <table id="tablereadtrue">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <span>寄送者</span>
+                            </th>
+                            <th>
+                                <span>通知</span>
+                            </th>
+                            <th>
+                                <span>時間</span>
+                            </th>
+                            <th>
+                                <span>動作</span>
+                            </th>
+                            <th>
+                                <span>刪除</span>
+                            </th>
+                        <tr>
+                            <th colspan="5">
+                                <h5>已讀</h5>
+                            </th>
+                        </tr>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="readtrue" style="border-bottom:solid 2px black">
+                        </tr>
+                       
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <td id="tablereadtrueSelectPage" style="display:none"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td >
+                                <div id="tablereadtruechoosePage" style="display:inline-block">
+                                    <input type="number" class="form-control" style="width:6em;display:inline" value="1" /><span>頁</span>
+                                    <button id="tablereadtruechoosePageBtn" type="button" class="btn btn-primary">前往</button>
+                                    <button id="tablereadtruePageBackwardBtn" type="button" class="btn btn-primary"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+                                </div>
+                                <div id="tablereadtruePage" style="display:inline-block">
+
+                                </div>
+                                <div style="display:inline-block">
+                                    <button id="tablereadtruePageForwardBtn" type="button" class="btn btn-primary"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="tablereadtrueAll" style="background-color:silver">
+                    <thead><tr></tr></thead>
+                    <tbody>
+                        @foreach (var userNews in Model)
+                        {
+                            if (userNews.read)
+                            {
+                                <tr style="border-bottom:dotted 1px silver">
+                                    <td style="width:3em"></td>
+                                    <td>
+                                        @if (@userNews.fromUser == "msit116apex@gmail.com")
+                                        {
+                                            @userNews.fromUser <span>(系統管理員)</span>
+                                        }
+                                        else
+                                        {
+                                            @userNews.fromUser
+                                        }
+                                    </td>
+                                    <td>
+                                        <span>標題：</span>@userNews.msgTitle
+                                        <br />
+                                        <span>內容：</span>@userNews.msgContent
+                                        <br />
+                                        @if (@userNews.msgUrl != "")
+                                        {
+                                            <span>連結：</span><a href="@userNews.msgUrl" class="btn btn-success">連結</a>
+                                        }
+                                    </td>
+                                    <td>@string.Format("{0:yyyy/MM/dd HH:mm:ss}",@userNews.time)</td>
+                                    <td>
+                                        <button type="button" name="@string.Format("sn{0}",@userNews.sn)" data-read="false" href="" class="btn btn-warning">變更為未讀</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" name="@string.Format("rm{0}",@userNews.sn)" href="" class="btn btn-danger">刪除</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts{
+    <script>
+        var tablereadpagesize = 5;
+        $(function () {
+            showtablereadfalse(tablereadpagesize,1);
+            showtablereadtrue(tablereadpagesize,1);
+            $("button[name^='sn']").click(function () {
+                console.log('click');
+                var tsn = $(this).attr("name").split("sn")[1];
+                var tread = $(this).data("read");
+                var updata = {
+                    sn: tsn,
+                    read: tread
+                };
+                $.post("@Url.Action("UserMessage", "Account",new { area=""})", updata, function (data) { });
+
+                var tTime = parseDate($(this).parent().parent().children("td:eq(3)").text());
+                var tablereadtrueAllELEs = $("#tablereadtrueAll>tbody>tr");
+                var tablereadfalseAllELEs = $("#tablereadfalseAll>tbody>tr");
+                var titem;
+                var titemBtn;
+                if (tread == true)
+                {
+                    titem = $('#tablereadfalseAll>tbody>tr:has(button[name="sn' + tsn + '"])');
+                    titemBtn = $('#tablereadfalseAll>tbody>tr>td button[name="sn' + tsn + '"]');
+                }
+                else
+                {
+                    titem = $('#tablereadtrueAll>tbody>tr:has(button[name="sn' + tsn + '"])');
+                    titemBtn = $('#tablereadtrueAll>tbody>tr>td button[name="sn' + tsn + '"]');
+                }
+                if (tread == true) {
+                    $.each(tablereadtrueAllELEs, function (id, children) {
+                        var cTime = parseDate($(children).children("td:eq(3)").text());
+                        if ((tTime > cTime) == false) {
+                            $(titem).insertBefore($(children));
+                            $(titemBtn).data("read", false).removeClass("btn-info").addClass("btn-warning").text("變更為未讀");
+                            return false;
+                        }
+                        if (tablereadtrueAllELEs.length-1 == $(children).index()) {
+                            $(titem).insertAfter($(children));
+                            $(titemBtn).data("read", false).removeClass("btn-info").addClass("btn-warning").text("變更為未讀");
+                            return false;
+                        }
+                    });
+                    if (tablereadtrueAllELEs.length == 0) {
+                        $(titemBtn).data("read", false).removeClass("btn-info").addClass("btn-warning").text("變更為未讀");
+                        $(titem).appendTo($('#tablereadtrueAll>tbody'));                        
+                    }
+                    showtablereadtrue(tablereadpagesize, parseInt($('#tablereadtrueSelectPage').html()));
+                    showtablereadfalse(tablereadpagesize, parseInt($('#tablereadfalseSelectPage').html()));
+                }
+                else if (tread == false) {
+                    $.each(tablereadfalseAllELEs, function (id, children) {
+                        var cTime = parseDate($(children).children("td:eq(3)").text());
+                        if ((tTime > cTime) == false) {
+                            $(titem).insertBefore($(children));
+                            $(titemBtn).data("read", true).removeClass("btn-warning").addClass("btn-info").text("變更為已讀");
+                            return false;
+                        }
+                        if (tablereadfalseAllELEs.length-1 == $(children).index()) {
+                            $(titem).insertAfter($(children));
+                            $(titemBtn).data("read", true).removeClass("btn-warning").addClass("btn-info").text("變更為已讀");
+                            return false;
+                        }
+                    });
+                    if (tablereadfalseAllELEs.length == 0) {
+                        $(titemBtn).data("read", true).removeClass("btn-warning").addClass("btn-info").text("變更為已讀");
+                        $(titem).appendTo($('#tablereadfalseAll>tbody'));                        
+                    }
+                    showtablereadtrue(tablereadpagesize, parseInt($('#tablereadtrueSelectPage').html()));
+                    showtablereadfalse(tablereadpagesize, parseInt($('#tablereadfalseSelectPage').html()));
+                }
+
+                //
+            });
+            $("button[name^='rm']").click(function () {
+                var trm = $(this).attr("name").split("rm")[1];
+                var updata = {
+                    sn: trm
+                    };
+                $.post("@Url.Action("RemoveUserMessage", "Account",new { area=""})", updata, function (data) { });
+                $('tr:has(button[name="sn' + trm + '"])').remove();
+                showtablereadtrue(tablereadpagesize, parseInt($('#tablereadtrueSelectPage').html()));
+                showtablereadfalse(tablereadpagesize, parseInt($('#tablereadfalseSelectPage').html()));
+            });
+
+            $('#tablereadfalsechoosePageBtn').click(function () {
+                gotoreadfalseSelectPage();
+            });
+            $('#tablereadtruechoosePageBtn').click(function () {
+                gotoreadtrueSelectPage();
+            });
+            $('#tablereadfalsePageForwardBtn').click(function () {
+                var selectPage = parseInt($('#tablereadfalseSelectPage').html())+1;
+                showtablereadfalse(tablereadpagesize, selectPage);
+            });
+            $('#tablereadfalsePageBackwardBtn').click(function () {
+                var selectPage = parseInt($('#tablereadfalseSelectPage').html())-1;
+                showtablereadfalse(tablereadpagesize, selectPage);
+            });
+            $('#tablereadtruePageForwardBtn').click(function () {
+                var selectPage = parseInt($('#tablereadtrueSelectPage').html())+1;
+                showtablereadtrue(tablereadpagesize, selectPage);
+            });
+            $('#tablereadtruePageBackwardBtn').click(function () {
+                var selectPage = parseInt($('#tablereadtrueSelectPage').html())-1;
+                showtablereadtrue(tablereadpagesize, selectPage);
+            });
+        });
+        function gotoreadfalseSelectPage()
+        {
+            var tablereadfalseAll = $('#tablereadfalseAll>tbody>tr');
+            var maxPage = Math.ceil(tablereadfalseAll.length / tablereadpagesize);
+            var mixPage = 1;
+            var selectPage = parseInt($('#tablereadfalsechoosePage>input').val());
+            if (selectPage > maxPage)
+                selectPage = maxPage;
+            if (selectPage < mixPage)
+                selectPage = mixPage;
+            $('#tablereadfalsechoosePage>input').val(selectPage);
+            showtablereadfalse(tablereadpagesize, selectPage);
+        }
+        function gotoreadtrueSelectPage() {
+            var tablereadtrueAll = $('#tablereadtrueAll>tbody>tr');
+            var maxPage = Math.ceil(tablereadtrueAll.length / tablereadpagesize);
+            var mixPage = 1;
+            var selectPage = parseInt($('#tablereadtruechoosePage>input').val());
+            if (selectPage > maxPage)
+                selectPage = maxPage;
+            if (selectPage < mixPage)
+                selectPage = mixPage;
+            $('#tablereadtruechoosePage>input').val(selectPage);
+            showtablereadtrue(tablereadpagesize, selectPage);
+        }
+        function showtablereadfalse(pageSize, selectPage) {            
+            var tablereadfalseAll = $('#tablereadfalseAll>tbody>tr');
+            var tablereadfalsePage = $('#tablereadfalsePage');
+            var tablereadfalsetbody = $('#tablereadfalse>tbody');
+            var maxPage = Math.ceil(tablereadfalseAll.length / pageSize);
+            var mixPage = 1;
+            if (selectPage > maxPage)
+                selectPage = maxPage;
+            if (selectPage < mixPage)
+                selectPage = mixPage;
+            $('#tablereadfalseSelectPage').html(selectPage);
+            $('#tablereadfalsechoosePage>input').val(selectPage);
+            $(tablereadfalsePage).empty();
+            $(tablereadfalsetbody).empty();
+            for (var i = 1; i <= maxPage; i++)
+            {
+                var readtruePageBtn = $('<button></button>').addClass('btn btn-primary').html(i).click(function () {
+                    showtablereadfalse(pageSize, $(this).html())
+                });
+                $(tablereadfalsePage).append(readtruePageBtn);
+            }
+            var pageStart = pageSize * (selectPage-1);//index
+            var pageEnd = pageStart + pageSize;//index-1
+            $.each(tablereadfalseAll.slice(pageStart, pageEnd), function (id, children) {
+                $(children).clone(true, true).appendTo('#tablereadfalse>tbody');
+            });
+        };
+        function showtablereadtrue(pageSize, selectPage) {            
+            var tablereadtrueAll = $('#tablereadtrueAll>tbody>tr');
+            var tablereadtruePage = $('#tablereadtruePage');
+            var tablereadtruetbody = $('#tablereadtrue>tbody');
+            var maxPage = Math.ceil(tablereadtrueAll.length / pageSize);
+            var mixPage = 1;
+            if (selectPage > maxPage)
+                selectPage = maxPage;
+            if (selectPage < mixPage)
+                selectPage = mixPage;
+            $('#tablereadtrueSelectPage').html(selectPage);
+            $('#tablereadtruechoosePage>input').val(selectPage);
+            $(tablereadtruePage).empty();
+            $(tablereadtruetbody).empty();
+            for (var i = 1; i <= maxPage ; i++) {
+                var readtruePageBtn = $('<button></button>').addClass('btn btn-primary').html(i).click(function () {
+                    showtablereadtrue(pageSize, $(this).html())
+                });
+                $(tablereadtruePage).append(readtruePageBtn);
+            }
+            var pageStart = pageSize * (selectPage - 1);//index
+            var pageEnd = pageStart + pageSize;//index-1
+            $.each(tablereadtrueAll.slice(pageStart, pageEnd), function (id, children) {
+                $(children).clone(true, true).appendTo(tablereadtruetbody);
+            });
+        };
+    </script>
+    }

@@ -1,0 +1,337 @@
+﻿@model msit116apexLayout.Areas.Fund.ViewModels.FundViewModel
+@{
+    ViewBag.Title = "基金總覽";
+}
+@section styles{
+    <style>
+        .row {
+            background-color: #F5F5F5;
+            height: 4em;
+            padding-top: 1em;
+            margin-bottom: 1.5em;
+        }
+
+        .fundOverviewSelect {
+            width: 15em;
+            height: 2em;
+            text-align: center;
+        }
+
+        .dark {
+            width: 1.15em;
+            -webkit-filter: grayscale(1); /*沒有任何色彩的黑白影像*/
+        }
+
+        .blind {
+            width: 1.15em;
+            -webkit-filter: grayscale(0);
+        }
+        .red {
+            color: #CC0000;
+        }
+        .green {
+            color: #55AA00;
+        }
+
+        .t {
+            border-top: 1px solid black;
+        }
+        .textCenter {           
+            text-align:center;   
+           
+        }
+        .line{
+            border:1px solid red;
+        }
+        .margingLeft{
+            margin-left:300px;
+        }
+        .textWhite {
+            color: #FFFFFF;
+        }
+        
+    </style>
+
+}
+
+<div>
+    @*@Html.ActionLink("商品管理","Index","BackStage")*@
+    <div>
+        <form class="form-inline margingLeft">
+            <input type="text" id="textSearch" placeholder="請輸入基金名稱" aria-label="Search" style="width:50em" class="form-control mr-sm-2">
+            <button id="buttonSearch" class="btn btn-secondary my-2 my-sm-0" type="button">搜尋</button>
+        </form>
+    </div>
+    
+    <div>
+        <h1>圖片</h1>
+    </div>
+    <div>
+        <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb" style="background-color:	#444444">
+                @*<li class="breadcrumb-item"><a href="@Url.Action("Index","HomeFund")">Home</a></li>*@
+                <li class="breadcrumb-item active" aria-current="page" style="color:#DDAA00">基金總覽</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col" id="areaDiv">
+                @Html.DropDownListFor(Model => Model.FundArea.First().FundAreaName, new List<SelectListItem> { new SelectListItem { Value = "0", Text = "境內/境外" } }.Concat(Model.FundAreaList), new { @class = "fundOverviewSelect", id = "SelectArea" })
+            </div>
+            <div class="col" id="typeDiv">
+                @Html.DropDownListFor(Model => Model.FundGoods.First().FundType.FundTypeName, new List<SelectListItem> { new SelectListItem { Value = "0", Text = "基金類型" } }.Concat(Model.FundTypeList), new { @class = "fundOverviewSelect", id = "SelectType" })
+            </div>
+            <div class="col" id="cpyDiv">
+                @Html.DropDownListFor(Model => Model.FundGoods.First().FundCompany.FundCpyName, new List<SelectListItem> { new SelectListItem { Value = "0", Text = "基金系列" } }.Concat(Model.FundCompanyList), new { @class = "fundOverviewSelect", id = "SelectCpy" })
+            </div>
+            <div class="col" id="cryDiv">
+                @Html.DropDownListFor(Model => Model.FundGoods.First().FundCurrency.FundCurrencyName, new List<SelectListItem> { new SelectListItem { Value = "0", Text = "計價幣別" } }.Concat(Model.FundCurrencyList), new { @class = "fundOverviewSelect", id = "SelectCry" })
+            </div>
+        </div>
+    </div>
+    <div id="divTable">
+        @Html.Action("FundTable")
+    </div>
+
+    <div>
+        @if (ViewBag.idd != null)
+        { @Html.Action("Index", "CartAnalysis")}
+       
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#areaDiv').on('change', '#SelectArea', function () { AreaChangeCpyOptions() });
+            $('#typeDiv').on('change', '#SelectType', function () { TypeChangeCpyOptions() });
+            $('#cpyDiv').on('change', '#SelectCpy', function () { CpyChangeCpyOptions() });
+            $('#cryDiv').on('change', '#SelectCry', function () { CryChangeFundTable() });
+            $('#buttonSearch').on('click', function () { SearchFund() });
+            //$('#FundPerformance').on('click', '.forAlert', function () {
+            //    $(this).alert("嫁入");
+            //});
+            $('.forAlert').click(function () {
+               alert("已加入購物車");
+            });
+        });
+
+        function SetAreaEmpty() {
+            $('#SelectArea').empty();
+            $('#SelectArea').append($('<option></option>').val('0').text('境內/境外'));
+        }
+
+        function SetTypeEmpty() {
+            $('#SelectType').empty();
+            $('#SelectType').append($('<option></option>').val('0').text('基金類型'));
+        }
+
+        function SetCpyEmpty() {
+            $('#SelectCpy').empty();
+            $('#SelectCpy').append($('<option></option>').val('0').text('基金系列'));
+        };
+
+        function SetCryEmpty() {
+            $('#SelectCry').empty();
+            $('#SelectCry').append($('<option></option>').val('0').text('計價幣別'));
+        };
+
+        function SetSearchEmpty() {
+            $('#textSearch').val('');
+        }
+
+        function SetFundTableEmpty() {
+            $('#divTable').empty();
+        }
+
+        function ajaxAreaOptions() {
+            //產生 Type 下拉選單
+            $.ajax({
+                    url: '@Url.Action("GetAreaOptioin", "FundOverview",new { area="Fund"})',
+                    //data: { areaId: selectedAreaId, typeId: selectedTypeId, cpyId: selectedCpyId, cryId: selectedCryId },
+                    type: 'post',
+                    cache: false,
+                    anync: false,
+                    dataType: 'html',
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $('#SelectArea').append(data);
+                        }
+                    }
+            })
+        }
+
+        function ajaxTypeOptions(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId) {
+            //產生 Type 下拉選單
+            $.ajax({
+                    url: '@Url.Action("GetTypeOption", "FundOverview",new { area="Fund"})',
+                    data: { areaId: selectedAreaId, typeId: selectedTypeId, cpyId: selectedCpyId, cryId: selectedCryId },
+                    type: 'post',
+                    cache: false,
+                    anync: false,
+                    dataType: 'html',
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $('#SelectType').append(data);
+                        }
+                    }
+            })
+        }
+
+        function ajaxCompanyOptions(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId) {
+            //產生 Company 下拉選單
+                $.ajax({
+                    url: '@Url.Action("GetCpyOption", "FundOverview",new { area="Fund"})',
+                    data: { areaId: selectedAreaId, typeId: selectedTypeId, cpyId: selectedCpyId, cryId: selectedCryId },
+                    type: 'post',
+                    cache: false,
+                    anync: false,
+                    dataType: 'html',
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $('#SelectCpy').append(data);
+                        }
+                    }
+                })
+        }
+
+        function ajaxCurrencyOptions(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId) {
+            //產生Currency 下拉選單
+                $.ajax({
+                    url: '@Url.Action("GetCryOption", "FundOverview",new { area="Fund"})',
+                    data: { areaId: selectedAreaId, typeId: selectedTypeId, cpyId: selectedCpyId, cryId: selectedCryId },
+                    type: 'post',
+                    cache: false,
+                    anync: false,
+                    dataType: 'html',
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $('#SelectCry').append(data);
+                        }
+                    }
+                })
+        }
+
+        function ajaxDisplayFundOverAll(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId, searchWord) {
+                $.ajax({
+                    url: '@Url.Action("FundTable", "FundOverview", new { area="Fund"})',
+                    data: { areaId: selectedAreaId, typeId: selectedTypeId, cpyId: selectedCpyId, cryId: selectedCryId, searchFund: searchWord },
+                    type: 'post',
+                    cache: false,
+                    async: false,
+                    dataType: 'html',
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $('#divTable').empty();
+                            $('#divTable').html(data);
+                        }
+                    }
+                })
+        }
+
+        //DropDownList: Area 改變 Type, Company & Currency
+        function AreaChangeCpyOptions() {
+            var selectedAreaId = $.trim($('#SelectArea option:selected').val());
+            var selectedTypeId = "0";
+            var selectedCpyId = "0";
+            var selectedCryId = "0";
+            var searchWord = "";
+            // 判斷有無選擇Area
+            //if (selectedAreaId == 0)
+            //{
+                //設DropDownList: Type selected value = 0
+                //$("#SelectType option[value=0]").prop('selected', 'selected');
+                SetTypeEmpty()
+                SetCpyEmpty();
+                SetCryEmpty();
+                SetSearchEmpty()
+                //產生 Type 下拉選單
+                ajaxTypeOptions(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId)
+                //產生 Company 下拉選單
+                ajaxCompanyOptions(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId)
+                //產生Currency 下拉選單
+                ajaxCurrencyOptions(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId)
+                //產生FundTable
+                ajaxDisplayFundOverAll(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId, searchWord)
+        };
+
+        //DropDownList: Type 改變 Company & Currency
+        function TypeChangeCpyOptions() {
+            var selectedAreaId = $.trim($('#SelectArea option:selected').val());
+            var selectedTypeId = $.trim($('#SelectType option:selected').val());
+            var selectedCpyId = "0";
+            var selectedCryId = "0";
+            var searchWord = "";
+            // 判斷有無選擇Type
+            //if (selectedTypeId == 0)
+            //{
+                SetCpyEmpty();
+                SetCryEmpty();
+                SetSearchEmpty()
+
+                //產生 Company 下拉選單
+                ajaxCompanyOptions(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId);
+                //產生Currency 下拉選單
+                ajaxCurrencyOptions(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId);
+
+                //產生FundTable
+                ajaxDisplayFundOverAll(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId, searchWord);
+        };
+
+        //DropDownList: Company 改變 Currency
+        function CpyChangeCpyOptions() {
+            var selectedAreaId = $.trim($('#SelectArea option:selected').val());
+            var selectedTypeId = $.trim($('#SelectType option:selected').val());
+            var selectedCpyId = $.trim($('#SelectCpy option:selected').val());
+            var selectedCryId = "0";
+            var searchWord = "";
+
+            SetCryEmpty();
+            SetSearchEmpty()
+                //產生Currency 下拉選單
+                ajaxCurrencyOptions(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId);
+
+                //產生FundTable
+                ajaxDisplayFundOverAll(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId, searchWord);
+
+        };
+
+        function CryChangeFundTable() {
+            var selectedAreaId = $.trim($('#SelectArea option:selected').val());
+            var selectedTypeId = $.trim($('#SelectType option:selected').val());
+            var selectedCpyId = $.trim($('#SelectCpy option:selected').val());
+            var selectedCryId = $.trim($('#SelectCry option:selected').val());
+            var searchWord = "";
+            SetSearchEmpty();
+
+            ajaxDisplayFundOverAll(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId, searchWord);
+        }
+
+        @*<img id="idstar0" class="dark" src="@Href("~/Areas/Fund/Images/star.png")" alt="Images/star" />*@
+
+        function SearchFund() {
+            var selectedAreaId = "0";
+            var selectedTypeId = "0";
+            var selectedCpyId = "0";
+            var selectedCryId = "0";
+            var searchWord = $.trim($('#textSearch').val());
+            SetAreaEmpty();
+            SetTypeEmpty();
+            SetCpyEmpty();
+            SetCryEmpty();
+            //產生 Area 下拉選單
+            ajaxAreaOptions()
+            //產生 Type 下拉選單
+            ajaxTypeOptions(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId)
+            //產生 Company 下拉選單
+            ajaxCompanyOptions(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId)
+            //產生Currency 下拉選單
+            ajaxCurrencyOptions(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId)
+            //產生FundTable
+            ajaxDisplayFundOverAll(selectedAreaId, selectedTypeId, selectedCpyId, selectedCryId, searchWord)
+        }
+
+    </script>
+}

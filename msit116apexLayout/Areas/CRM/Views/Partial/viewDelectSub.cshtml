@@ -1,0 +1,117 @@
+﻿@model IEnumerable<msit116apexLayout.Areas.CRM.Models.UserData>
+
+<script src="~/Areas/CRM/Script/datatables.min.js"></script>
+<link href="~/Areas/CRM/Script/datatables.min.css" rel="stylesheet" />
+
+@section styles{
+    <style>
+        #overlay {
+            position: fixed; /* Sit on top of the page content */
+            display: none; /* Hidden by default */
+            width: 100%; /* Full width (cover the whole page) */
+            height: 100%; /* Full height (cover the whole page) */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+            z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+            cursor: pointer; /* Add a pointer on hover */
+        }
+
+        .textOverlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 50px;
+            color: white;
+            user-select: none;
+            transform: translate(-50%,-50%);
+            -ms-transform: translate(-50%,-50%);
+        }
+
+        .masterdiv {
+            margin: 2em
+        }
+
+        .nakadiv {
+            margin: 1em
+        }
+
+        .monostyle {
+            width: 400px
+        }
+
+        .h {
+            margin-left: 4em
+        }
+
+        .content {
+            width: 1000px;
+            height: 15em
+        }
+    </style>
+}
+<div style="margin-right:10em">
+    <div class="row">
+        <h2 class="h">刪除會員關聯</h2>
+    </div>
+    <hr />
+</div>
+
+
+<div style="">
+
+    @using (Html.BeginForm())
+    {
+        <div style="margin-left:3em">
+            <table id="table" class="table table-hover" style="width:1800px">
+                <thead id="userTh" style="background-color:gold">
+                    <tr>
+                        <th style="width:280px;padding-left:5.2em"><h3>頭像</h3></th>
+                        <th style="width:200px;padding-left:1.5em"><h3>會員姓名</h3></th>
+                        <th style="padding-left:2em;width:150px"><h3 style="width:3em">職稱</h3> </th>
+                        <th style="width:10em"><h3 style="padding-left:1em">生日</h3></th>
+                        <th style="padding-left:2em;width:350px"><h3>電子郵件</h3></th>
+                        <th style="padding-left:3em"><h3>手機號碼</h3></th>
+                        <th style="width:200px;padding-left:1em"><h3>刪除關聯</h3></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var n in Model)
+                {
+                    string BirthDay = "";
+                    if (n.BirthDay != null)
+                    {
+                        BirthDay = n.BirthDay.Value.ToShortDateString();
+                    }
+
+                    <tr>
+                        <td style="background-color:burlywood;padding-left:0em">
+                            <img style="height:160px;width:160px;border-radius:50%; margin-left:3em" src="@Url.Action("GetUserImageFile", "InterviewRecords", new { area = "CRM", userid = n.UserID })" />
+                        </td>
+                        <td style="padding-top:4.3em;padding-left:2.5em"><h5> @n.Name</h5></td>
+                        <td style="padding-top:4.3em;padding-left:1.5em"><h5>@n.Title</h5></td>
+                        <td style="padding-top:4.3em;padding-left:3em"><h5>@BirthDay</h5></td>
+                        <td style="padding-top:4.3em;padding-left:1.5em;width:350px"><h5>@n.Email</h5></td>
+                        <td style="padding-top:4.3em;padding-left:3em"><h5>@n.Telephone</h5></td>
+                        <td style="padding-top:2.3em;padding-left:0px">
+                            <a href="@Url.Action("DelectSub", "Partial", new { area = "CRM", Userid = n.UserID })" class="btn btn-primary" style="margin-top:1em; margin-left:3em">刪除</a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    }
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#subTable").DataTable();
+        })
+    </script>
+}
+
+

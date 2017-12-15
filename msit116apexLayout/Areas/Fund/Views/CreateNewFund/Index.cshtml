@@ -1,0 +1,70 @@
+﻿@model IEnumerable<msit116apexLayout.Models.FundMaster>
+
+@{
+    ViewBag.Title = "基金資料庫";
+}
+
+<h2>基金資料庫</h2>
+
+<p>
+    @Html.ActionLink("新增基金", "Create","CreateNewFund")
+    @Html.ActionLink("返回基金管理","Index","BackStage")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FundName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SetUpDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Location)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Custodian)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FundScale)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StarRank)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FundStatus)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FundName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SetUpDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Location)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Custodian)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FundScale)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StarRank)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FundStatus)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.FundID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.FundID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.FundID })
+        </td>
+    </tr>
+}
+
+</table>

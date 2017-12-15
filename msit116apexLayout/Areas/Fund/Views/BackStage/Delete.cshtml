@@ -1,0 +1,99 @@
+﻿@model msit116apexLayout.Models.FundGoods
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<div>
+    <nav aria-label="breadcrumb" role="navigation">
+        <ol class="breadcrumb" style="background-color:	#444444">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index","BackStage")" style="color:#FFFFFF">基金管理</a></li>
+            <li class="breadcrumb-item active" aria-current="page" style="color:#DDAA00">移除基金</li>
+        </ol>
+    </nav>
+</div>
+@*<h2>Delete</h2>*@
+<br />
+<br />
+<br />
+<h1 style="text-align:center"><span class="badge badge-secondary">是否確定移除 @Html.DisplayFor(model => model.FundMaster.FundName)</span></h1>
+<div>
+    @*<h4>FundGoods</h4>*@
+    <hr />
+    @*<dl class="dl-horizontal">
+
+        <dt style="background-color:#333333; color:white;width:100px;text-align:center">
+            @Html.DisplayNameFor(model => model.FundMaster.FundName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FundMaster.FundName)
+        </dd>
+        
+        <dt style="background-color:#333333; color:white;width:100px;text-align:center">
+            @Html.DisplayNameFor(model => model.FundArea.FundAreaName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FundArea.FundAreaName)
+        </dd>*@
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.ClickRate)
+        </dt>*@
+
+        @*<dd>
+            @Html.DisplayFor(model => model.ClickRate)
+        </dd>*@
+
+        @*<dt style="background-color:#333333; color:white;width:100px;text-align:center">
+            @Html.DisplayNameFor(model => model.FundType.FundTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FundType.FundTypeName)
+        </dd>
+
+        <dt style="background-color:#333333; color:white;width:100px;text-align:center">
+            @Html.DisplayNameFor(model => model.ChargeFee.ChargeFeeCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ChargeFee.ChargeFeeCode)
+        </dd>
+
+        <dt style="background-color:#333333; color:white;width:100px;text-align:center">
+            @Html.DisplayNameFor(model => model.FundCompany.FundCpyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FundCompany.FundCpyName)
+        </dd>
+
+        <dt style="background-color:#333333; color:white;width:100px;text-align:center">
+            @Html.DisplayNameFor(model => model.FundCurrency.FundCurrencyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FundCurrency.FundCurrencyName)
+        </dd>
+      
+        @*<dt style="background-color:#333333; color:white;width:100px;text-align:center">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>*@
+
+    @*</dl>*@
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color" style="text-align:center">
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            @Html.ActionLink("Back to List", "Index",null,new { @class = "btn btn-dark" })
+        </div>
+    }
+</div>

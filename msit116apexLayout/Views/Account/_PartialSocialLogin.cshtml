@@ -1,0 +1,31 @@
+﻿@using Microsoft.Owin.Security
+<section id="socialLoginForm">
+    @{
+        var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+        if (loginProviders.Count() != 0)
+        {
+            using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = ViewBag.ReturnUrl }))
+            {
+                <div id="socialLoginList">
+                    @foreach (AuthenticationDescription p in loginProviders)
+                    {
+                        <button type="submit" class="outSignIn" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="使用 @p.Caption 登入">
+                            <div>
+                                <img id="@string.Format("outSignInPng{0}",@p.AuthenticationType)" src="" />
+                            </div>
+                            <div>
+                                <span class="RobotoButtonText">Sign in with @p.AuthenticationType</span>
+                            </div>
+                        </button>
+                    }
+                </div>
+            }
+        }
+    }
+</section>
+<script>
+        $(function () {
+            $("#outSignInPngGoogle").attr("src","@Url.Content("~/Images/googleSignIn.png")");
+            $("#outSignInPngFacebook").attr("src","@Url.Content("~/Images/facebookSignIn.png")");
+        });
+</script>

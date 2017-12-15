@@ -1,0 +1,25 @@
+﻿@model IEnumerable<msit116apexLayout.Models.Leave>
+    <table class="table " lay-filter="parse-table-demo">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    1
+                </th>
+                <th>
+                    1
+                </th>
+
+            </tr>
+            </thead>
+@foreach (var item in Model)
+{
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lav_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lav_ID)
+            </td>
+        </tr>
+}
+            </table>

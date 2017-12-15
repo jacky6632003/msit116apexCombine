@@ -1,0 +1,145 @@
+﻿@using msit116apexLayout.Models
+@using GoogleRecaptchaMvc
+@model LoginViewModel
+@{
+    ViewBag.Title = "登入";
+}
+@section styles{
+    <style>
+        .tmpDivWidth {
+            width: 800px;
+        }
+        .form-inline {
+            margin: 3px;
+        } 
+        .form-inline > label {
+            display: inline-block;
+        }
+    </style>
+
+}
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="card">
+            <h4 class="card-header bg-info text-white">
+                登入
+            </h4>
+            <div class="card-body">
+                <section id="loginForm">
+                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal tmpDivWidth", role = "form" }))
+            {
+                        @Html.ValidationSummary("", new { @class = "text-danger" })
+                        <div class="form-inline">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label xtextAlignRight" })
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        </div>
+                        <div class="form-inline">
+                            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label xtextAlignRight" })
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            <label>點選複製</label>
+                            <input id="fastCopypwd" type="text" value="P@ssw0rd" />
+                        </div>
+                        <div class="form-inline">
+                            @Html.CheckBoxFor(m => m.RememberMe, new { @class = "col-md-2 xtextAlignRight" })
+                            @Html.LabelFor(m => m.RememberMe, new { @class = "form-control" })
+                        </div>
+                        <script src='https://www.google.com/recaptcha/api.js'></script>
+                        <div class="form-inline">
+                            <div class="col-md-2"></div>
+                            @Html.RecaptchaV2("6LfqzzcUAAAAAMh8ccBhPoZasdTLMohzY1TNk2_2")
+                        </div>
+                        <div class="form-inline">
+                            <div class="col-sm-2"></div>
+                            <label for="dontcheckgrc">不進行GoogleRecaptcha檢查</label>
+                            <input id="dontcheckgrc" name="dontcheckgrc" type="checkbox" />
+                        </div>
+                        <div class="form-inline">
+                            <div class="col-sm-2"></div>
+                            <button id="demoLoginyacBtn" type="button">Demo 註冊及管理帳號 登入</button>
+                        </div>
+                        <div class="form-inline">
+                            <div class="col-sm-2"></div>
+                            <button id="demoLoginyasBtn" type="button">Demo 系統管理員yas 登入</button>
+                        </div>
+                        <div class="form-inline">
+                            <div class="col-sm-2"></div>
+                            <button id="demoLogin666Btn" type="button">Demo 666@gmail.com 登入</button>
+                        </div>
+                        <div class="form-inline">
+                            <div class="col-sm-2"></div>
+                            <button id="demoLoginxBtn" type="button">Demo x@x.com 登入</button>
+                        </div>
+                        <div class="form-inline">
+                            <div class="col-sm-2"></div>
+                            <button id="demoLoginSE1Btn" type="button">Demo SE1@gmail.com 登入</button>
+                        </div>
+                        <div class="form-inline">
+                            <div class="col-md-2"></div>
+                            <input id="btnloginsubmit" type="submit" value="登入" class="btn btn-primary" />
+                        </div>
+                    }
+                </section>
+                <br />
+                <div class="tmpDivWidth">
+                    <div class="form-inline">
+                        <div class="col-md-2 control-label xtextAlignRight">外部登入</div>
+                        <div>@Html.Partial("_PartialSocialLogin")</div>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+@section scripts{
+<script>
+    $(function () {
+        $("#fastCopypwd").click(function () {
+            $(this).select();
+            document.execCommand('copy');
+        });
+        $("#demoLoginyacBtn").click(function () {
+            $('#Password').val("P@ssw0rd");
+            $('#dontcheckgrc').prop("checked", true);
+            $('#Email').val("ycwaspclient@gmail.com");
+            $('#btnloginsubmit').click();
+        });
+        $("#demoLoginyasBtn").click(function () {
+            $('#Password').val("P@ssw0rd");
+            $('#dontcheckgrc').prop("checked", true);
+            $('#Email').val("ycwaspserver@gmail.com");
+            $('#btnloginsubmit').click();
+        });
+        $("#demoLoginm116Btn").click(function () {
+            $('#Password').val("P@ssw0rd");
+            $('#dontcheckgrc').prop("checked", true);
+            $('#Email').val("msit116apex@gmail.com");
+            $('#btnloginsubmit').click();
+        });
+        $("#demoLogin666Btn").click(function () {
+            $('#Password').val("P@ssw0rd");
+            $('#dontcheckgrc').prop("checked", true);
+            $('#Email').val("666@gmail.com");
+            $('#btnloginsubmit').click();
+        });
+        $("#demoLoginxBtn").click(function () {
+            $('#Password').val("P@ssw0rd");
+            $('#dontcheckgrc').prop("checked", true);
+            $('#Email').val("x@x.com");
+            $('#btnloginsubmit').click();
+        });
+        $("#demoLoginSE1Btn").click(function () {
+            $('#Password').val("P@ssw0rd");
+            $('#dontcheckgrc').prop("checked", true);
+            $('#Email').val("SE1@gmail.com");
+            $('#btnloginsubmit').click();
+        });
+    });
+</script>
+    }

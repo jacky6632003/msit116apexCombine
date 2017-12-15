@@ -1,0 +1,154 @@
+﻿@using Microsoft.AspNet.Identity
+@model msit116apexLayout.Models.ProcedureGetUserData_Result
+
+    <style>
+        p {
+            font-weight: bold;
+        }
+
+        .form-inline{
+            margin:6px;
+        } 
+        .form-inline > label {
+            display: inline-block;
+        }
+        .row-Title{
+            font-weight:bold;
+            font-size:18px;
+        }
+    </style>
+@*<script src="~/Scripts/jquery-3.2.1.min.js"></script>*@
+
+@using (Html.BeginForm("ChangeUserPersonData", "Manage", new { area = "" }, FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data", role = "form", id = "changeUserPersonForm" }))
+{
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3">
+            <div class="row-Title">
+                頭像
+            </div>
+            <img id="ImagePhoto" style="height:200px;width:200px;border-radius:50%" />
+            <input id="Photo" name="Photo" type="file" class="btn btn-info" style="width:100px" />
+        </div>
+        <div class="col-sm-8">
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            <div class="form-inline">
+                @Html.LabelFor(p => p.UserName, new { @class = "col-md-3 control-label xtextAlignRight row-Title" })
+                @Html.DisplayFor(p => p.UserName)
+            </div>
+            <div class="form-inline">
+                @Html.LabelFor(p => p.Email, new { @class = "col-md-3 control-label xtextAlignRight row-Title" })
+                @Html.DisplayFor(p => p.Email)
+            </div>
+            <div class="form-inline">
+                <label class="col-md-3 control-label xtextAlignRight row-Title">帳號種類</label>
+                @ViewBag.AccountType
+            </div>
+            <div class="form-inline">
+                @Html.LabelFor(p => p.BirthDay, new { @class = "col-md-3 control-label xtextAlignRight row-Title" })
+                <label>@string.Format("{0:yyyy-MM-dd}", Model.BirthDay)</label>               
+            </div>
+            <div class="form-inline">
+                @Html.LabelFor(p => p.PhoneNumber, new { @class = "col-md-3 control-label xtextAlignRight row-Title" })
+                @Html.EditorFor(p => p.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+            <div class="form-inline">
+                @Html.LabelFor(p => p.Telephone, new { @class = "col-md-3 control-label xtextAlignRight row-Title" })
+                @Html.EditorFor(p => p.Telephone, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+            <div class="form-inline">
+                @Html.LabelFor(p => p.ResidenceAddress, new { @class = "col-md-3 control-label xtextAlignRight row-Title" })
+                @Html.DisplayFor(p => p.ResidenceAddress)
+            </div>
+            <div class="form-inline">
+                @Html.LabelFor(p => p.MailingAddress, new { @class = "col-md-3 control-label xtextAlignRight row-Title" })
+                @Html.EditorFor(p => p.MailingAddress, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+            <div class="form-inline">
+                @Html.LabelFor(p => p.Name, new { @class = "col-md-3 control-label xtextAlignRight row-Title" })
+                @Html.DisplayFor(p => p.Name)
+            </div>
+            <div class="form-inline">
+                @Html.LabelFor(p => p.Title, new { @class = "col-md-3 control-label xtextAlignRight row-Title" })
+                @Html.DisplayFor(p => p.Title)
+            </div>
+            <div class="form-inline">
+                @Html.LabelFor(p => p.Country, new { @class = "col-md-3 control-label xtextAlignRight row-Title" })
+                @Html.EditorFor(p => p.Country, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+            <div class="form-inline">
+                @Html.LabelFor(p => p.IdentityCardNumber, new { @class = "col-md-3 control-label xtextAlignRight row-Title" })
+                @Html.DisplayFor(p => p.IdentityCardNumber)
+            </div>
+            <div class="form-inline">
+                <div class="col-md-3 control-label xtextAlignRight row-Title"></div>
+                <button id="demoChangeUserDateBtn" type="button">Demo</button>
+            </div>
+            <div class="form-inline">
+                <div class="col-md-3"></div>
+                <button id="btnChangeUserPersonDataSubmit" type="button" class="btn btn-success">更新</button>
+            </div>
+        </div>
+    </div>
+    
+    
+}
+
+@if (TempData["AlertConfirm"] != null)
+{
+    <script type="text/javascript">
+        var message = @Html.Raw(Json.Encode(TempData["AlertConfirm"]));
+        alert(message);
+    </script>
+}
+
+<script>
+        $(function () {
+            $("#demoChangeUserDateBtn").click(function () {
+                $('#PhoneNumber').val("0939580802");
+                $('#Telephone').val("05311590");
+                $('#MailingAddress').val("桃園市 復興區 庫志 60巷 71弄 592號 11樓");
+                $('#Country').val("台灣");
+            });
+
+        var d = new Date();
+        $('#ImagePhoto').attr('src', '@Url.Action("GetImageFile","Account",new { area=""})'+'?'+d);
+        $("#Photo").change(fileViewer);
+        function fileViewer() {
+            var files = document.getElementById("Photo").files;
+            for (var i = 0; i < files.length; i++) {
+                var reader = new FileReader();
+                reader.readAsDataURL(files[i]);
+                reader.onload = function (e) {
+                    var fileContent = e.target.result;
+                    var imgEle = document.getElementById("ImagePhoto");
+                    imgEle.setAttribute("src", fileContent);
+                    $("#Photo").css('width','200px');
+                }
+            }
+        };
+
+
+        $('#btnChangeUserPersonDataSubmit').click(function () {
+            var fdata = new FormData();
+            var file = document.getElementById("Photo").files[0];
+            var formArray = $('#changeUserPersonForm').serializeArray();
+            for (var i = 0; i < formArray.length; i++) {
+                fdata.append(formArray[i]['name'], formArray[i]['value']);
+            };
+            fdata.append("Photo", file);
+            $.ajax({
+                type: 'post',
+                url: '@Url.Action("ChangeUserPersonData", "Manage", new { area = "" })',
+                data: fdata,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    $('#userPersonData').html(data);
+                }
+            });
+        });
+
+    });
+</script>
+

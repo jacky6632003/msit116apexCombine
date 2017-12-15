@@ -1,0 +1,221 @@
+﻿
+@model msit116apexLayout.Models.uRolePowerConfirm
+
+
+@using (Html.BeginForm("EditRoleConfirm", "PowerConfirm", new { area = "" }, FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "editRoleConfirmForm" }))
+{
+    if (@Model != null)
+    {
+    <input type="hidden" id="uRolePowerSn" name="uRolePowerSn" value="@Model.uRolePowerSn"/>
+    }
+    else
+    {
+        <input type="hidden" id="uRolePowerSn" name="uRolePowerSn" value="-1" />
+    }
+        
+    <div class="form-group">
+        @Html.LabelFor(n => n.uEachRoleMinNum, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.uEachRoleMinNum, new { htmlAttributes = new { @class = "form-control",min="0" } })            
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(n => n.uTotlaRoleMinNum, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.uTotlaRoleMinNum, new { htmlAttributes = new { @class = "form-control", min = "0" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(n => n.rolePriority, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.rolePriority, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(n => n.maxDay, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.EditorFor(m => m.maxDay, new { htmlAttributes = new { @class = "form-control", min = "0" } })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class = "col-md-3">覆核角色</label>
+        <div class="form-inline">
+            <div id="selectViewRoleConfirmRoleDiv">
+
+            </div>
+            <input id="btnAddUserToRoleCR" type="button" class="btn btn-primary" value="+" />
+            <input id="ECroleListOption1" type="radio" name="ECroleListOptions" value="-1"/>
+            <label for="ECroleListOption1">無</label>
+            <input id="ECroleListOption2" type="radio" name="ECroleListOptions" value="1" checked/>
+            <label for="ECroleListOption2">只顯示上一層主管</label>
+            <input id="ECroleListOption3" type="radio" name="ECroleListOptions" value="2"/>
+            <label for="ECroleListOption3">顯示所有上級主管</label>
+        </div>
+        
+        <div>
+            <ul id="selectedRCRolesUL">
+
+            </ul>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12">
+            <span>
+                當使用者擁有多個角色時，依據下列條件順序選擇使用的角色覆核設定：
+            </span>
+            <span>1.以優先度最高的，如無設定優先度為最低。</span>
+            <span>2.以'覆核角色'中階層最高的</span>
+            <span>3.以'覆核角色'需要角色最多的</span>
+            <span>4.以'所有角色最少確認人數'最多的</span>
+            <span>5.以'每個角色最少確認人數'最多的</span>
+            <span>6.以'角色創建時間'最早的</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input id="btnEditRoleConfirmSubmit" type="button" value="完成編輯" class="btn btn-primary" />
+        </div>
+    </div>
+}
+
+
+
+<script>
+    $(function () {
+        var urpSn = parseInt($("#uRolePowerSn").val());
+        if (!urpSn)
+            urpSn = -1;
+        $.get("@Url.Action("EditRoleConfirmRole", "PowerConfirm", new { area=""})?urpSn=" + urpSn, null, function (data) {
+            $.each(data, function (idv, objv) {
+                var labelname = $('<label>' + objv.uRoles.uRoleName + '</label>');
+                var labelname2 = $('<label>&lt部門: ' + objv.Department + '&gt</label>');
+                var labelname3 = $('<label>&lt主管: ' + objv.uRoleSurName + '&gt</label>');
+                var reruBtn = $('<input type="button" class="btn btn-primary" value="-" />');
+                var addli = $("<li name=lirid" + objv.uRoles.uRoleID + "></li>")
+                    .append(labelname)
+                    .append(labelname2)
+                    .append(labelname3)
+                    .append(reruBtn)
+                    .data("rn", objv.uRoles.uRoleName)
+                    .data("d", objv.Department)
+                    .data("rsn", objv.uRoleSurName);
+                var eruList = $("#selectedRCRolesUL");
+                $(eruList).append(addli);
+            });
+        });
+        $.get("@Url.Action("ECGetRolesList", "PowerConfirm", new { area=""})?roleID=" + $('#selectViewRoleConfirmSelect').val() + "&options=" + $('input:radio[name="ECroleListOptions"]:checked').val(), null, function (data) {
+                var sx1s = $('<select id="selectVRCRSelect"></select>').addClass('form-control').prepend("<option value=''>請選擇</option>");
+                $.each(data, function (idv, objv) {
+                    var sx1 = $("<option></option>")
+                        .attr("value", objv.uRoles.uRoleID)
+                        .data("rn", objv.uRoles.uRoleName)
+                        .data("d", objv.Department)
+                        .data("rsn", objv.uRoleSurName)
+                        .text(objv.uRoles.uRoleName + "<部門:" + objv.Department + "><主管:" + objv.uRoleSurName + ">");
+                    sx1s.append(sx1);
+                });
+                $('#selectViewRoleConfirmRoleDiv').html(sx1s);
+        });
+        $('input:radio[name="ECroleListOptions"]').change(function () {
+            var ecrval = $(this).val();
+            var roleID = $('#selectViewRoleConfirmSelect').val();
+            switch (ecrval)
+            {
+                case "1":
+                case "2":
+                case "-1":
+                    $.get("@Url.Action("ECGetRolesList", "PowerConfirm", new { area=""})?roleID=" + roleID + "&options=" + ecrval, null, function (data) {
+                        var sx1s = $('<select id="selectVRCRSelect"></select>').addClass('form-control').prepend("<option value=''>請選擇</option>");
+                        $.each(data, function (idv, objv) {
+                            var sx1 = $("<option></option>")
+                                .attr("value", objv.uRoles.uRoleID)
+                                .data("rn", objv.uRoles.uRoleName)
+                                .data("d", objv.Department)
+                                .data("rsn", objv.uRoleSurName)
+                                .text(objv.uRoles.uRoleName + "<部門:" + objv.Department + "><主管:" + objv.uRoleSurName+">");
+                            sx1s.append(sx1);
+                        });
+                        $('#selectViewRoleConfirmRoleDiv').html(sx1s);
+                    });
+                default:
+                    break;
+            }
+        });
+        $("#btnAddUserToRoleCR").click(function () {
+            var utxt = $("#selectVRCRSelect option:selected");
+            var labelname = $('<label>' + utxt.data("rn") + '</label>');
+            var labelname2 = $('<label>&lt部門: ' + utxt.data("d") + '&gt</label>');
+            var labelname3 = $('<label>&lt主管: ' + utxt.data("rsn") + '&gt</label>');
+            var reruBtn = $('<input type="button" class="btn btn-primary" value="-" />');
+            var addli = $("<li name=lirid" + $(utxt).val() + "></li>")
+                .append(labelname)
+                .append(labelname2)
+                .append(labelname3)
+                .append(reruBtn)
+                .data("rn", utxt.data("rn"))
+                .data("d", utxt.data("d"))
+                .data("rsn", utxt.data("rsn"));
+            var eruList = $("#selectedRCRolesUL");
+            //var limitLength = $("#editRoleUserLimit").val();
+            var currentLength = $("#selectedRCRolesUL li").length;
+            if ($(eruList).children("li[name='lirid" + $(utxt).val()+"']").length == 0) {
+                //if (limitLength > currentLength)
+                    $(eruList).append(addli);
+            }
+        });
+        $("#selectedRCRolesUL").on('click', "input[value='-']", function () {
+            $(this).parent().remove();
+        });
+        $('#btnEditRoleConfirmSubmit').click(function () {
+            var eruList = $("#selectedRCRolesUL li");
+            var returnArray = {};
+            returnArray["roleID"] = $('#selectViewRoleConfirmSelect').val();
+            returnArray["powerID"] = $('#selectRoleCEditPower').val();
+            var count = 1;
+            $.each(eruList, function () {
+                var uname = "crID" + count;
+                returnArray[uname] = $(this).attr("name").split("lirid")[1];
+                count = count + 1;
+            });
+
+            var formArray = $('#editRoleConfirmForm').serializeArray();
+            var returnArray1 = {};
+            for (var i = 0; i < formArray.length; i++) {
+                returnArray1[formArray[i]['name']] = formArray[i]['value'];
+            };
+            returnArray1["roleID"] = $('#selectViewRoleConfirmSelect').val();
+            returnArray1["powerID"] = $('#selectRoleCEditPower').val();
+            var pid = $('#selectRoleCEditPower').val();
+
+            $.post('@Url.Action("EditRoleConfirm", "PowerConfirm", new { area = "" })', returnArray1, function (data) {
+                //Finsehed Update
+                $('#returnMessage1').text(data).css("display", "block");
+                var msg1 = data;
+                $.post('@Url.Action("EditRoleConfirmRole", "PowerConfirm", new { area = "" })', returnArray, function (data) {
+                    $('#returnMessage2').text(data).css("display", "block");
+                    //Finsehed Update
+                    var msg2 = data;
+                    if (msg1 == "角色覆核人數設定更新成功")
+                        if (msg2 == "角色覆核角色更新成功")
+                        {
+                            var eul = $('#urpEditID' + $('#selectRoleCEditPower').val()).parent().next("ul");
+                            eul.html("");
+                            $.each(eruList, function () {
+                                console.log($(this).data("rn"));
+                                var editedeurli = $('<li></li>').text($(this).data("rn") + "<" + $(this).data("d") + ">");
+                                eul.append(editedeurli);
+                            });
+                        }
+
+                    //Reload
+                    @*$.get("@Url.Action("EditRoleConfirm", "PowerConfirm", new { area=""})?upowerID=" + pid, function (data) {
+
+                        $('#loadEditRoleConfirmRole').html(data);
+                    });*@
+                });
+            });
+
+
+        });
+    });
+</script>

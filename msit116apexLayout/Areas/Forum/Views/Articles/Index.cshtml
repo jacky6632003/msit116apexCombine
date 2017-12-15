@@ -1,0 +1,39 @@
+﻿@model IEnumerable<msit116apexLayout.Models.Article>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>新聞區</h2>
+
+<p>
+    @Html.ActionLink("發布新聞", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Articlename)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Articlecontent)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.ActionLink(item.Articlename, "Details", new { id = item.ArticleID })
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Articlecontent)
+        </td>*@
+        <td>
+            @Html.ActionLink("修改新聞", "Edit", new { id=item.ArticleID }) |
+            |
+            @Html.ActionLink("刪除新聞", "Delete", new { id=item.ArticleID })
+        </td>
+    </tr>
+}
+
+</table>

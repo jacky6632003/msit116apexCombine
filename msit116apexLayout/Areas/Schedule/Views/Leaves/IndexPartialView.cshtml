@@ -1,0 +1,42 @@
+﻿@using (Html.BeginForm("Index", "Leaves", FormMethod.Get, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+    <div class="alert alert-secondary">
+        <div class="form-inline">
+            
+            
+            <select id="year" name="year" class="color1 form-control inline" style="width:170px;"></select>&nbsp;&nbsp;
+            <input type="submit" value="搜尋" name="test" class="btn btn-default" id="submit" />
+            &nbsp;&nbsp;
+            @Html.ActionLink("匯出", "ExportToExcel", "Leaves", new { year = Request.QueryString["year"] }, new { @class = "btn btn-primary" })
+            &nbsp;&nbsp;
+            @Html.ActionLink("新增假單", "Create",null, new { @class = "btn btn-danger" })
+        </div>
+        
+    </div>
+    
+    <script>
+        var Today = new Date();
+        var toyear = Today.getYear() + 1900;
+        var mySelect = document.getElementById("year");
+        var NewOption = document.createElement("option");
+        NewOption.text = "==選擇全部==";
+        NewOption.value = 0;
+        mySelect.add(NewOption, null); 
+        for (i = toyear; i>=2015; i--) {   //新增年
+            var opt = window.document.createElement("option");  //<option >
+            //opt.setAttribute("value", i);  //<option value=1,2...>
+            //var optTxt = document.createTextNode(i);  //1,2,3.....
+            //opt.appendChild(optTxt);  //<option value=1>1</option>
+            opt.value = i;
+            opt.innerHTML = i;
+            document.getElementById('year').appendChild(opt);
+
+
+        }
+
+        
+        //$("#year").val('toyear');
+        //$('#year').val(toyear);
+    </script>
+
+}

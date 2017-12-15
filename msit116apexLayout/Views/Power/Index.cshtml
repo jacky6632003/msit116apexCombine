@@ -1,0 +1,251 @@
+﻿@model msit116apexLayout.Models.PowerViewModel
+@{
+    ViewBag.Title = "角色權限管理";
+}
+
+@section styles{
+    <style>
+        #overlayLoadAct {
+            height: 100%;
+            width: 100%;
+            display: none;
+            position: fixed;
+            z-index: 10001;
+            top: 0;
+            left: 0;
+            background-color: rgba(0,0,0, 0);
+        }
+
+        #overlayLoadActContent {
+            height: 50%;
+            width: 50%;
+            position: fixed;
+            z-index: 10002;
+            top: 25%;
+            left: 25%;
+            background-color: black;
+            color:white;
+        }
+        #overlayLoadAct #overlayLoadActClosebtn {
+            padding: 8px;
+            text-decoration: none;
+            font-size: 60px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+            position: absolute;
+            z-index: 10003;
+            top: 25%;
+            right: 25%;
+        }
+
+            #overlayLoadAct #overlayLoadActClosebtn:hover {
+                cursor: pointer;
+                color: #f1f1f1;
+            }
+    </style>
+    }
+
+<div class="row">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-10">
+        <div class="card">
+            <h4 class="card-header bg-info text-white">角色權限管理</h4>
+            <div class="card-body">
+
+                <div id="tabs">
+                    <ul>
+                        <li><a href="#tabs-4">檢視</a></li>
+                        <li><a href="#tabs-1">新增</a></li>
+                        <li><a href="#tabs-2">編輯</a></li>
+                        <li><a href="#tabs-3">刪除</a></li>
+                    </ul>
+                    <div id="tabs-4" style="padding:0">
+                        <div id="tabs1">
+                            <ul>
+                                <li><a href="#tabs-11">權限檢視圖</a></li>
+                                <li><a href="#tabs-12">角色階層圖</a></li>
+                            </ul>
+                            <div id="tabs-11">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="loadViewRoleFromPowerContent" style="border:1px black solid;">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tabs-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="loadViewRoleLevelContent" style="border:1px black solid;">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tabs-1">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div id="loadNewRoleContent" style="border:1px black solid;">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tabs-2">
+
+                        <div class="row">
+                            <div id="selectEditRoleDiv" class="col-md-4">
+                                @*@Html.DropDownList("selectEditRole", Model.roles, "請選擇", new { @class = "form-control" })*@
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>角色</label>
+                                <div id="loadEditRoleContent" style="border:1px black solid;">
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label>權限</label>
+                                <div id="loadEditRolePowerContent" style="border:1px black solid;">
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label>使用者</label>
+                                <div id="loadEditRoleUserContent" style="border:1px black solid;">
+
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div id="tabs-3">
+                        <div class="row">
+                            <div id="selectRemoveRoleDiv" class="col-md-4">
+                                @*@Html.DropDownList("selectRemoveRole", Model.roles, "請選擇", new { @class = "form-control" })*@
+                            </div>
+                        </div>
+                        
+                        <input id="btnRemoveRole" class="btn btn-danger" value="刪除" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="overlayLoadAct">
+    <a id="overlayLoadActClosebtn">&times;</a>
+    <div id="overlayLoadActContent">
+    </div>
+</div>
+
+
+
+
+
+
+@section scripts{
+    <script>
+        $(function () {
+            $.get("@Url.Action("GetRolesList", "Power",new { area=""})", null, function (data) {
+                var sx1s = $('<select id="selectEditRole"></select>').addClass('form-control').prepend("<option value=''>請選擇</option>");
+                var sx2s = $('<select id="selectRemoveRole"></select>').addClass('form-control').prepend("<option value=''>請選擇</option>");
+                $.each(data, function (idv, objv) {
+                    var sx1 = $("<option></option>")
+                        .attr("value", objv.uRoles.uRoleID)
+                        .text(objv.uRoles.uRoleName);
+                    var sx2 = $("<option></option>")
+                        .attr("value", objv.uRoles.uRoleID)
+                        .text(objv.uRoles.uRoleName);
+                    sx1s.append(sx1);
+                    sx2s.append(sx2);
+                });
+
+                $('#selectEditRoleDiv').html(sx1s);
+                $('#selectRemoveRoleDiv').html(sx2s);
+            });
+            $("#tabs").tabs();
+            $("#tabs1").tabs();
+            $.get('@Url.Action("NewRole")', function (data) {
+                    $('#loadNewRoleContent').html(data);
+            });
+            $.get('@Url.Action("ViewRoleFromPower")', function (data) {
+                $('#loadViewRoleFromPowerContent').html(data);
+            });
+            $.get('@Url.Action("ViewRoleLevel")', function (data) {
+                $('#loadViewRoleLevelContent').html(data);
+            });
+            $("#selectEditRoleDiv").on('change', "#selectEditRole",function () {
+                var roleID = parseInt($(this).val());
+                if (roleID) {
+                    $.get('@Url.Action("EditRole")' + '?roleID=' + roleID, function (data) {
+                        $('#loadEditRoleContent').html(data);
+                    });
+                    $.get('@Url.Action("EditRolePower")' + '?roleID=' + roleID, function (data) {
+                        $('#loadEditRolePowerContent').html(data);
+                    });
+                    $.get('@Url.Action("EditRoleUser")' + '?roleID=' + roleID, function (data) {
+                        $('#loadEditRoleUserContent').html(data);
+                    });
+                }
+                else
+                {
+                    $('#loadEditRoleContent').html("");
+                    $('#loadEditRolePowerContent').html("");
+                    $('#loadEditRoleUserContent').html("");
+                }
+
+            });
+
+            $("#btnRemoveRole").click(function () {
+                var reRole = $('#selectRemoveRole option:selected');
+                if (reRole.val()!="") {
+                    var reMsg = $('<h1>確認刪除 ' + reRole.text() + ' 角色?</h1>');
+                    var roleID = $("#selectRemoveRole").val();
+                    var rerBtn = $('<input class="btn btn-danger" value="刪除"/>').click(function () {
+                        $.get('@Url.Action("RemoveRoleUser")' + '?roleID=' + roleID, function () { });
+                        location.reload();
+                    });
+                    var resDiv1 = $('<div class="col-md-2"></div>');
+                    var resDiv2 = $('<div class="col-md-2"></div>');
+                    var resMsgDiv = $('<div class="col-md-10"></div>').append(reMsg);
+                    var resBtnDiv = $('<div class="col-md-10"></div>').append(rerBtn);
+                    var rerMsgDiv = $('<div class="row"></div>').append(resDiv1).append(resMsgDiv);
+                    var rerBtnDiv = $('<div class="row"></div>').append(resDiv2).append(resBtnDiv);
+                    var spaceDiv = $('<div style="height:30%;width:100%"></div>');
+                    var verDiv = $('<div style="height:40%;width:100%"></div>').append(rerMsgDiv).append(rerBtnDiv);
+                    $("#overlayLoadActContent").append(spaceDiv).append(verDiv);
+                    openNav();
+                }
+            });
+
+            $("#overlayLoadAct").click(function (event) {
+                closeNav();
+            }).children("div").click(function (e) {
+                return false;
+            });
+            $("#overlayLoadActClosebtn").click(function (event) {
+                event.stopPropagation();
+                closeNav();
+            });
+        });
+        function openNav() {
+            //$('#overlayLoadAct').css({ 'display': 'block' });
+            $("#overlayLoadAct").toggle('fade', null, 300);
+        };
+        function closeNav() {
+            //$('#overlayLoadAct').css({ 'display': 'none' });
+            $("#overlayLoadAct").hide('fade', null, 300);
+            $('#overlayLoadActContent').html('');
+        };
+
+    </script>
+    }
+

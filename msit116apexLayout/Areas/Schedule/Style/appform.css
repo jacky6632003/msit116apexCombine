@@ -1,0 +1,38 @@
+﻿ 
+.navbar {
+margin-left: 0;
+margin-right: 0;
+border: none;
+-webkit-box-shadow: none;
+box-shadow: none;
+border-radius:0;
+margin:0;
+padding-left:0;
+padding-right: 0;
+padding-top:5px; 
+background:#000000;
+}
+
+ .navbar a {
+     color:#ffffff;
+      text-decoration:none;
+ }
+
+.sitename {
+    color: #ffffff;
+font-size: 24px;
+text-shadow: none;
+padding-top:10px;
+padding-bottom: 10px;
+float: left;
+  
+line-height: 20px;
+
+}
+
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+color:#333;
+background-color: #ffffff;
+}
+ 

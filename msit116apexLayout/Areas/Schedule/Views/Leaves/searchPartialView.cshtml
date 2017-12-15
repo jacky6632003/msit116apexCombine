@@ -1,0 +1,127 @@
+﻿
+@using (Html.BeginForm("searchtest", "Leaves", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <table class="table table-hover search">
+        <tr>
+
+
+            <th width="150px">
+           
+            </th>
+
+            <td width="350px">
+                <table id="ctl00_ContentPlaceHolder1_rbl_status" border="0" style="width:300px;">
+                    <tr>
+
+                        <td>
+                            @Html.RadioButton("RadioButton", 0, true)
+                            全部
+                        </td>
+                       
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+
+
+
+        <tr id="ctl00_ContentPlaceHolder1_tr_type">
+            <th>
+            
+            </th>
+            <td colspan="5">
+                <input type="checkbox" onclick="SelectAll(this, 'thetype')" />全選/反選
+
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                <span id="thetype">
+                    <span id="spanid" style="display:inline-block;width:900px;">
+
+                        @foreach (var item in Model.leavecategory)
+                        {
+                            // @Html.CheckBox("LeavecategoryID" + @Html.DisplayFor(modelItem => item.LeavecategoryID), false);
+                            <input type="checkbox" name="LacCheckBox" value="@item.LeavecategoryName">
+                        
+                            //@Html.LabelFor(modelItem => item.LeavecategoryID,, htmlAttributes: new { @class = "control-label" })
+
+                        }
+
+
+                    </span>
+                </span>
+
+
+
+
+            </td>
+        </tr>
+
+        <tr>
+
+
+            <th> 時間類別</th>
+            <td>
+                <table id="ctl00_ContentPlaceHolder1_rbl_timetype" border="0" style="width:200px;">
+                    <tr></tr>
+                </table>
+            </td>
+
+
+
+            <th>
+                開始時間 從:
+            </th>
+            <td colspan="3">
+
+                <input type="text" id="Lav_StartTime" class="form-control" name="Lav_StartTime" display="inline-block" style="width:180px;" />
+                到:
+                <input type="text" id="Lac_EndTime" class="form-control" name="Lac_EndTime" display="inline-block" style="width:180px;" />
+
+            </td>
+
+
+
+
+
+        </tr>
+
+
+
+        <tr>
+
+
+
+            <th>
+                部門
+            </th>
+            <td>
+
+                @Html.DropDownList("sss", null, htmlAttributes: new { @class = "form-control inline", @sss = "sss" })
+
+            </td>
+
+            <th>
+
+                <label for="tags">ID/姓名/部門： </label>
+            </th>
+
+            <td>
+                @*@Html.EditorFor(model => model.user.First().UserName, new { htmlAttributes = new { @class = "form-control"} })*@
+                <input type="text" id="tags" class="form-control" name="tags">
+            </td>
+            <td colspan="2"></td>
+
+        </tr>
+        <tr>
+            <td colspan="6" align="center">
+                <input type="button" value="搜索" id="btnsearch" class="btn btn-primary btn-flat" style="width:200px;" />
+                <input type="submit" value="搜索" id="btnsearch" class="btn btn-primary btn-flat" style="width:200px;" />
+                <a href="@Url.Action("ExportToExcel")" class="btn btn-success   btn-flat">匯出</a>
+                <a id="del" href="javascript:void(0)" ; onclick="if(isselect()) _del(); return false;" class="btn   btn-danger btn-flat">     刪除</a>
+
+            </td>
+
+        </tr>
+
+    </table>
+}

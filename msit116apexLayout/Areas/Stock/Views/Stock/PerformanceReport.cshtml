@@ -1,0 +1,387 @@
+﻿@model IEnumerable<msit116apexLayout.Areas.Stock.Models.Partial.PerformanceModel>
+
+@{
+    ViewBag.Title = "寶碩投資績效系統_績效報表";
+
+}
+<style>
+    .head {
+        font-size: 2.4em;
+    }
+
+    .dp {
+        font-size: 1.7em;
+    }
+
+    .emp {
+        float: right;
+    }
+
+    .empcolor {
+        color: steelblue;
+    }
+
+    .pass {
+        color: limegreen;
+    }
+
+    .warn {
+        color: red
+    }
+
+    select {
+        -webkit-appearance: button;
+        -moz-appearance: button;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -webkit-padding-end: 20px;
+        -moz-padding-end: 20px;
+        -webkit-padding-start: 2px;
+        -moz-padding-start: 2px;
+        background: #ffeac0;
+        background-image: -webkit-linear-gradient(top, #E5E5E5, #F4F4F4); /* For Chrome and Safari */
+        background-image: -moz-linear-gradient(top, #E5E5E5, #F4F4F4); /* For old Fx (3.6 to 15) */
+        background-image: -ms-linear-gradient(top, #E5E5E5, #F4F4F4); /* For pre-releases of IE 10*/
+        background-image: -o-linear-gradient(top, #E5E5E5, #F4F4F4); /* For old Opera (11.1 to 12.0) */
+        background-image: linear-gradient(to bottom, #E5E5E5, #F4F4F4); /* Standard syntax; must be last */
+        background-position: center right;
+        background-repeat: no-repeat;
+        border: 1px solid #AAA;
+        border-radius: 2px;
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+        color: #555;
+        font-size: inherit;
+        margin: 0;
+        overflow: hidden;
+        padding-top: 4px;
+        padding-bottom: 2px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+<span style="font-size:30px">績效報表 - 2017/</span>
+<select title="選擇季度">
+    <option value="1">Q1</option>
+    <option value="2">Q2</option>
+    <option value="3">Q3</option>
+    <option value="4" selected="selected">Q4</option>
+</select>
+<div class="row">
+    <div class="col">
+        <table class="table" >
+            <thead>
+                <tr>
+                    <th><span class="head"> @Html.DisplayNameFor(model => model.departmentName)</span></th>
+                    @*<th><span class="head">部門未實現損益</span></th>
+                    <th><span class="head">部門已實現損益</span></th>*@
+                    <th><span class="head">@Html.DisplayNameFor(model => model.unrealizedgainsorlosses)</span></th>
+                    <th><span class="head">@Html.DisplayNameFor(model => model.realizedgainsorlosses)</span></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var items in Model)
+                {
+                    <tr>
+                        <td><span class="dp" title="@Html.DisplayFor(modelItem => items.departmentID)">@Html.DisplayFor(modelItem => items.departmentName)</span></td>
+                        @if (items.unrealizedgainsorlosses > 0)
+                {
+                            <td><span class="dp pass">@Html.DisplayFor(modelItem => items.unrealizedgainsorlosses)</span></td>
+                        }
+                        else if (items.unrealizedgainsorlosses <= 0)
+                        {
+                            <td><span class="dp warn">@Html.DisplayFor(modelItem => items.unrealizedgainsorlosses)</span></td>
+                        }
+                        @if (items.realizedgainsorlosses > 0)
+                {
+                            <td><span class="dp pass">@Html.DisplayFor(modelItem => items.realizedgainsorlosses)</span></td>
+                        }
+                        else if (items.realizedgainsorlosses <= 0)
+                        {
+                            <td><span class="dp warn">@Html.DisplayFor(modelItem => items.realizedgainsorlosses)</span></td>
+                        }
+
+
+
+                    </tr>
+                    <tr>
+                        <td><span class="emp empcolor">員工帳號</span></td>
+                        <td><span class="emp empcolor">未實現損益(個人)</span></td>
+                        <td><span class="emp empcolor">已實現損益(個人)</span></td>
+                    </tr>
+                    foreach (var item in items.EMPPR)
+                    {
+                        <tr>
+                            <td><span class="emp">@Html.DisplayFor(modelItems => item._UserName)</span></td>
+                            @if (item._unrealizedgainsorlosses > 0)
+                    {
+                                <td><span class="emp pass">@Html.DisplayFor(modelItems => item._unrealizedgainsorlosses)</span></td>
+                            }
+                            else if (item._unrealizedgainsorlosses <= 0)
+                            {
+                                <td><span class="emp warn">@Html.DisplayFor(modelItems => item._unrealizedgainsorlosses)</span></td>
+                            }
+                            @if (item._realizedgainsorlosses > 0)
+                    {
+                                <td><span class="emp pass">@Html.DisplayFor(modelItems => item._realizedgainsorlosses)</span></td>
+                            }
+                            else if (item._realizedgainsorlosses <= 0)
+                            {
+                                <td><span class="emp warn">@Html.DisplayFor(modelItems => item._realizedgainsorlosses)</span></td>
+                            }
+
+
+                        </tr>
+                    }
+                }
+
+
+
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-5">
+        <canvas id="canvas1" style=" width: 700px; height: 340px;" class="chartjs-render-monitor"></canvas>
+        <canvas id="canvas2" style=" width: 700px; height: 340px;"  class="chartjs-render-monitor"></canvas>
+      
+
+    </div>
+</div>
+
+@section scripts{
+    <script async="" src="//www.google-analytics.com/analytics.js"></script>
+<script src="http://www.chartjs.org/dist/2.7.1/Chart.bundle.js"></script>
+<script src="http://www.chartjs.org/samples/latest/utils.js"></script>
+<style>
+    canvas1 {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+    canvas2 {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+</style>
+<script>
+    var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var color = Chart.helpers.color;
+    var barChartData = {
+        labels: [],
+        datasets: []
+    };
+    var barChartData2 = {
+        labels: [],
+        datasets: []
+    };
+    var myBar;
+    var myBar2;
+
+    var dpu10 = [];
+    var dpu11 = [];
+    var dpu12 = [];
+    var unrealizedgainsorlossesdatas = [];
+    var dpr10 = [];
+    var dpr11 = [];
+    var dpr12 = [];
+    var realizedgainsorlossesdatas = [];
+
+
+    window.onload = function () {
+        var ctx = document.getElementById("canvas1").getContext("2d");
+        myBar = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: '績效表-部門未實現損益'
+                }
+            }
+        });
+
+
+
+        $.getJSON('@Url.Action("PerformanceReportJson", "Stock")', { 'month': 10 }, function (DATAS) {
+            for (var i = 0; i < DATAS.length; i++) {
+                dpu10.push(DATAS[i].unrealizedgainsorlosses);
+            }
+        }).done($.getJSON('@Url.Action("PerformanceReportJson", "Stock")', { 'month': 11 }, function (DATAS) {
+            for (var i = 0; i < DATAS.length; i++) {
+                dpu11.push(DATAS[i].unrealizedgainsorlosses);
+            }
+        })).done($.getJSON('@Url.Action("PerformanceReportJson", "Stock")', { 'month': 12 }, function (DATAS) {
+            for (var i = 0; i < DATAS.length; i++) {
+                dpu12.push(DATAS[i].unrealizedgainsorlosses);
+            }
+            })).done(function () {
+                unrealizedgainsorlossesdatas.push(dpu10);
+                unrealizedgainsorlossesdatas.push(dpu11);
+                unrealizedgainsorlossesdatas.push(dpu12);
+                addData();
+                addDataset();
+        });
+
+
+        var ctx2 = document.getElementById("canvas2").getContext("2d");
+        myBar2 = new Chart(ctx2, {
+            type: 'bar',
+            data: barChartData2,
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: '績效表-部門已實現損益'
+                }
+            }
+        });
+
+         $.getJSON('@Url.Action("PerformanceReportJson", "Stock")', { 'month': 10 }, function (DATAS) {
+            for (var i = 0; i < DATAS.length; i++) {
+                dpr10.push(DATAS[i].realizedgainsorlosses);
+            }
+        }).done($.getJSON('@Url.Action("PerformanceReportJson", "Stock")', { 'month': 11 }, function (DATAS) {
+            for (var i = 0; i < DATAS.length; i++) {
+                dpr11.push(DATAS[i].realizedgainsorlosses);
+                }
+            })).done($.getJSON('@Url.Action("PerformanceReportJson", "Stock")', { 'month': 12 }, function (DATAS) {
+                for (var i = 0; i < DATAS.length; i++) {
+                    dpr12.push(DATAS[i].realizedgainsorlosses);
+                 }
+             })).done(function () {
+                 realizedgainsorlossesdatas.push(dpr10);
+                 realizedgainsorlossesdatas.push(dpr11);
+                 realizedgainsorlossesdatas.push(dpr12);
+                 addData2();
+                 addDataset2();
+             })
+
+
+    };
+
+
+
+
+    function addData() {
+        testdatas = ["十月", "十一月", "十二月"];
+        for (var i = 0; i < testdatas.length; i++) {
+            barChartData.labels.push(testdatas[i]);
+        }
+
+        myBar.update();
+    }
+
+
+    var colorNames = Object.keys(window.chartColors);
+    function addDataset() {
+        @*var dpu10 = [];
+        var dpu11 = [];
+        var dpu12 = [];
+        $.getJSON('@Url.Action("PerformanceReportJson", "Stock")', { 'month': 10 }, function (DATAS) {
+            for (var i = 0; i < DATAS.length; i++) {
+                dpu10.push(DATAS[i].unrealizedgainsorlosses);
+            }
+        }).done($.getJSON('@Url.Action("PerformanceReportJson", "Stock")', { 'month': 11 }, function (DATAS) {
+            for (var i = 0; i < DATAS.length; i++) {
+                dpu11.push(DATAS[i].unrealizedgainsorlosses);
+                }
+            })).done($.getJSON('@Url.Action("PerformanceReportJson", "Stock")', { 'month': 12 }, function (DATAS) {
+                for (var i = 0; i < DATAS.length; i++) {
+                    dpu12.push(DATAS[i].unrealizedgainsorlosses);
+                }
+            })).done();*@
+        $.getJSON('@Url.Action("PerformanceReportJson", "Stock")', {}, function (DATAS) {
+
+                for (var i = 0; i < DATAS.length; i++) {
+                   var colorName = colorNames[barChartData.datasets.length % colorNames.length];;
+                   var dsColor = window.chartColors[colorName];
+
+                   var newDataset = {
+                       label: DATAS[i].departmentName,
+                       backgroundColor: color(dsColor).alpha(0.5).rgbString(),
+                       borderColor: dsColor,
+                       borderWidth: 1,
+                       data: []
+                   };
+                    //每個月第index個部門
+                   for (var index = 0; index < barChartData.labels.length; index++) {
+                       newDataset.data.push(unrealizedgainsorlossesdatas[index][i]);
+                   }
+
+
+                   barChartData.datasets.push(newDataset);
+                   myBar.update();
+               }
+
+           })
+
+       }
+
+
+       function addData2() {
+           testdatas = ["十月", "十一月", "十二月"];
+           for (var i = 0; i < testdatas.length; i++) {
+               barChartData2.labels.push(testdatas[i]);
+           }
+
+           window.myBar2.update();
+       }
+
+       function addDataset2() {
+           @*var dpr10 = [];
+           var dpr11 = [];
+           var dpr12 = [];
+        $.getJSON('@Url.Action("PerformanceReportJson", "Stock")', { 'month': 10 }, function (DATAS) {
+            for (var i = 0; i < DATAS.length; i++) {
+                dpr10.push(DATAS[i].realizedgainsorlosses);
+            }
+        }).done($.getJSON('@Url.Action("PerformanceReportJson", "Stock")', { 'month': 11 }, function (DATAS) {
+            for (var i = 0; i < DATAS.length; i++) {
+                dpr11.push(DATAS[i].realizedgainsorlosses);
+                }
+            })).done($.getJSON('@Url.Action("PerformanceReportJson", "Stock")', { 'month': 12 }, function (DATAS) {
+                for (var i = 0; i < DATAS.length; i++) {
+                    dpr12.push(DATAS[i].realizedgainsorlosses);
+                }
+            })).done();*@
+
+           $.getJSON('@Url.Action("PerformanceReportJson", "Stock")', {}, function (DATAS) {
+                for (var i = 0; i < DATAS.length; i++) {
+                   var colorName = colorNames[barChartData2.datasets.length % colorNames.length];;
+                   var dsColor = window.chartColors[colorName];
+
+
+                   var newDataset2 = {
+                       label: DATAS[i].departmentName,
+                       backgroundColor: color(dsColor).alpha(0.5).rgbString(),
+                       borderColor: dsColor,
+                       borderWidth: 1,
+                       data: []
+                   };
+
+                    //每個月第index個部門
+                   for (var index = 0; index < barChartData2.labels.length; index++) {
+                       newDataset2.data.push(realizedgainsorlossesdatas[index][i]);
+                   }
+
+
+                   barChartData2.datasets.push(newDataset2);
+                   window.myBar2.update();
+               }
+
+           })
+
+       }
+
+
+</script>
+
+    }

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a26c09702c6f4ddab9b773043ca6ac54" Name="Diagram1" ZoomLevel="64">
+        <EntityTypeShape EntityType="MSIT116APEXModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.Article" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.AspNetRoles" Width="1.5" PointX="5.75" PointY="17.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.AspNetUserClaims" Width="1.5" PointX="10.25" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.AspNetUserLogins" Width="1.5" PointX="10.25" PointY="18.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.AspNetUsers" Width="1.5" PointX="8" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.IsEmployee" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.News" Width="1.5" PointX="8.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.Task" Width="1.5" PointX="0.75" PointY="14.75" IsExpanded="true" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="MSIT116APEXModel.AspNetUserRoles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.TestWebApi" Width="1.5" PointX="10.375" PointY="9.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.UserTwoFactor" Width="1.5" PointX="10.375" PointY="12.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.UserPreference" Width="1.5" PointX="15.375" PointY="0.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.UserPreferenceAOrder" Width="1.5" PointX="15.375" PointY="4.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.UserNewsUrls" Width="1.5" PointX="15.375" PointY="11.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.UserLevel" Width="1.5" PointX="10.25" PointY="21.25" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_UserLevel_AspNetUsers" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.uPages" Width="1.5" PointX="8.375" PointY="6.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.uPowers" Width="1.5" PointX="10.375" PointY="6.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.uRolePowers" Width="1.5" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.uRoleUsers" Width="1.5" PointX="5.375" PointY="12.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.CRM_subordinate" Width="1.5" PointX="12.375" PointY="6.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.InterviewRecords" Width="1.5" PointX="14.625" PointY="15" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.InterviewType" Width="1.5" PointX="12.375" PointY="15.875" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_Interview_records_InterviewType" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.Department" Width="1.5" PointX="11.375" PointY="28.375" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.Events" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.Leavecategory" Width="1.5" PointX="15.625" PointY="39.625" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.Review" Width="1.5" PointX="15.625" PointY="37.25" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.uRolePowerConfirmRole" Width="1.5" PointX="5.375" PointY="3.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.IsAdmin" Width="1.5" PointX="3.375" PointY="6.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.uRoles" Width="1.5" PointX="7.375" PointY="9.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.uRolePowerConfirm" Width="1.5" PointX="5.375" PointY="6.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.uRolePowerConfirmHistoryDetail" Width="1.5" PointX="3.375" PointY="9.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.uRolePowerConfirmHistory" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.UserNews" Width="1.5" PointX="12.375" PointY="9.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.uRolePowerConfirmHistoryConfirmData" Width="1.5" PointX="14.75" PointY="7.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.uRolePowerConfirmHistoryConfirmDataDetail" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.ChargeFee" Width="1.5" PointX="17.375" PointY="42.875" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundArea" Width="1.5" PointX="17.375" PointY="45.125" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundChargeDate" Width="1.5" PointX="19.625" PointY="20.25" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundCompany" Width="1.5" PointX="17.375" PointY="50" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundCurrency" Width="1.5" PointX="17.375" PointY="8.625" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundDetail" Width="1.5" PointX="19.625" PointY="8.5" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundGoods" Width="1.5" PointX="19.625" PointY="3.25" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundMaster" Width="1.5" PointX="17.375" PointY="4.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundOrder" Width="1.5" PointX="19.625" PointY="27.5" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundOrderDetail" Width="1.5" PointX="21.875" PointY="26.625" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundTradeBank" Width="1.5" PointX="17.375" PointY="52.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundTradeCurrency" Width="1.5" PointX="17.375" PointY="55" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundTradeType" Width="1.5" PointX="19.625" PointY="0.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundType" Width="1.5" PointX="17.375" PointY="47.625" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundUserBankAccount" Width="1.5" PointX="19.625" PointY="53.375" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.ShoppingCart" Width="1.5" PointX="21.875" PointY="3.25" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.FundDeploy" Width="1.5" PointX="19.625" PointY="11.375" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundGoods_ChargeFee" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundCompany_FundArea" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundGoods_FundArea" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundOrderDetail_FundChargeDate" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_ShoppingCart_FundChargeDate" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundGoods_FundCompany" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundGoods_FundCurrency" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundDetail_FundMaster" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundGoods_FundMaster" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundGoods_FundType" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_ShoppingCart_FundGoods" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundDeploy_FundMaster" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundOrderDetail_FundOrder" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundOrderDetail_FundTradeType" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundOrderDetail_FundUserBankAccount" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundUserBankAccount_FundTradeBank" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_FundUserBankAccount_FundTradeCurrency" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_ShoppingCart_FundTradeType" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_ShoppingCart_FundUserBankAccount" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.Leave" Width="1.5" PointX="19.875" PointY="31.125" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.User" Width="1.5" PointX="13.625" PointY="20.875" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_User_AspNetUsers" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_User_Department" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_Leave_Leavecategory" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_Leave_Review" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_Leave_User" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_Leave_User1" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_User_User" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.Annualleav" Width="1.5" PointX="15.875" PointY="57.625" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_Annualleav_User" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.PendingOrderHistory" Width="1.5" PointX="5.25" PointY="36.5" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.SelfSelectedStockList" Width="1.5" PointX="5.25" PointY="26.875" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.StockCategoriesList" Width="1.5" PointX="0.75" PointY="30.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.StockInfo" Width="1.5" PointX="3" PointY="30.125" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.StockInfoHistory" Width="1.5" PointX="5.25" PointY="33.625" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.StockTradingRecord" Width="1.5" PointX="5.25" PointY="29.875" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.StockTreasury" Width="1.5" PointX="5.25" PointY="23.625" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_PendingOrderHistory_StockInfo" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_SelfSelectedStockList_StockInfo" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_StockInfo_StockCategoriesList" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_StockInfoHistory_StockInfo" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_StockTradingRecord_StockInfo" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_StockTreasury_StockInfo" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.UserNewsConfirmList" Width="1.5" PointX="11.375" PointY="3.75" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.AddressCity" Width="1.5" PointX="22.375" PointY="12" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.AddressDistrict" Width="1.5" PointX="24.625" PointY="11.875" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.AddressRoad" Width="1.5" PointX="26.875" PointY="11.875" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.UserMailAddress" Width="1.5" PointX="29.125" PointY="15.125" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.UserResidenceAddress" Width="1.5" PointX="32.125" PointY="14.125" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_AddressDistrict_AddressCity" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_UserMailAddress_AddressCity" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_UserResidenceAddress_AddressCity" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_AddressRoad_AddressDistrict" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_UserMailAddress_AddressDistrict" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_UserResidenceAddress_AddressDistrict" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_UserMailAddress_AddressRoad" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_UserResidenceAddress_AddressRoad" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_UserMailAddress_AspNetUsers" />
+        <AssociationConnector Association="MSIT116APEXModel.FK_UserResidenceAddress_AspNetUsers" />
+        <EntityTypeShape EntityType="MSIT116APEXModel.ConfirmPhoto" Width="1.5" PointX="0.75" PointY="17.75" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

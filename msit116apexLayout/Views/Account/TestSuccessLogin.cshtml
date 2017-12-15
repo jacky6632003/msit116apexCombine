@@ -1,0 +1,83 @@
+﻿@using Microsoft.AspNet.Identity
+@model msit116apexLayout.Models.ProcedureGetUserData_Result
+@{
+    ViewBag.Title = "TestSuccessLogin";
+}
+@section styles{
+    <style>
+        p{
+            font-weight:bold;
+        }
+    </style>
+    }
+<h2>TestSuccessLogin</h2>
+<p>帳號ID</p>
+@ViewBag.LogUser
+<hr />
+<p>帳號ID</p>
+@User.Identity.GetUserName()
+<hr />
+<p>是否為員工(不是員工則是會員)</p>
+@ViewBag.IsEmployee
+<hr />
+<p>使用者資料表：AspNetUsers</p>
+<hr />
+@using (Html.BeginForm("TestSuccessLogin", "Account", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+{
+<p>UserName=帳號ID</p>
+@Model.UserName
+<hr />
+<p>Email=電子郵件</p>
+@Model.Email
+<hr />
+<p>BirthDay=生日</p>
+@Model.BirthDay
+<hr />
+<p>PhoneNumber=手機號碼</p>
+@Model.PhoneNumber
+<hr />
+<p>Telephone=居住電話</p>
+@Model.Telephone
+<hr />
+<p>ResidenceAddress=戶籍地址</p>
+@Model.ResidenceAddress
+<hr />
+<p>MailingAddress=通訊地址</p>
+@Model.MailingAddress
+<hr />
+<p>Name=姓名</p>
+@Model.Name
+<hr />
+<p>Country=國籍</p>
+@Model.Country
+<hr />
+<p>IdentityCardNumber=身分證字號</p>
+@Model.IdentityCardNumber
+<hr />
+<p>Photo=照片</p>
+    <input id="Photo" name="Photo" type="file"/>
+<img id="ImagePhoto" style="height:300px" src="@Url.Action("GetImageFile","Account")" />
+<hr />
+    <button type="submit">更新</button>
+}
+@Html.Action("_PartialManageSocialLogin", "Account")
+
+@section scripts{
+    <script>
+        $(function () {
+            $("#Photo").change(fileViewer);
+            function fileViewer() {
+                var files = document.getElementById("Photo").files;
+                for (var i = 0; i < files.length; i++) {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(files[i]);
+                    reader.onload = function (e) {
+                        var fileContent = e.target.result;
+                        var imgEle = document.getElementById("ImagePhoto");
+                        imgEle.setAttribute("src", fileContent);
+                    }
+                }
+            }
+        });
+    </script>
+    }

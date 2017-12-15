@@ -1,0 +1,25 @@
+﻿@model IEnumerable<msit116apexLayout.Models.Article>
+
+
+
+<table class="table">
+    <tr>
+        <th>
+            新聞標題
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Articlename, "Details", new { id = item.ArticleID })
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Articlecontent)
+                </td>*@
+        </tr>
+    }
+
+</table>
+

@@ -1,0 +1,91 @@
+﻿@model msit116apexLayout.Models.Leave
+
+@{
+    ViewBag.Title = "刪除假請單";
+}
+
+<div class="alert alert-secondary  bg-warning">
+    <div style=" width:100%; text-align:center; " class="print-btn">
+        <h4>刪除</h4>
+    </div>
+
+</div>
+     <div>
+          <h3 style="color:red">你確定刪除</h3>
+
+    </div>
+<div class="card" style="width: 20rem;margin-left:auto; margin-right:auto;">
+   
+    <div class="card-body">
+        <img class="card-img-top" src="@Url.Action("GetImage","Leaves",new {id=Model.ID })" alt="Card image cap">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Lav_ID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.User.AspNetUsers.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Lav_StartTime)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Lav_StartTime)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Lac_EndTime)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Lac_EndTime)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Lac_Agent)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Lac_Agent)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Lac_Tag)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Lac_Tag)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Leavecategory.LeavecategoryName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Leavecategory.LeavecategoryName)
+            </dd>
+
+
+
+        </dl>
+    </div>
+</div>
+
+
+
+<div>
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div style=" width:90%; text-align:center; " class="print-btn">
+
+            <input type="submit" value="刪除" class="btn btn-default" />
+            @Html.ActionLink("返回", "Index", null, new { @class = "noprint btn btn-danger" })
+
+        </div>
+
+      
+    }
+</div>

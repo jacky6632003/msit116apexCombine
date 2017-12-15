@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "感謝您的註冊";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p>@ViewBag.Message</p><br />
+
+@if (TempData["ViewBagLink"] != null) {
+    @*<p>
+        Or you could just use <a href="@TempData["ViewBagLink"]">this link</a>.
+                
+    </p>*@
+            
+}

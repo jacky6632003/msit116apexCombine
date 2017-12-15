@@ -1,0 +1,651 @@
+﻿@using Microsoft.AspNet.Identity
+@using msit116apexLayout.Extensions;
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    <link href="~/Content/outSignInButton2.css" rel="stylesheet" />
+    <link href="~/Content/LoginRegister.css" rel="stylesheet" />
+    <link href="~/Content/formCss.css" rel="stylesheet" />
+    @*<link href="~/Content/jquery-ui.theme.min.css" rel="stylesheet" />*@
+    @*<link href="~/Content/jquery-ui.min.css" rel="stylesheet" />*@
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Areas/Schedule/Content/style3.css" rel="stylesheet" />
+    <style>
+        * {
+            font-family: "微軟正黑體"
+        }
+
+        /*input[type="button"],input[type="submit"]{
+            border-radius: 1px;
+            box-shadow:0px;
+        }*/
+        /*input[type="button"]:hover,input[type="submit"]:hover{
+            cursor:pointer;
+            background-color:white;
+        }*/
+        input, span {
+            margin: 3px;
+        }
+
+        /*.row a{
+            display:inline-block;
+            background-color:aqua;
+            border-radius: 5px;
+            padding:2px;
+        }*/
+        table {
+            margin: 3px;
+        }
+
+            table td, table th {
+                padding: 3px;
+            }
+
+        #navMainAll {
+            padding: 0px;
+        }
+
+            #navMainAll a {
+                padding: 10px;
+            }
+
+            #navMainAll button {
+                padding: 10px;
+                color: yellow;
+            }
+
+                #navMainAll button:hover {
+                    background-color: orange;
+                }
+        /*navbar主按鈕*/
+        #navbarSupportedContent ul li a {
+            margin-right: 0px;
+            padding-right: 10px;
+            color: yellow;
+        }
+
+            #navbarSupportedContent ul li a:hover {
+                cursor: pointer;
+                background-color: orange;
+            }
+        /*navbar底色*/
+        #navMainAll {
+            background: -webkit-repeating-linear-gradient(#FFBC00, #D16C00); /* For Safari 5.1 to 6.0 */
+            background: -o-repeating-linear-gradient(#FFBC00, #D16C00); /* For Opera 11.1 to 12.0 */
+            background: -moz-repeating-linear-gradient(#FFBC00, #D16C00); /* For Firefox 3.6 to 15 */
+            background: repeating-linear-gradient(#FFBC00, #D16C00); /* Standard syntax (must be last) */
+        }
+
+        #navbarSupportedContent ul li div {
+            background-color: darkorange;
+        }
+        /*navbar下拉選單*/
+        #navbarSupportedContent ul li div {
+            border-color: #CCCCCC;
+        }
+
+            #navbarSupportedContent ul li div a {
+                color: yellow;
+                padding-left: 5px;
+            }
+
+                #navbarSupportedContent ul li div a:hover {
+                    color: #808080;
+                    background-color: yellow;
+                }
+        /*登入登出*/
+        #navbarSupportedContent div a {
+            color: yellow;
+        }
+
+            #navbarSupportedContent div a:hover {
+                color: white;
+            }
+
+        .navbarABorder {
+            width: 7px;
+        }
+
+            .navbarABorder div {
+                height: 100%;
+                background: black; /* For browsers that do not support gradients */
+                background: -webkit-repeating-linear-gradient(#D18C00, #FFBC00); /* For Safari 5.1 to 6.0 */
+                background: -o-repeating-linear-gradient(#D18C00, #FFBC00); /* For Opera 11.1 to 12.0 */
+                background: -moz-repeating-linear-gradient(#D18C00, #FFBC00); /* For Firefox 3.6 to 15 */
+                background: repeating-linear-gradient(#D18C00, #FFBC00); /* Standard syntax (must be last) */
+            }
+
+        .newsDivBtn {
+            border-radius: 50%;
+            position: fixed;
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+            top: 5%;
+            right: 10%;
+        }
+
+        .newsInit {
+            display: none;
+        }
+
+        .news {
+            position: fixed;
+            margin: 0;
+            padding: 10px;
+            border-bottom: 3px double silver;
+            border-right: 3px double silver;
+            background-color: blue;
+            height: 90%;
+            width: 400px;
+            top: 4em;
+            z-index: 15001;
+        }
+
+            .news:hover {
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            }
+
+        .newsMsg {
+            display: block;
+            height: auto;
+            background-color: white;
+            margin: 1px;
+        }
+
+            .newsMsg:hover {
+                margin: 0px;
+                border: 1px solid yellow;
+            }
+
+        .newsMsgOrder {
+            display: block;
+            background-color: gray;
+            color: white;
+            float: left;
+            height: 100%;
+            line-height: 100%;
+            text-align: center;
+        }
+
+        .newsMsgOrderNums {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: normal;
+        }
+
+        #newsDivC {
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        #closeNewsDivBtn {
+            line-height: 33px;
+            width: 33px;
+            font-size: 33px;
+            text-align: center;
+            font-weight: bold;
+            color: silver;
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            display: block;
+            transition: 0.3s;
+        }
+
+            #closeNewsDivBtn:hover {
+                color: #FFFFFF;
+                cursor: pointer;
+            }
+        .editOverrideAlert {
+            font-size: 1.3em;
+            padding: 1em;
+            text-align: center;
+            width: auto;
+            word-wrap: break-word;
+            height: auto;
+        }
+    </style>
+    @RenderSection("styles", false)
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+    @*導覽列*@
+    <div class="container">
+        <nav id="navMainAll" class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <a class="navbar-brand" href="@Url.Action("Index","Default",new { area=""})">寶碩投資績效系統</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul id="navMain" class="navbar-nav mr-auto">
+                    <li class="nav-item navbarABorder"><div></div></li>
+                    <li class="nav-item">
+                        <a class="nav-link navbar-brand" href="@Url.Action("Index","Default",new { area=""})"><i class="fa fa-home" aria-hidden="true"></i>首頁</a>
+                    </li>
+                    <li class="nav-item navbarABorder"><div></div></li>
+
+                    @if (Request.Cookies[".AspNet.ApplicationCookie"] != null)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle navbar-brand" id="dropdown00" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle" aria-hidden="true"></i>帳戶</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown00">
+                                @*帳戶*@
+                                <a class="dropdown-item" href="@Url.Action("Index", "Manage", new { area = "" })">管理</a>
+                                <a class="dropdown-item" href="@Url.Action("UserMessage", "Account", new { area = "" })">通知</a>
+
+                                @if (User.Identity.GetIsAdmin() == true)
+                                {
+                                    <a class="dropdown-item" href="@Url.Action("Index", "Power", new { area = "" })">角色權限管理</a>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "PowerConfirm", new { area = "" })">角色覆核管理</a>
+                                }
+                                @*<a class="dropdown-item" href="@Url.Action("EmlpoyeesManager", "Account", new { area = "" })">員工資料測試(新增.檢視)</a>
+                                    <a class="dropdown-item" href="@Url.Action("MembersManager", "Account", new { area = "" })">會員資料測試(新增.檢視)</a>
+                                    <a class="dropdown-item" href="@Url.Action("Index", "Test", new { area = "" })">員工+會員資料測試(檢視.修改.刪除)</a>
+                                    <a class="dropdown-item" href="@Url.Action("TestSuccessLogin", "Account", new { area = "" })">測試登入頁(正在登入的使用者)</a>*@
+                            </div>
+                        </li>
+                        <li class="nav-item navbarABorder"><div></div></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle navbar-brand" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-line-chart" aria-hidden="true"></i>股票交易</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown01">
+                                @*股票交易*@
+                                <a class="dropdown-item" href="@Url.Action("Index","Stock",new {area="Stock" })">股票交易系統</a>
+                                <a class="dropdown-item" href="@Url.Action("StockTradeAdvancedsearch","Stock",new {area="Stock" })">交易紀錄進階查詢</a>
+                                <hr />
+                                <a class="dropdown-item" href="@Url.Action("PerformanceReport","Stock",new {area="Stock" })">績效報表</a>
+                            </div>
+                        </li>
+                        <li class="nav-item navbarABorder"><div></div></li>
+                        <li class="nav-item">
+                            <a class="nav-link navbar-brand" href="@Url.Action("Index", "Articles", new { area = "Forum" })"><i class="fa fa-comments" aria-hidden="true"></i>新聞區</a>
+                            @*討論區*@
+                        </li>
+                        <li class="nav-item navbarABorder"><div></div></li>
+                    }
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle navbar-brand" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-money" aria-hidden="true"></i>基金商城</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown03">
+                            @*基金商城*@
+                            <a class="dropdown-item" href="@Url.Action("Index","FundOverview",new { area="Fund"})">基金交易平台</a>
+                            @if (User.Identity.GetIsAdmin())
+                            {
+                                <a class="dropdown-item" href="@Url.Action("Index", "BackStage",new { area="Fund"})">基金上架</a>
+                            }
+                        </div>
+                    </li>
+                    <li class="nav-item navbarABorder"><div></div></li>
+                    @if (Request.Cookies[".AspNet.ApplicationCookie"] != null)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle navbar-brand" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-calendar" aria-hidden="true"></i>排程管理</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown04">
+                                @*排程管理*@
+                                <a class="dropdown-item" href="@Url.Action("Create", "Leaves", new { area = "Schedule" })">請假系統</a>
+                                <a class="dropdown-item" href="@Url.Action("Index", "Home", new { area = "Schedule" })">行事曆</a>
+                                @if (User.Identity.GetIsAdmin())
+                                {
+                                    <a class="dropdown-item" href="@Url.Action("DeptLeave", "Leaves", new { area = "Schedule" })">部門請假搜尋</a>
+                                    <a class="dropdown-item" href="@Url.Action("search", "Leaves", new { area = "Schedule" })">假單收尋</a>
+                                    <a class="dropdown-item" href="@Url.Action("Review", "Leaves", new { area = "Schedule" })">審查</a>
+                                    <a class="dropdown-item" href="@Url.Action("echarts", "Leaves", new { area = "Schedule" })">匯出報表</a>
+                                }
+                            </div>
+                        </li>
+                        <li class="nav-item navbarABorder"><div></div></li>
+                        <li class="nav-item">
+                            <a class="nav-link navbar-brand" href="@Url.Action("MasterIndex", "InterviewRecords", new { Area = "CRM" })"><i class="fa fa-handshake-o" aria-hidden="true"></i>客戶關係管理</a>
+                            @*客戶關係管理*@
+                        </li>
+                        <li class="nav-item navbarABorder"><div></div></li>
+                    }
+                </ul>
+                <div class="form-inline my-2 my-lg-0">
+                    @if (Request.Cookies[".AspNet.ApplicationCookie"] == null)
+                    {
+                        <a href="@Url.Action("Register", "Account", new { area = "" })" class="btn btn-outline-warning my-2 mx-1 my-sm-0"><i class="fa fa-user-plus" aria-hidden="true"></i>註冊</a>
+                    }
+                </div>
+                <div>
+                    @*登入登出按鈕*@
+                    @Html.Partial("_PartialNavLogin")
+                </div>
+            </div>
+        </nav>
+    </div>
+    @*內容*@
+    <div class="container-fluid mt-4" style="padding-top: 3em;">
+        @RenderBody()
+    </div>
+    @*通知*@
+    @*<div id="newsDivBtn" class="newsDivBtn newsDivBtnDisplay" style="text-align:center">
+        <span style="font-size:30px;color:gray">
+            <i class="fa fa-bell-o" aria-hidden="true"></i>
+            </span>
+            <span class="badge badge-notify">1</span>
+        </div>*@
+    @*<div id="newsDivBtn" class="btn btn-primary newsDivBtn newsInit ui-widget-content" style="width:50px;height:50px;overflow: visible;z-index: 15002;">*@
+    <div id="newsDivBtn" class="btn btn-primary newsDivBtn newsInit" style="width:50px;height:50px;overflow: visible;z-index: 15002;">
+        <span style="font-size:30px;letter-spacing:-12px;padding-left:5px">
+            <i class="fa fa-bell-o" aria-hidden="true"></i>
+        </span>
+        <span id="noticNums" class="badge badge-light" style="background-color:red;color:white;vertical-align:super;">
+            0
+        </span>
+    </div>
+    <div id="newsDiv" class="news newsInit ui-widget-content">
+        <a id="closeNewsDivBtn">&times;</a>
+        <div>
+            <h3 style="color:white"><a class="text-white" href="@Url.Action("UserMessage","Account",new { area=""})">通知</a></h3>
+        </div>
+        <div id="newsDivC">
+
+        </div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    @*<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>*@
+    @*<script src="~/Scripts/jquery-ui-1.12.1.js"></script>*@
+    @RenderSection("scripts", false)
+    @*通知*@
+    <script>
+        window.alert = function (message) {
+            $(document.createElement('div'))
+                .attr({ title: '提醒視窗', 'class': 'editOverrideAlert' })
+                .html(message)
+                .dialog({
+                    buttons: [{
+                        text: "關閉",
+                        "class": 'btn btn-info',
+                        click: function () {
+                            //$(this).dialog('close');
+                            $(this).remove();
+                        }
+                    }],
+                    close: function () {
+                        $(this).remove();
+                    },
+                    draggable: true,
+                    modal: true,
+                    resizable: false,
+                    show: {
+                        effect: "blind",
+                        duration: 200
+                    }
+                }).prev(".ui-dialog-titlebar").addClass("bg-dark text-white");
+        };
+    </script>
+    <script>
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        };
+        $(function () {
+
+
+            $.get("@Url.Action("GetUserPreference","Account",new { area=""})",null, function (data) {
+                if (data.UserId !== undefined)
+                {
+                    $('#newsDiv').css({
+                        left: data.newsDivLeft + "px",
+                        top: data.newsDivTop + "px",
+                        width: (parseInt(data.newsDivWidth) + 21) + "px",
+                        height: (parseInt(data.newsDivHeight) + 21) + "px"
+                    });
+                    if (getCookie("newsDivDisplay") != "close")
+                        //$("#newsDiv").toggle("blind", {}, 0);
+                        $('#newsDiv').removeClass('newsInit');
+                    $('#newsDivBtn').css({
+                        left: data.newsDivBtnLeft + "px",
+                        top: data.newsDivBtnTop + "px"
+                    }).removeClass('newsInit');
+
+                    $.get("@Url.Action("GetUserHavntReadNews", "Account",new { area=""})", null, function (data) {
+                $.each(data, function (id, item) {
+                    var noticnum = parseInt($('#noticNums').html()) + 1;
+                    var itemd = new Date(parseInt(item.UserNews.time.replace("/Date(", "").replace(")/", ""), 10));
+                    var newsOrderNums = $('<span></span>').addClass('newsMsgOrderNums').html(noticnum);
+                    var newsOrder = $('<div></div>').addClass('newsMsgOrder').html(newsOrderNums);
+                    var newsTitle = $('<h4></h4>').text(item.UserNews.msgTitle);
+                    var newsFromUser = $('<p></p>').text(item.FromUserName + "<" + item.UserNews.fromUser + ">");
+                    var newsMsg = $('<div></div>').html(item.UserNews.msgContent).addClass('text-dark');
+                    var newsDiv = $('<div></div>').addClass('newsMsg');
+                    var newsTime = $('<span></span>').text(itemd.getFullYear() + "-" + (itemd.getMonth()+1) + "-" + itemd.getDate() + " " + itemd.getHours() + ":" + itemd.getMinutes() + ":" + itemd.getSeconds());
+                    var newsBtns = $('<div></div>');
+                    if (item.UserNews.msgUrl) {
+                        var newsALink = $('<a></a>');
+                        newsALink.attr('href', item.UserNews.msgUrl);
+                        newsALink.css('cursor', ' pointer');
+                        newsALink.text('連結');
+                        newsALink.addClass("btn").addClass("btn-success");
+                        newsBtns.append(newsALink);
+                    }
+                    if (item.UserNewsUrlss) {
+                        $.each(item.UserNewsUrlss, function (id, itemB) {
+                            var newsABtn = $('<a></a>');
+                            newsABtn.attr('href', itemB.UserNewsUrl);
+                            newsABtn.css('cursor', ' pointer');
+                            newsABtn.text(itemB.UserNewsTitle);
+                            newsABtn.addClass("btn").addClass(itemB.UserNewsCSS);
+                            newsBtns.append(newsABtn);
+                        });
+                    }
+                    newsDiv.append([newsOrder, newsTitle, newsFromUser, newsMsg, newsBtns, newsTime]);
+                    newsDiv.click(function () {
+
+                    });
+                    $('#newsDivC').prepend(newsDiv);
+                    $('#noticNums').html(noticnum);
+                });
+                newsDivCresize();
+            });
+                }
+            });
+            //$('#newsDiv').css({ left: getCookie("newsDivLeft") + "px", top: getCookie("newsDivTop") + "px" }).removeClass('newsInit');
+            //$('#newsDivBtn').css({ left: getCookie("newsDivBtnLeft") + "px", top: getCookie("newsDivBtnTop") + "px" }).removeClass('newsInit');
+            $('#newsDiv').resizable({
+                resize: function (event, ui) {
+                    newsDivCresize();
+                },
+                stop: function () {
+                    if ($('#newsDiv').width() < 300)
+                        $('#newsDiv').width("300px");
+                    if ($('#newsDiv').height() < 200)
+                        $('#newsDiv').height("200px");
+                    var updata = {
+                        UserId: "",
+                        newsDivWidth: $('#newsDiv').width(),
+                        newsDivHeight: $('#newsDiv').height()
+                    };
+                    $.post("@Url.Action("SetUserPreference", "Account",new { area=""})", updata, function (data) { });
+                    newsDivCresize();
+                }
+            }).draggable({
+                stop: function (event, ui) {
+                    checkFixedDivPosition('newsDiv');
+                    //document.cookie= "newsDivLeft="+ $('#newsDiv').position().left;
+                    //document.cookie ="newsDivTop="+ $('#newsDiv').position().top;
+                    //var updata = { UserId: "", newsDivLeft: $('#newsDiv').position().left, newsDivTop: $('#newsDiv').position().top };
+                    var updata = {
+                        UserId: "",
+                        newsDivBtnLeft: parseInt($('#newsDivBtn').position().left),
+                        newsDivBtnTop: parseInt($('#newsDivBtn').position().top),
+                        newsDivLeft: parseInt($('#newsDiv').position().left),
+                        newsDivTop: parseInt($('#newsDiv').position().top)
+                    };
+                    $.post("@Url.Action("SetUserPreference", "Account",new { area=""})", updata, function (data) {});
+                }
+            });
+            $('#newsDivBtn').draggable({
+                stop: function (event, ui) {
+                    checkFixedDivPosition('newsDivBtn');
+                    //document.cookie = "newsDivBtnLeft=" + $('#newsDivBtn').position().left;
+                    //document.cookie = "newsDivBtnTop=" + $('#newsDivBtn').position().top;
+                    var updata = {
+                        UserId: "",
+                        newsDivBtnLeft: parseInt($('#newsDivBtn').position().left),
+                        newsDivBtnTop: parseInt($('#newsDivBtn').position().top),
+                        newsDivLeft: parseInt($('#newsDiv').position().left),
+                        newsDivTop: parseInt($('#newsDiv').position().top)
+                    };
+                    $.post("@Url.Action("SetUserPreference", "Account",new { area=""})", updata, function (data) {});
+                }
+            }).click(function () {
+                $("#newsDiv").toggle("blind", {}, 200);
+                if (getCookie("newsDivDisplay") == "close")
+                    document.cookie = "newsDivDisplay=open; path=/";
+                else
+                    document.cookie = "newsDivDisplay=close; path=/";
+                });
+
+            $('#closeNewsDivBtn').click(function () {
+                $("#newsDiv").toggle("blind", {}, 200);
+                if (getCookie("newsDivDisplay") == "close")
+                    document.cookie = "newsDivDisplay=open; path=/";
+                else
+                    document.cookie = "newsDivDisplay=close; path=/";
+            });
+
+            //$("#newsDivBtn").toggleClass("newsDivBtnDisplay", 0);
+            //$("#newsDiv").toggle(0, function () {
+            //    $("#newsDivBtnIcon").text("▶");
+            //});
+            //$('#newsDivBtn').click(function(){
+            //    $("#newsDivBtn").toggleClass("newsDivBtnDisplay", 500);
+            //    $("#newsDiv").toggle(500, function () {
+            //        var ndbt = $("#newsDivBtnIcon").text();
+            //        if (ndbt == "▶")
+            //            $("#newsDivBtnIcon").text("◀");
+            //        else
+            //            $("#newsDivBtnIcon").text("▶");
+            //    });
+            //});
+            $(window).resize(function () {
+                checkFixedDivPosition('newsDiv');
+                checkFixedDivPosition('newsDivBtn');
+            });
+        });
+        function checkFixedDivPosition(divName)
+        {
+            if (parseInt($('#' + divName).css('left')) > $(window).width() - parseInt($('#' + divName).css('width')))
+                $('#' + divName).css('left', $(window).width() - parseInt($('#' + divName).css('width')));
+            if (parseInt($('#' + divName).css('top')) > $(window).height() - parseInt($('#' + divName).css('height')))
+                $('#' + divName).css('top', $(window).height() - parseInt($('#' + divName).css('height')));
+            if (parseInt($('#' + divName).css('left')) < 0)
+                $('#' + divName).css('left', '0');
+            if (parseInt($('#' + divName).css('top')) < 0)
+                $('#' + divName).css('top', '0');
+        };
+        function parseDate(input) {
+            var parts = input.match(/(\d+)/g);
+            return new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]); //     months are 0-based
+        };
+        function newsDivCresize() {
+            $('#newsDivC').height(($('#newsDiv').height() - 43));
+        };
+    </script>
+    <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        $(function () {
+            var newsu = $.connection.newsHub;
+            newsu.client.addNewsToPage = function (fromUserID, strTitle, strMsg, strUrl, userUrls, noDefAct, sn) {
+                var noticnum = parseInt($('#noticNums').html()) + 1;
+                var itemd = new Date();
+                var newsOrderNums = $('<span></span>').addClass('newsMsgOrderNums').html(noticnum);
+                var newsOrder = $('<div></div>').addClass('newsMsgOrder').html(newsOrderNums);
+                var newsTitle = $('<h4></h4>').text(strTitle);
+                var newsFromUser = $('<p></p>').text(fromUserID);
+                var newsMsg = $('<div></div>').html(strMsg).addClass('text-dark');
+                var newsDiv = $('<div></div>').addClass('newsMsg');
+                var newsTime = $('<span></span>').text(itemd.getFullYear() + "-" + (itemd.getMonth() + 1) + "-" + itemd.getDate() + " " + itemd.getHours() + ":" + itemd.getMinutes() + ":" + itemd.getSeconds());
+                var newsBtns = $('<div></div>');
+                if (strUrl) {
+                    var newsALink = $('<a></a>');
+                    newsALink.attr('href', strUrl);
+                    newsALink.css('cursor', ' pointer');
+                    newsALink.text('連結');
+                    newsALink.addClass("btn").addClass("btn-success");
+                    newsBtns.append(newsALink);
+                }
+                if (userUrls) {
+                    $.each(userUrls, function (id, itemB) {
+                        var newsABtn = $('<a></a>');
+                        newsABtn.attr('href', itemB.UserNewsUrl);
+                        newsABtn.css('cursor', ' pointer');
+                        newsABtn.text(itemB.UserNewsTitle);
+                        newsABtn.addClass("btn").addClass(itemB.UserNewsCSS);
+                        newsBtns.append(newsABtn);
+                    });
+                }
+                newsDiv.append([newsOrder, newsTitle, newsFromUser, newsMsg, newsBtns, newsTime]);
+                newsDiv.click(function () {
+
+                });
+                $('#newsDivC').prepend(newsDiv);
+
+                $('#noticNums').html(noticnum);
+                newsDivCresize();
+
+                //如果是在通知頁面
+                var tablereadfalseAll = $("#tablereadfalseAll>tbody");
+                if (tablereadfalseAll) {
+                    var newTd1 = $('<td></td>');
+                    var ntd2e1 = $('<span></span>').attr("name", "fromUserNameId").text(fromUserID);
+                    var newTd2 = $('<td></td>').append(ntd2e1);
+                    var newmsgContent = "標題：<span name='newsTitle'>" + strTitle + "</span><br />內容：<div name='newsContent'>" + strMsg + "</div><br/>";
+                    if (strUrl != "")
+                        newmsgContent += "<span>連結：</span><a href='" + strUrl + "' class='btn btn-success'>連結</a>";
+                    if (userUrls) {
+                        $.each(userUrls, function (id, itemB) {
+
+                            newmsgContent += "<a href='" + itemB.UserNewsUrl + "' class='btn " + itemB.UserNewsCSS + "' style='cursor:pointer;'>" + itemB.UserNewsTitle + "</a>";
+                        });
+                    }
+                    var newTd3 = $('<td></td>').html(newmsgContent);
+                    var newTd4 = $('<td></td>').text(itemd.getFullYear() + "/" + (itemd.getMonth() + 1) + "/" + itemd.getDate() + " " + itemd.getHours() + ":" + itemd.getMinutes() + ":" + itemd.getSeconds());
+                    var newTd5 = $('<td></td>');
+                    var newTd6 = $('<td></td>');
+                    var ntd5Btn = $('<button data-read="true"></button>');
+                    ntd5Btn.attr("type", "button").text("變更為已讀").attr("name", "sn" + sn).attr("href", "").addClass("btn btn-info");
+                    var ntd6Btn = $('<button></button>');
+                    ntd6Btn.attr("type", "button").text("刪除").attr("name", "rm" + sn).attr("href", "").addClass("btn btn-danger");
+                    if (noDefAct != "True") {
+                        newTd5.append(ntd5Btn);
+                        newTd6.append(ntd6Btn);
+                    }
+                    var newTr = $('<tr></tr>').css("border-bottom", "dotted 1px silver").append(newTd1).append(newTd2).append(newTd3).append(newTd4).append(newTd5).append(newTd6);
+                    console.log(newTr);
+                    tablereadfalseAll.prepend(newTr);
+
+                    showtablereadtrue(tablereadpagesize, parseInt($('#tablereadtrueSelectPage').html()));
+                    showtablereadfalse(tablereadpagesize, parseInt($('#tablereadfalseSelectPage').html()));
+                }
+            };
+            // Start the connection.
+            $.connection.hub.start().done(function () { });
+        });
+    </script>
+    
+</body>
+</html>
